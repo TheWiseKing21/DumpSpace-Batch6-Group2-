@@ -1,0 +1,8 @@
+.MuiSnackbar-anchorTopRight {
+    top: 50px;
+    right: 50px;
+  }
+  
+  .MuiSnackbar-root {
+    background-color: #fff;
+  }
