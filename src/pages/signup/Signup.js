@@ -102,6 +102,7 @@ const Signup = () => {
                     aria-required="true"
                     autoComplete="off"
                     name="email"
+                    required
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
@@ -113,6 +114,7 @@ const Signup = () => {
                     aria-required="true"
                     autoComplete="off"
                     name="fullName"
+                    required
                     onChange={(e) => setFullName(e.target.value)}
                   />
                 </div>
@@ -124,6 +126,7 @@ const Signup = () => {
                     aria-required="true"
                     autoComplete="off"
                     name="username"
+                    required
                     onChange={(e) => setUsername(e.target.value)}
                     onKeyDown={(e) => e.code === "Space" && e.preventDefault()}
                   />
@@ -136,6 +139,7 @@ const Signup = () => {
                     aria-required="true"
                     autoComplete="off"
                     name="password"
+                    required
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
