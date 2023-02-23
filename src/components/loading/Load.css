@@ -1,0 +1,12 @@
+.load-container {
+  height: 100vh;
+}
+
+.load-image-wrapper {
+  width: 100px;
+  height: fit-content;
+}
+.load-image-wrapper img {
+  width: 100%;
+  height: 100%;
+}

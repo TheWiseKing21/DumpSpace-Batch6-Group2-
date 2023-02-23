@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import firebaseContex from "./FirebaseContex";
+import firebaseContex from "./FirebaseContext";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
