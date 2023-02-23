@@ -36,7 +36,7 @@ function LinearProgressWithLabel(props) {
   );
 }
 
-const ImageUpload = () => {
+const CreatePost = () => {
   const [image, setImage] = useState("");
   const [caption, setCaption] = useState("");
   const [progress, setProgress] = useState(0);
@@ -193,4 +193,4 @@ const ImageUpload = () => {
   );
 };
 
-export default ImageUpload;
+export default CreatePost;
