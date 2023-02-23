@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/navbar/Navbar";
 import CreatePost from "../../components/createPost/CreatePost";
+import PostCard from "../../components/postCard/PostCard";
 import firebaseContex from "../../context/FirebaseContext";
 import "./Home.css";
 import { RxCross2 } from "react-icons/rx";
@@ -26,7 +27,21 @@ const Home = () => {
   return (
     <>
       <Navbar />
-      <CreatePost />
+      <div className="home-page-container">
+        <div>
+          <CreatePost />
+          <div>
+            {posts.map((post) => (
+              <PostCard
+                key={post.id}
+                post={post.data()}
+                postId={post.id}
+                setAlertMessage={setAlertMessage}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
     </>
   );
 };

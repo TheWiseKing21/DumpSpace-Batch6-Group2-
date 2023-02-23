@@ -3,3 +3,9 @@
   justify-content: center;
   position: relative;
 }
+
+@media (max-width: 426px) {
+  .home-page-container {
+    flex-direction: column;
+  }
+}
