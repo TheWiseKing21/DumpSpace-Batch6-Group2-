@@ -61,7 +61,6 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
         comments: arrayUnion({
           username: auth.currentUser.displayName,
           comment: comments,
-          commentId: post.comments.length + 1,
         }),
       });
       setComments("");
