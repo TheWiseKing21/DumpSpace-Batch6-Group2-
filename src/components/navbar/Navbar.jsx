@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import "./Navbar.css";
 import { Link, useNavigate } from "react-router-dom";
 import firebaseContex from "../../context/FirebaseContext";
 import { auth } from "../../config/FirebaseConfig";

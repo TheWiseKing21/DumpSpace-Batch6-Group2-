@@ -4,6 +4,7 @@ import Navbar from "../../components/navbar/Navbar";
 import CreatePost from "../../components/createPost/CreatePost";
 import PostCard from "../../components/postCard/PostCard";
 import PostCardOutline from "../../components/postCard/PostCardOutline";
+import SearchUser from "../../components/searchUser/SearchUser";
 import firebaseContex from "../../context/FirebaseContext";
 import "./Home.css";
 import { RxCross2 } from "react-icons/rx";
@@ -46,6 +47,7 @@ const Home = () => {
             )}
           </div>
         </div>
+        <SearchUser />
       </div>
     </>
   );
