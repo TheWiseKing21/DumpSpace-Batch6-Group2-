@@ -12,7 +12,7 @@ code {
     monospace;
 }
 
-/* css variable for the dark theme*/
+/* CSS variable for the dark theme*/
 :root {
   --body_background: #fff ;
   --body_color: black;
