@@ -9,8 +9,7 @@
 }
 
 body {
-  background-color: #fafafa;
-  scroll-behavior: smooth;
+  overflow-y: scroll;
 }
 
 ::-webkit-scrollbar {
