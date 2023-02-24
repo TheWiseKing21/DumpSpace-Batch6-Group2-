@@ -11,3 +11,8 @@
     border-radius: 0px;
   }
 }
+
+.MuiCardHeader-root{
+  background-color: var(--body_background);
+  color: var(--body_color);
+}
