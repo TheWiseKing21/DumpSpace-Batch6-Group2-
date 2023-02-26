@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import "./PostCard.css";
 import { FiHeart } from "react-icons/fi";
-import { updateDoc, arrayUnion, doc, arrayRemove } from "firebase/firestore";
+import {
+  updateDoc,
+  arrayUnion,
+  doc,
+  arrayRemove,
+  deleteDoc,
+} from "firebase/firestore";
 import { db, auth } from "../../config/FirebaseConfig";
 import { Link } from "react-router-dom";
 import Card from "@mui/material/Card";
@@ -12,9 +18,10 @@ import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { blueGrey, red } from "@mui/material/colors";
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button, Icon, Menu, MenuItem, TextField } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import SendIcon from "@mui/icons-material/Send";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 const PostCard = ({ post, postId, setAlertMessage }) => {
   const [likesCount, setLikesCount] = useState(post.likes);
@@ -89,6 +96,19 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
     }
   };
 
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleDeletePost = async (e) => {
+    await deleteDoc(doc(db, "posts", e));
+  };
+
   return (
     <div className="card-container">
       <Card elevation={24} sx={{ maxWidth: 800, borderRadius: "15px" }}>
@@ -114,29 +134,46 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                   minute: "2-digit",
                 })
           }
+          action={
+            auth.currentUser.displayName == post.username ? (
+              <div>
+                <IconButton onClick={handleClick}>
+                  <MoreVertIcon />
+                </IconButton>
+                <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+                  <MenuItem onClick={() => handleDeletePost(postId)}>
+                    Delete Post
+                  </MenuItem>
+                </Menu>
+              </div>
+            ) : (
+              <></>
+            )
+          }
         />
-        <Typography
-          sx={{
-            fontFamily: "monospace",
-            textDecoration: "none",
-            paddingLeft: "30px",
-            marginBottom: "10px",
-            paddingRight: "30px",
-          }}
-        >
-          {post.caption}
-        </Typography>
-        {post.imageUrl != null ? (
-          <CardMedia
-            component="img"
-            height="100%"
-            image={post.imageUrl}
-            alt="Image Post"
-          />
-        ) : (
-          " "
-        )}
-
+        <CardContent>
+          <Typography
+            sx={{
+              fontFamily: "monospace",
+              textDecoration: "none",
+              paddingLeft: "30px",
+              marginBottom: "10px",
+              paddingRight: "30px",
+            }}
+          >
+            {post.caption}
+          </Typography>
+          {post.imageUrl != null ? (
+            <CardMedia
+              component="img"
+              height="100%"
+              image={post.imageUrl}
+              alt="Image Post"
+            />
+          ) : (
+            " "
+          )}
+        </CardContent>
         <CardContent>
           <Stack direction="row" spacing={3}>
             <IconButton onClick={handleLikes}>
@@ -204,6 +241,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                   >
                     {data.username}
                   </Typography>
+
                   <Typography
                     variant="subtitle1"
                     sx={{
@@ -213,19 +251,28 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                   >
                     {data.comment}
                   </Typography>
-                  {auth.currentUser?.displayName != data.username ? (
-                    " "
-                  ) : (
-                    <Button
-                      size="small"
-                      onClick={() =>
-                        handleDeleteComment(data.username, data.comment)
-                      }
-                    >
-                      Remove
-                    </Button>
-                  )}
                 </Box>
+                {auth.currentUser?.displayName != data.username ? (
+                  " "
+                ) : (
+                  <>
+                    <IconButton size="small" onClick={handleClick}>
+                      <MoreVertIcon />
+                    </IconButton>
+                    <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+                      <MenuItem onClick={handleClose}>
+                        <Typography
+                          variant="body2"
+                          onClick={() =>
+                            handleDeleteComment(data.username, data.comment)
+                          }
+                        >
+                          Delete Comment
+                        </Typography>
+                      </MenuItem>
+                    </Menu>
+                  </>
+                )}
               </Stack>
             </Stack>
           ))}
