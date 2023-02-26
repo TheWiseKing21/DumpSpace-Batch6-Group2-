@@ -7,6 +7,7 @@
   position: relative;
 }
 
+
 .login-poster {
   width: 385px;
   height: 530px;
@@ -23,6 +24,7 @@
   flex-direction: column;
   max-width: 350px;
   width: 100%;
+
 }
 
 .login-box {
@@ -45,6 +47,7 @@
   width: 154px;
 }
 
+
 .login-form-wrapper {
   padding: 0 40px 20px;
 }
@@ -55,6 +58,7 @@
   align-items: center;
   width: 100%;
   max-width: 350px;
+
 }
 
 .input-label {
@@ -91,6 +95,18 @@
   font-weight: bold;
 }
 
+.forgot-pass {
+  margin-right: auto;
+}
+
+.forgot-pass a {
+  color: var(--primary-btn-bg);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: small;
+  
+}
+
 .redirect-text {
   margin: 10px;
 }
@@ -99,6 +115,7 @@
   color: var(--primary-btn-bg);
   text-decoration: none;
   font-weight: 500;
+  
 }
 
 .loading-spinner-wrapper {
@@ -130,15 +147,16 @@
   background: none;
   color: #385185;
   font-size: 16px;
+
 }
 .facebook-login-btn .facebook-icon {
   width: 20px;
   height: 20px;
-  margin-right: 5px;
+  margin-right: 5px; 
 }
 
 /* responsive for mobile */
-@media (max-width: 426px) {
+@media (max-width:426px) {
   .login-poster {
     display: none;
   }
@@ -152,11 +170,11 @@
     background: none;
     border: none;
     padding: 0;
-    align-items: center;
   }
 
   .login-form-wrapper {
     padding: 0 20px 20px;
     width: 100%;
   }
+
 }
