@@ -27,7 +27,6 @@ const SearchUser = () => {
       <Box
         sx={{
           bgcolor: "white",
-          height: "50%",
           position: "fixed",
           top: "0",
           left: "30px",
