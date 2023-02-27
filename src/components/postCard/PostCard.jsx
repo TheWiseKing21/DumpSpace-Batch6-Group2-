@@ -18,11 +18,12 @@ import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { blueGrey } from "@mui/material/colors";
-import { Box, Menu, Button, MenuItem, TextField } from "@mui/material";
+import { Box, Menu, Button, MenuItem, TextField, Icon } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import SendIcon from "@mui/icons-material/Send";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Backdrop from "@mui/material/Backdrop";
+import { ExitToApp } from "@mui/icons-material";
 
 const PostCard = ({ post, postId, setAlertMessage }) => {
   const [likesCount, setLikesCount] = useState(post.likes);
@@ -107,6 +108,15 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
     setPostAnchor(null);
   };
 
+  const [postDetailsAnchor, setPostDetailsAnchor] = React.useState(null);
+  const openPostDetailsOption = Boolean(postDetailsAnchor);
+  const handlePostDetailsOptionClick = (event) => {
+    setPostDetailsAnchor(event.currentTarget);
+  };
+  const handlePostDetailsOptionClose = () => {
+    setPostDetailsAnchor(null);
+  };
+
   const handleDeletePost = async (e) => {
     await deleteDoc(doc(db, "posts", e));
   };
@@ -119,6 +129,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
 
   const handleCloseDetails = () => {
     setOpenPostDetails(false);
+    handlePostDetailsOptionClose();
   };
 
   return (
@@ -332,24 +343,31 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                     })
               }
               action={
-                auth.currentUser.displayName === post.username ? (
-                  <div>
-                    <IconButton onClick={handlePostOptionClick}>
-                      <MoreVertIcon />
-                    </IconButton>
+                <div>
+                  <IconButton onClick={handlePostDetailsOptionClick}>
+                    <MoreVertIcon />
+                  </IconButton>
+                  {auth.currentUser.displayName === post.username ? (
                     <Menu
-                      anchorEl={postAnchor}
-                      open={openPostOption}
-                      onClose={handlePostOptionClose}
+                      anchorEl={postDetailsAnchor}
+                      open={openPostDetailsOption}
+                      onClose={handlePostDetailsOptionClose}
                     >
                       <MenuItem onClick={() => handleDeletePost(postId)}>
                         Delete Post
                       </MenuItem>
+                      <MenuItem onClick={handleCloseDetails}>Close</MenuItem>
                     </Menu>
-                  </div>
-                ) : (
-                  <></>
-                )
+                  ) : (
+                    <Menu
+                      anchorEl={postDetailsAnchor}
+                      open={openPostDetailsOption}
+                      onClose={handlePostDetailsOptionClose}
+                    >
+                      <MenuItem onClick={handleCloseDetails}>Close</MenuItem>
+                    </Menu>
+                  )}
+                </div>
               }
             />
             <CardContent onClick={handleClickOpenDetails}>
