@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./PostCard.css";
 import { FiHeart } from "react-icons/fi";
 import {
   updateDoc,
@@ -23,7 +22,7 @@ import Stack from "@mui/material/Stack";
 import SendIcon from "@mui/icons-material/Send";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Backdrop from "@mui/material/Backdrop";
-import { ExitToApp } from "@mui/icons-material";
+import Container from "@mui/material/Container";
 
 const PostCard = ({ post, postId, setAlertMessage }) => {
   const [likesCount, setLikesCount] = useState(post.likes);
@@ -134,7 +133,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
 
   return (
     <>
-      <div className="card-container">
+      <Container maxWidth="md" sx={{ marginBottom: "20px" }}>
         <Card elevation={24} sx={{ maxWidth: 800, borderRadius: "15px" }}>
           <CardHeader
             avatar={
@@ -495,7 +494,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
             </CardContent>
           </Card>
         </Backdrop>
-      </div>
+      </Container>
     </>
   );
 };

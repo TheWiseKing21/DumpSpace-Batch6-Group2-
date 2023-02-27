@@ -6,7 +6,7 @@ import PostCard from "../../components/postCard/PostCard";
 import PostCardOutline from "../../components/postCard/PostCardOutline";
 import SearchUser from "../../components/searchUser/SearchUser";
 import firebaseContex from "../../context/FirebaseContext";
-import "./Home.css";
+import Container from "@mui/material/Container";
 
 const Home = () => {
   const { posts, allUsers, loading } = useContext(firebaseContex);
@@ -28,7 +28,7 @@ const Home = () => {
   return (
     <>
       <Navbar />
-      <div className="home-page-container">
+      <Container maxWidth="md">
         <div>
           <CreatePost />
           <div>
@@ -47,7 +47,7 @@ const Home = () => {
           </div>
         </div>
         <SearchUser />
-      </div>
+      </Container>
     </>
   );
 };

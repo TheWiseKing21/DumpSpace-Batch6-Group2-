@@ -1,31 +1,30 @@
 import React from "react";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
+import Skeleton from "@mui/material/Skeleton";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import CardContent from "@mui/material/CardContent";
+import Container from "@mui/material/Container";
 
 const PostCardOutline = () => {
-  const arrayCount = Array(6).fill(1);
-  return arrayCount.map((val, index) => (
-    <div className="card-container" key={index}>
-      <div className="card-wrapper">
-        <div className="card-header align-center">
-          <div className="image-wrapper absolute-center">
-            <Skeleton circle={true} height={42} width={42} />
-          </div>
-          <div className="profile-username">
-            <Skeleton width={65} />
-          </div>
-        </div>
-        <div className="post-wrapper">
-          <Skeleton height={300} />
-        </div>
-        <div className="card-bottom">
-          <Skeleton />
-          <Skeleton />
-          <Skeleton />
-        </div>
-      </div>
-    </div>
-  ));
+  return (
+    <Container fixed sx={{ marginBottom: "20px" }}>
+      <Card elevation={24} sx={{ maxWidth: 800, borderRadius: "15px" }}>
+        <CardHeader
+          avatar={<Skeleton variant="circular" height={42} width={42} />}
+          title={<Skeleton width={80} />}
+          subheader={<Skeleton width={65} />}
+        />
+
+        <Skeleton sx={{ margin: "10px", width: 780, height: "500px" }} />
+
+        <CardContent>
+          <Skeleton height={42} />
+          <Skeleton height={42} />
+          <Skeleton height={42} />
+        </CardContent>
+      </Card>
+    </Container>
+  );
 };
 
 export default PostCardOutline;
