@@ -313,9 +313,9 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
           <Card
             elevation={24}
             sx={{
-              width: 800,
+              width: 900,
               borderRadius: "15px",
-              maxHeight: "50%",
+              maxHeight: "80%",
               overflow: "auto",
             }}
           >
