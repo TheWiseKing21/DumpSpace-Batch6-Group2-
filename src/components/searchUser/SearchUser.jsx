@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import firebaseContex from "../../context/FirebaseContext";
 import { useNavigate } from "react-router-dom";
-import { Divider, IconButton, TextField, Typography } from "@mui/material";
+import { Divider, TextField, Typography } from "@mui/material";
 import { Box, Stack } from "@mui/system";
 import Dialog from "@mui/material/Dialog";
 import Avatar from "@mui/material/Avatar";
@@ -27,7 +27,6 @@ const SearchUser = () => {
       <Box
         sx={{
           bgcolor: "white",
-          height: "50%",
           position: "fixed",
           top: "0",
           left: "30px",

@@ -12,10 +12,6 @@ body {
   overflow-y: scroll;
 }
 
-::-webkit-scrollbar {
-  height: 0px;
-}
-
 /* common classes */
 
 .absolute-center {
@@ -63,12 +59,12 @@ body {
 
 /* CSS variable for the dark theme*/
 :root {
-  --body_background: #fff ;
+  --body_background: #fff;
   --body_color: black;
   --link_color: navy;
 }
 
-[data-theme="dark"]{
+[data-theme="dark"] {
   --body_background: #243043;
   --body_color: white;
   --link_color: cyan;
