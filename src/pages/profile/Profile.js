@@ -28,9 +28,10 @@ import CardActions from "@mui/material/CardActions";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { Menu, MenuItem, IconButton } from "@mui/material";
+import { Menu, MenuItem, IconButton, Typography } from "@mui/material";
 import PostCardOutline from "../../components/postCard/PostCardOutline";
 import PostCard from "../../components/postCard/PostCard";
+import Container from "@mui/material/Container";
 
 const Profile = () => {
   const { allUsers, loading, setLoading, posts } = useContext(firebaseContex);
@@ -116,16 +117,9 @@ const Profile = () => {
 
   return (
     <div className="profile-page-section">
-      <div className="top-instagram-logo">
-        <img
-          src="/images/Instagram_logo.svg"
-          alt="instagram logo"
-          className="instagram-logo"
-        />
-      </div>
       <Navbar />
-      <SearchUser />
-      <div className="profile-page-container">
+
+      <div>
         {loading ? (
           <ProfileSkeleton />
         ) : (
@@ -200,99 +194,36 @@ const Profile = () => {
             </div>
           ))
         )}
-
-        <div className="posts-list-section">
-          <div
-            className="posts-list-container"
-            // style={{
-            //   width: "800px",
-            //   justifyContent: "center",
-            //   alignItems: "center",
-            //   marginLeft: "220px",
-            // }}
-          >
+        <Container maxWidth="md" sx={{ marginBottom: "20px" }}>
+          <div>
+            <CreatePost />
             <div>
-              <CreatePost />
-              <div>
-                {loading ? (
-                  <PostCardOutline />
-                ) : (
-                  currentUserPosts.map((post) => (
-                    <PostCard
-                      key={post.id}
-                      post={post.data()}
-                      postId={post.id}
-                      setAlertMessage={setAlertMessage}
-                    />
-                  ))
-                )}
-              </div>
+              {loading ? (
+                <PostCardOutline />
+              ) : (
+                currentUserPosts.map((post) => (
+                  <PostCard
+                    key={post.id}
+                    post={post.data()}
+                    postId={post.id}
+                    setAlertMessage={setAlertMessage}
+                  />
+                ))
+              )}
+              {!currentUserPosts.length && (
+                <Typography
+                  variant="h6"
+                  sx={{ display: "flex", justifyContent: "center" }}
+                >
+                  No Posts Available
+                </Typography>
+              )}
             </div>
-
-            {/* {loading ? (
-            <ExploreCardSkeleton number={1} />
-          ) : (
-            currentUserPosts.map((post) => (
-              <>
-                <List>
-                  <Card sx={{ maxWidth: 800 }} key={post.id}>
-                    <CardHeader
-                      avatar={
-                        <div className="image-wrapper absolute-center">
-                          <img
-                            src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
-                            alt="user-profile"
-                          />
-                        </div>
-                      }
-                      title={post.username}
-                      subheader={post.caption}
-                    />
-                    <CardMedia
-                      component="img"
-                      height="100%"
-                      image={post.data().imageUrl}
-                      alt="post"
-                    />
-                    <CardContent></CardContent>
-                    <CardActions disableSpacing>
-                      <div classname="morevert">
-                        {auth.currentUser.displayName !== post.username ? (
-                          <>
-                            <IconButton onClick={handleMenu}>
-                              <MoreVertIcon />
-                            </IconButton>
-                            <Menu
-                              anchorEl={anchorEl}
-                              keepMounted
-                              open={Boolean(anchorEl)}
-                              onClose={handleClose}
-                            >
-                              <MenuItem onClick={() => handleDelete(post.id)}>
-                                Delete
-                              </MenuItem>
-                            </Menu>
-                            {console.log(post.userId)}
-                          </>
-                        ) : (
-                          ""
-                        )}
-                      </div>
-                      <IconButton aria-label="add to favorites">
-                        <FavoriteIcon />
-                      </IconButton>
-                      <IconButton aria-label="share">
-                        <ShareIcon />
-                      </IconButton>
-                    </CardActions>
-                  </Card>
-                </List>
-              </>
-            ))
-          )} */}
           </div>
-        </div>
+        </Container>
       </div>
+
+      <SearchUser />
     </div>
   );
 };
