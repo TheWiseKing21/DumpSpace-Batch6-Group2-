@@ -7,6 +7,8 @@ import firebaseContex from "../../context/FirebaseContext";
 import "./Login.css";
 import "../signup/Signup.css";
 
+import CustomSnackbar from "../../components/snackbar/snackbar";
+
 const Login = () => {
   const { login } = useContext(firebaseContex);
   const [email, setEmail] = useState("");
@@ -21,9 +23,16 @@ const Login = () => {
 
   const invalid = password.length < 6 || email === "";
 
+  //new const for snackbar
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const handleSnackbarClose = () => {
+    setShowSnackbar(false);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setShowSnackbar(true);
     try {
       const loginUser = await login(email, password);
       if (auth.currentUser.emailVerified) {
@@ -65,12 +74,20 @@ const Login = () => {
   return (
     <div className="login-container">
       <div className="login-poster">
-        <img src="" alt="" className="" />
+        <img
+          src="/images/iphone.png"
+          alt="iphone-poster"
+          className="login-poster-image"
+        />
       </div>
       <div className="login-wrapper">
         <div className="login-box">
           <div className="logo-wrapper">
-            <img src="" alt="" className="" />
+            <img
+              src="/images/Instagram_logo.svg"
+              alt="instagram logo"
+              className="instagram-logo"
+            />
           </div>
           {!isEmailSend ? (
             <div className="login-form-wrapper">
@@ -98,6 +115,12 @@ const Login = () => {
                   />
                 </div>
 
+                <div className="forgot-pass">
+                  <Link to="/forgot" className="cur-point">
+                    Forgot Password?
+                  </Link>
+                </div>
+
                 <div className="button-wrapper ">
                   <button
                     disabled={invalid}
@@ -110,7 +133,13 @@ const Login = () => {
                   {loading && <Loading />}
                 </div>
               </form>
-              {errorMessage && <p className="errorMessage">{errorMessage}</p>}
+
+              <CustomSnackbar
+                open={showSnackbar}
+                message="Login successful"
+                variant="success"
+                onClose={handleSnackbarClose}
+              />
             </div>
           ) : (
             // email send confirmation
@@ -123,19 +152,13 @@ const Login = () => {
                 />
               </div>
               <div className="confirm-email-message">
-                Your Email not Verified yet, So Please verify email first.
-                Varification link send to your email (check inbox or spam
+                Your email not verified yet, so please verify email first.
+                Verification link send to your email (check inbox or spam
                 folder).
               </div>
             </div>
           )}
-          <div className="redirect-text">
-            <Link to="/forgot" className="cur-point">
-              Forgot Password?
-            </Link>
-          </div>
-        </div>
-        <div className="redirect-box login-box">
+
           <div className="redirect-text">
             <p>
               Don't have an account?{" "}
@@ -160,6 +183,8 @@ const Login = () => {
           </div>
         </div>
       </div>
+
+      {/* <Footer /> */}
     </div>
   );
 };
