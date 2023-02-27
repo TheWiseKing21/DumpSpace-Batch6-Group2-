@@ -1,14 +1,7 @@
-import { sendEmailVerification } from "firebase/auth";
 import React, { useContext, useEffect, useState } from "react";
-import { FaFacebookSquare } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-// import Footer from "../../components/footer/Footer";
-import Loading from "../../components/loading/Loading";
-import { auth } from "../../config/FirebaseConfig";
 import firebaseContex from "../../context/FirebaseContext";
 
-// import "./Login.css";
-// import "../signup/Signup.css";
 import "./Forgot.css";
 import "../forgot/Forgot.css";
 
@@ -70,17 +63,6 @@ const Forgot = () => {
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
-                {/* <div className="input-label">
-                  <input
-                    type="password"
-                    placeholder="Password"
-                    aria-label="Enter your password"
-                    aria-required="true"
-                    autoComplete="off"
-                    name="password"
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </div> */}
 
                 <div className="button-wrapper ">
                   <button
@@ -91,13 +73,6 @@ const Forgot = () => {
                   >
                     Send
                   </button>
-                  {/* {loading && <Loading />} */}
-
-                  {/* <div className="redirect-text">
-                    <Link to="/signup" className="cur-point">
-                      Forgot Password
-                    </Link>
-                  </div> */}
                 </div>
               </form>
               {errorMessage && <p className="errorMessage">{errorMessage}</p>}
@@ -145,7 +120,6 @@ const Forgot = () => {
           </div>
         </div>
       </div>
-      {/* <Footer /> */}
     </div>
   );
 };

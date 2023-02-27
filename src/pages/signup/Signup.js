@@ -8,7 +8,7 @@ import { doc, setDoc } from "firebase/firestore";
 import usernameChecker from "./UsernameCheker";
 import { sendEmailVerification, updateProfile } from "firebase/auth";
 import Loading from "../../components/loading/Loading";
-// import Footer from "../../components/footer/Footer";
+import CustomSnackbar from "../../components/snackbar/snackbar";
 
 const Signup = () => {
   const { signup } = useContext(firebaseContex);
@@ -25,9 +25,16 @@ const Signup = () => {
   const invalid =
     password.length < 8 || email === "" || fullName === "" || username === "";
 
+  //new const for snackbar
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const handleSnackbarClose = () => {
+    setShowSnackbar(false);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setShowSnackbar(true);
     const usernameList = await usernameChecker(username);
     if (!usernameList.length) {
       try {
@@ -162,19 +169,28 @@ const Signup = () => {
             </div>
           ) : (
             // email send confirmation
-            <div className="signup-confirm-email-wrapper">
-              <div className="confirm-email-image-wrapper">
-                <img
-                  src="/images/confirm-email.svg"
-                  alt="confirm-email"
-                  className="confirm-email-image"
-                />
+
+            <>
+              <CustomSnackbar
+                open={showSnackbar}
+                message="Sign up successful"
+                variant="success"
+                onClose={handleSnackbarClose}
+              />
+              <div className="signup-confirm-email-wrapper">
+                <div className="confirm-email-image-wrapper">
+                  <img
+                    src="/images/confirm-email.svg"
+                    alt="confirm-email"
+                    className="confirm-email-image"
+                  />
+                </div>
+                <div className="confirm-email-message">
+                  Verification link send to your email (check inbox or spam
+                  folder). Please verify email first.
+                </div>
               </div>
-              <div className="confirm-email-message">
-                Verification link send to your email (check inbox or spam
-                folder). Please verify email first.
-              </div>
-            </div>
+            </>
           )}
         </div>
         <div className="redirect-box login-box">
