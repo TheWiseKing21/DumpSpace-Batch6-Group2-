@@ -1,8 +1,6 @@
 import { sendEmailVerification } from "firebase/auth";
 import React, { useContext, useEffect, useState } from "react";
-
 import { Link, useNavigate } from "react-router-dom";
-// import Footer from "../../components/footer/Footer";
 import Loading from "../../components/loading/Loading";
 import { auth } from "../../config/FirebaseConfig";
 import firebaseContex from "../../context/FirebaseContext";
@@ -10,7 +8,7 @@ import "./Login.css";
 import "../signup/Signup.css";
 
 const Login = () => {
-  const { login, facebookLogin } = useContext(firebaseContex);
+  const { login } = useContext(firebaseContex);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -110,12 +108,6 @@ const Login = () => {
                     Log In
                   </button>
                   {loading && <Loading />}
-
-                  {/* <div className="redirect-text">
-                    <Link to="/signup" className="cur-point">
-                      Forgot Password
-                    </Link>
-                  </div> */}
                 </div>
               </form>
               {errorMessage && <p className="errorMessage">{errorMessage}</p>}
@@ -168,8 +160,6 @@ const Login = () => {
           </div>
         </div>
       </div>
-
-      {/* <Footer /> */}
     </div>
   );
 };
