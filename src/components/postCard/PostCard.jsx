@@ -107,27 +107,18 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
     setPostAnchor(null);
   };
 
-  const [commentAnchor, setCommentAnchor] = React.useState(null);
-  const openCommentOption = Boolean(commentAnchor);
-  const handleCommentOptionClick = (event) => {
-    setCommentAnchor(event.currentTarget);
-  };
-  const handleCommentOptionClose = () => {
-    setCommentAnchor(null);
-  };
-
   const handleDeletePost = async (e) => {
     await deleteDoc(doc(db, "posts", e));
   };
 
-  const [openDailog, setOpenDilaog] = React.useState(false);
+  const [openPostDetails, setOpenPostDetails] = React.useState(false);
 
-  const handleClickOpen = () => {
-    setOpenDilaog(true);
+  const handleClickOpenDetails = () => {
+    setOpenPostDetails(true);
   };
 
-  const handleCloseDialog = () => {
-    setOpenDilaog(false);
+  const handleCloseDetails = () => {
+    setOpenPostDetails(false);
   };
 
   return (
@@ -177,7 +168,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
               )
             }
           />
-          <CardContent onClick={handleClickOpen}>
+          <CardContent onClick={handleClickOpenDetails}>
             <Typography
               sx={{
                 fontFamily: "monospace",
@@ -302,12 +293,12 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
           </CardContent>
         </Card>
 
-        {/* <Backdrop
+        <Backdrop
           sx={{
             color: "#fff",
             zIndex: (theme) => theme.zIndex.drawer + 1,
           }}
-          open={openDailog}
+          open={openPostDetails}
         >
           <Card
             elevation={24}
@@ -343,10 +334,14 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
               action={
                 auth.currentUser.displayName === post.username ? (
                   <div>
-                    <IconButton onClick={handleClick}>
+                    <IconButton onClick={handlePostOptionClick}>
                       <MoreVertIcon />
                     </IconButton>
-                    <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+                    <Menu
+                      anchorEl={postAnchor}
+                      open={openPostOption}
+                      onClose={handlePostOptionClose}
+                    >
                       <MenuItem onClick={() => handleDeletePost(postId)}>
                         Delete Post
                       </MenuItem>
@@ -357,7 +352,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                 )
               }
             />
-            <CardContent>
+            <CardContent onClick={handleClickOpenDetails}>
               <Typography
                 sx={{
                   fontFamily: "monospace",
@@ -369,7 +364,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
               >
                 {post.caption}
               </Typography>
-              {post.imageUrl != null ? (
+              {post.imageUrl !== null ? (
                 <CardMedia
                   component="img"
                   height="100%"
@@ -460,40 +455,28 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                         {data.comment}
                       </Typography>
                     </Box>
-                    {auth.currentUser?.displayName !== data.username ? (
+                    {auth.currentUser?.displayName != data.username ? (
                       " "
                     ) : (
-                      <>
-                        <IconButton size="small" onClick={handleClick}>
-                          <MoreVertIcon />
-                        </IconButton>
-                        <Menu
-                          anchorEl={anchorEl}
-                          open={open}
-                          onClose={handleClose}
-                        >
-                          <MenuItem onClick={handleClose}>
-                            <Typography
-                              onClick={() =>
-                                handleDeleteComment(
-                                  data.username,
-                                  data.comment,
-                                  data.commentId
-                                )
-                              }
-                            >
-                              Delete Comment
-                            </Typography>
-                          </MenuItem>
-                        </Menu>
-                      </>
+                      <Button
+                        size="small"
+                        onClick={() =>
+                          handleDeleteComment(
+                            data.username,
+                            data.comment,
+                            data.commentId
+                          )
+                        }
+                      >
+                        <Typography variant="subheader2">Remove</Typography>
+                      </Button>
                     )}
                   </Stack>
                 </Stack>
               ))}
             </CardContent>
           </Card>
-        </Backdrop> */}
+        </Backdrop>
       </div>
     </>
   );
