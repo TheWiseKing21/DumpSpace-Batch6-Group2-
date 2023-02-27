@@ -1,8 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
+
 import CreatePost from "../../components/createPost/CreatePost";
 import Navbar from "../../components/navbar/Navbar";
 import firebaseContex from "../../context/FirebaseContext";
 import "./Profile.css";
+
 import ProfileSkeleton from "./ProfileSkeleton";
 import {
   arrayRemove,
@@ -17,6 +19,7 @@ import {
 } from "firebase/firestore";
 import { auth, db } from "../../config/FirebaseConfig";
 import { useParams } from "react-router-dom";
+
 import SearchUser from "../../components/searchUser/SearchUser";
 import Loading from "../../components/loading/Loading";
 import List from "@mui/material/List";
@@ -29,6 +32,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Menu, MenuItem, IconButton } from "@mui/material";
+
 import PostCardOutline from "../../components/postCard/PostCardOutline";
 import PostCard from "../../components/postCard/PostCard";
 

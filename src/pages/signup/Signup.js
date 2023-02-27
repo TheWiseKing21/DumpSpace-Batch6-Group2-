@@ -9,6 +9,7 @@ import usernameChecker from "./UsernameCheker";
 import { sendEmailVerification, updateProfile } from "firebase/auth";
 import Loading from "../../components/loading/Loading";
 import CustomSnackbar from "../../components/snackbar/snackbar";
+import validator from "validator";
 
 const Signup = () => {
   const { signup } = useContext(firebaseContex);
@@ -22,8 +23,26 @@ const Signup = () => {
 
   const navigate = useNavigate();
 
+  const validate = (value) => {
+    if (
+      validator.isStrongPassword(value, {
+        minLength: 8,
+        minLowercase: 1,
+        minUppercase: 1,
+        minNumbers: 1,
+        minSymbols: 1,
+      })
+    ) {
+      setErrorMessage("Is Strong Password");
+    } else {
+      setErrorMessage("Is Not Strong Password");
+    }
+  };
+
   const invalid =
     password.length < 8 || email === "" || fullName === "" || username === "";
+
+  console.log(invalid);
 
   //new const for snackbar
   const [showSnackbar, setShowSnackbar] = useState(false);
@@ -87,6 +106,25 @@ const Signup = () => {
       setTimeout(() => {
         setErrorMessage("");
       }, 3000);
+    }
+
+    if (
+      validator.isStrongPassword(password, {
+        minLength: 8,
+        minLowercase: 1,
+        minUppercase: 1,
+        minNumbers: 1,
+        minSymbols: 1,
+      })
+    ) {
+      // setErrorMessage("Is Strong Password");
+      const createUser = await signup(email, password);
+      await sendEmailVerification(createUser.user);
+
+      setLoading(false);
+      setIsEmailSend(true);
+    } else {
+      setErrorMessage("Is Not Strong Password");
     }
   };
 
