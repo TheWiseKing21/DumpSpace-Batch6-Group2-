@@ -15,8 +15,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
 import DarkMode from "../darkmode/DarkMode";
-import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { MoreVert } from "@mui/icons-material";
 
 const Navbar = () => {
@@ -177,7 +175,7 @@ const Navbar = () => {
               </IconButton>
             </Tooltip>
             <Menu
-              sx={{ mt: "45px" }}
+              sx={{ mt: "45px", padding: "10px" }}
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
@@ -196,7 +194,8 @@ const Navbar = () => {
                 <DarkMode />
               </MenuItem>
               <MenuItem onClick={handleLogout}>
-                <Typography>Logout</Typography>
+                <LogoutIcon />
+                <Typography sx={{ marginLeft: "10px" }}>Logout</Typography>
               </MenuItem>
             </Menu>
           </Box>

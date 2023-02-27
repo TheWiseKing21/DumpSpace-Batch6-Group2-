@@ -7,12 +7,11 @@ import PostCardOutline from "../../components/postCard/PostCardOutline";
 import SearchUser from "../../components/searchUser/SearchUser";
 import firebaseContex from "../../context/FirebaseContext";
 import "./Home.css";
-import { RxCross2 } from "react-icons/rx";
 
 const Home = () => {
-  const { posts, allUsers, loading, setIsUpload } = useContext(firebaseContex);
+  const { posts, allUsers, loading } = useContext(firebaseContex);
   const navigate = useNavigate();
-  const [alertMessage, setAlertMessage] = useState("");
+  const [setAlertMessage] = useState("");
 
   const localUser = JSON.parse(localStorage.getItem("authUser"));
 
