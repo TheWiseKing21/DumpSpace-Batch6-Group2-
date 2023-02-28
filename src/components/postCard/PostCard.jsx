@@ -51,7 +51,7 @@ const ExpandMore = styled((props) => {
 const PostCard = ({ post, postId, setAlertMessage }) => {
   const [likesCount, setLikesCount] = useState(post.likes);
   const [comments, setComments] = useState("");
-  const [setIsClick] = useState(false);
+  const [isClick, setIsClick] = useState(false);
   const currentDate = new Date().toLocaleDateString("en-US");
 
   const invalid = comments === "";
@@ -169,7 +169,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
 
   return (
     <>
-      <Container maxWidth="md" sx={{ marginBottom: "20px" }}>
+      <Container maxWidth="md" sx={{ marginBottom: "20px" }} className="card-container">
         <Card
           elevation={24}
           sx={{
@@ -194,18 +194,20 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
             titleTypographyProps={{ fontWeight: "600", variant: "body1" }}
             subheader={
               post.datePostedOn.toDate().toLocaleDateString("en-US") !==
-              currentDate
+                currentDate
                 ? post.datePostedOn.toDate().toLocaleDateString("en-US")
                 : post.datePostedOn.toDate().toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })
             }
+            subheaderTypographyProps={{ color: "var(--text_color)" }}
+
             action={
               auth.currentUser.displayName === post.username ? (
                 <div>
                   <IconButton onClick={handlePostOptionClick}>
-                    <MoreVertIcon />
+                    <MoreVertIcon sx={{ color: "var(--text_color)" }} />
                   </IconButton>
                   <Menu
                     anchorEl={postAnchor}
@@ -225,7 +227,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
           <CardContent onClick={handleClickOpenDetails}>
             <Typography
               sx={{
-                fontFamily: "monospace",
+                // fontFamily: "monospace",
                 textDecoration: "none",
                 paddingLeft: "30px",
                 marginBottom: "10px",
@@ -262,22 +264,26 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                 placeholder="Add a comment"
                 onChange={(e) => setComments(e.target.value)}
                 value={comments ?? ""}
-                sx={{ width: "90%" }}
+                sx={{
+                  width: "90%",
+                  backgroundColor: "var(--home_background)",
+                  color: "var(--text_color)",
+                }}
               />
               <IconButton
                 disabled={invalid}
                 onClick={handlePostComments}
                 color="inherit"
               >
-                 <RocketLaunchOutlinedIcon
-                    sx={{ color: "var(--body_color)" }}
-                  />
-                  <CustomSnackbar
-                    open={showSnackbar}
-                    message="Your comment are posted."
-                    variant="success"
-                    onClose={handleSnackbarClose}
-                  />
+                <RocketLaunchOutlinedIcon
+                  sx={{ color: "var(--body_color)" }}
+                />
+                <CustomSnackbar
+                  open={showSnackbar}
+                  message="Your comment are posted."
+                  variant="success"
+                  onClose={handleSnackbarClose}
+                />
               </IconButton>
             </Stack>
           </CardContent>
@@ -371,7 +377,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                                   data.commentId
                                 )
                               }
-                              color ="white"
+                              color="white"
                             >
                               <Typography variant="subheader2" >
                                 Remove
@@ -547,12 +553,15 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
               borderRadius: "15px",
               maxHeight: "80%",
               overflow: "auto",
+              backgroundColor: "var(--card_color)",
+              color: "var(--text_color)",
+
             }}
           >
             <CardHeader
               avatar={
                 <Avatar
-                  sx={{ bgcolor: blueGrey[500], textDecoration: "none" }}
+                  sx={{ bgcolor: "#57636F", textDecoration: "none" }}
                   aria-label="recipe"
                   component={Link}
                   to={`/profile/${post.username}`}
@@ -561,20 +570,21 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                 </Avatar>
               }
               title={post.username}
-              titleTypographyProps={{ fontWeight: "600", variant: "body1" }}
+              titleTypographyProps={{ fontWeight: "600", variant: "body1", color: "var(--text_color)" }}
               subheader={
                 post.datePostedOn.toDate().toLocaleDateString("en-US") !==
-                currentDate
+                  currentDate
                   ? post.datePostedOn.toDate().toLocaleDateString("en-US")
                   : post.datePostedOn.toDate().toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
               }
+              subheaderTypographyProps={{ color: "var(--text_color)" }}
               action={
                 <div>
                   <IconButton onClick={handlePostDetailsOptionClick}>
-                    <MoreVertIcon />
+                    <MoreVertIcon sx={{ color: "var(--text_color)" }} />
                   </IconButton>
                   {auth.currentUser.displayName === post.username ? (
                     <Menu

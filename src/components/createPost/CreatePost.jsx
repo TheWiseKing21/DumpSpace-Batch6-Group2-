@@ -93,7 +93,6 @@ const CreatePost = () => {
           setImage("");
           setProgress(0);
           setLoading(false);
-          setMessage("Image Upload Successfully");
           setTimeout(() => {
             setMessage("");
           }, 5000);
@@ -140,7 +139,7 @@ const CreatePost = () => {
   };
 
   return (
-    <Container maxWidth="md" sx={{ marginBottom: "20px" }}>
+    <Container maxWidth="md" sx={{ marginBottom: "20px", color: "var(--text_color)" }}>
       <Card
         elevation={24}
         sx={{
@@ -166,7 +165,7 @@ const CreatePost = () => {
               sx={{
                 maxWidth: "100%",
                 backgroundColor: "var(--home_background)",
-                color: "white",
+                color: "var(--text_color)",
               }}
             />
           </Stack>
@@ -187,9 +186,9 @@ const CreatePost = () => {
                 ref={imageRef}
                 hidden
               />
-              <CameraAltOutlinedIcon />
+              <CameraAltOutlinedIcon sx={{ color: "var(--text_color)" }} />
             </IconButton>
-            <Button
+            <Button className="create-post"
               variant="contained"
               onClick={handleUpload}
               disabled={!caption}
@@ -206,7 +205,7 @@ const CreatePost = () => {
             />
           </Stack>
         </CardContent>
-        {progress > 0 && <LinearProgressWithLabel value={progress} sx={{}} />}
+        {progress > 0 && <LinearProgressWithLabel value={progress} />}
         {message && (
           <div>
             <Typography>{message}</Typography>
