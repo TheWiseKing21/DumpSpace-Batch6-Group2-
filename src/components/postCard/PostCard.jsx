@@ -50,7 +50,7 @@ const ExpandMore = styled((props) => {
 const PostCard = ({ post, postId, setAlertMessage }) => {
   const [likesCount, setLikesCount] = useState(post.likes);
   const [comments, setComments] = useState("");
-  const [setIsClick] = useState(false);
+  const [isClick, setIsClick] = useState(false);
   const currentDate = new Date().toLocaleDateString("en-US");
 
   const invalid = comments === "";
@@ -256,7 +256,6 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                   }}
                 />
               </IconButton>
-
               <TextField
                 placeholder="Add a comment"
                 onChange={(e) => setComments(e.target.value)}
