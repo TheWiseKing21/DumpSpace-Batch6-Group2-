@@ -15,6 +15,7 @@ import Box from "@mui/material/Box";
 import CameraAltOutlinedIcon from '@mui/icons-material/CameraAltOutlined';
 import CustomSnackbar from "../snackbar/snackbar";
 
+import Container from "@mui/material/Container";
 
 function LinearProgressWithLabel(props) {
   return (

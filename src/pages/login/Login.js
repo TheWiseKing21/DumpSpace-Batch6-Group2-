@@ -10,9 +10,8 @@ import "../signup/Signup.css";
 import CustomSnackbar from "../../components/snackbar/snackbar";
 // import DarkMode from "../../components/darkmode/DarkMode";
 
-
 const Login = () => {
-  const { login, facebookLogin } = useContext(firebaseContex);
+  const { login } = useContext(firebaseContex);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -136,13 +135,10 @@ const Login = () => {
                     className="login-button cur-point"
                     style={{ opacity: (invalid || loading) && "0.5" }}
                   >
-
                     Log In
                   </button>
-                  {/* {loading && <Loading />} */}
-
+                  {loading && <Loading />}
                 </div>
-
               </form>
 
               <CustomSnackbar
@@ -170,7 +166,6 @@ const Login = () => {
             </div>
           )}
 
-
           <div className="redirect-text">
             <p>
               Don't have an account?{" "}
@@ -178,24 +173,22 @@ const Login = () => {
                 Sign up
               </Link>
             </p>
-
           </div>
-          <div
-            className="guest-login-info-wrapper login-box"
-            style={{ display: "none" }}
-          >
-            <div className="title">Create new account or login as a guest</div>
-            <div className="guest-login-credential">
-              <div className="guest-email">
-                <p>Email: guest@gmail.com</p>
-              </div>
-              <div className="guest-password">
-                <p>Password: guest@1234</p>
-              </div>
+        </div>
+        <div
+          className="guest-login-info-wrapper login-box"
+          style={{ display: "none" }}
+        >
+          <div className="title">Create new account or login as a guest</div>
+          <div className="guest-login-credential">
+            <div className="guest-email">
+              <p>Email: guest@gmail.com</p>
+            </div>
+            <div className="guest-password">
+              <p>Password: guest@1234</p>
             </div>
           </div>
         </div>
-
       </div>
       {/* <DarkMode /> */}
       {/* <Footer /> */}

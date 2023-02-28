@@ -1,4 +1,3 @@
-// import { textAlign } from "@mui/system";
 import React from "react";
 
 const PageNotFound = () => {
