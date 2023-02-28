@@ -48,11 +48,13 @@ const ExpandMore = styled((props) => {
   marginLeft: "auto",
 }));
 
+
 const PostCard = ({ post, postId, setAlertMessage }) => {
   const [likesCount, setLikesCount] = useState(post.likes);
   const [comments, setComments] = useState("");
   const [isClick, setIsClick] = useState(false);
   const currentDate = new Date().toLocaleDateString("en-US");
+  const [message, setMessage] = useState("");
 
   const invalid = comments === "";
   const isLiked = post.likes.filter(
@@ -103,6 +105,8 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
         }),
       });
       setComments("");
+      setMessage("Your comment is on space.");
+      setShowSnackbar(true);
     } catch (error) {
       console.log(error);
       setAlertMessage(error.message);
@@ -112,6 +116,8 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
 
   const commentRef = doc(db, "posts", postId);
   const handleDeleteComment = async (userName, userComment, userCommentId) => {
+    setMessage("Your comment is out on space.");
+    setShowSnackbar(true);
     try {
       await updateDoc(commentRef, {
         comments: arrayRemove({
@@ -148,6 +154,8 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
 
   const handleDeletePost = async (e) => {
     await deleteDoc(doc(db, "posts", e));
+    setMessage("Your post is out on space.");
+    setShowSnackbar(true);
   };
 
   const [openPostDetails, setOpenPostDetails] = React.useState(false);
@@ -214,7 +222,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                     open={openPostOption}
                     onClose={handlePostOptionClose}
                     PaperProps={{
-                      style: {backgroundColor: "var(--home_background)"}
+                      style: { backgroundColor: "var(--home_background)" }
 
                     }}
                   >
@@ -285,7 +293,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                 />
                 <CustomSnackbar
                   open={showSnackbar}
-                  message="Your comment are posted."
+                  message={message}
                   variant="success"
                   onClose={handleSnackbarClose}
                 />
@@ -527,20 +535,20 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                     {auth.currentUser?.displayName != data.username ? (
                       " "
                     ) : (
-                      <Tooltip  title="Delete comment">
-                      <IconButton
-                        size="small"
-                        aria-label="delete"
-                        onClick={() =>
-                          handleDeleteComment(
-                            data.username,
-                            data.comment,
-                            data.commentId
-                          )
-                        }
-                      >
-                        <DeleteIcon sx={{color: "#57636F", '&:hover': { color: "var(--text_color)" }}}/>
-                      </IconButton>
+                      <Tooltip title="Delete comment">
+                        <IconButton
+                          size="small"
+                          aria-label="delete"
+                          onClick={() =>
+                            handleDeleteComment(
+                              data.username,
+                              data.comment,
+                              data.commentId
+                            )
+                          }
+                        >
+                          <DeleteIcon sx={{ color: "#57636F", '&:hover': { color: "var(--text_color)" } }} />
+                        </IconButton>
                       </Tooltip>
                     )}
                   </Stack>
@@ -603,18 +611,19 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                       open={openPostDetailsOption}
                       onClose={handlePostDetailsOptionClose}
                       PaperProps={{
-                        style: {backgroundColor: "var(--home_background)"}
+                        style: { backgroundColor: "var(--home_background)" }
 
                       }}
                     >
                       <Button onClick={() => handleDeletePost(postId)} variant="outlined" startIcon={<DeleteIcon />}
                         sx={{ color: "#57636F", borderColor: "#57636F", '&:hover': { borderColor: '#57636F', textColor: "#57636F", backgroundColor: "var(--button)", color: "var(--text_color)" } }}>
                         Delete Post
-                      </Button><br></br>
+                      </Button>
+                      <br></br>
                       <Button onClick={handleCloseDetails} variant="outlined" startIcon={<CloseIcon />}
-                      sx={{ marginTop: "5px", color: "#57636F", borderColor: "#57636F", '&:hover': { borderColor: '#57636F', backgroundColor: "var(--button)", color: "var(--text_color)" } }}>
-                      Close
-                    </Button>
+                        sx={{ marginTop: "5px", color: "#57636F", borderColor: "#57636F", '&:hover': { borderColor: '#57636F', backgroundColor: "var(--button)", color: "var(--text_color)" } }}>
+                        Close
+                      </Button>
                     </Menu>
                   ) : (
                     <Menu
@@ -622,14 +631,14 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                       open={openPostDetailsOption}
                       onClose={handlePostDetailsOptionClose}
                       PaperProps={{
-                        style: {backgroundColor: "var(--home_background)"}
+                        style: { backgroundColor: "var(--home_background)" }
 
                       }}
                     >
                       <br></br><Button onClick={handleCloseDetails} variant="outlined" startIcon={<CloseIcon />}
-                      sx={{ marginTop: "5px", color: "#57636F", borderColor: "#57636F", '&:hover': { borderColor: '#57636F', backgroundColor: "var(--button)", color: "var(--text_color)" } }}>
-                      Close
-                    </Button>
+                        sx={{ marginTop: "5px", color: "#57636F", borderColor: "#57636F", '&:hover': { borderColor: '#57636F', backgroundColor: "var(--button)", color: "var(--text_color)" } }}>
+                        Close
+                      </Button>
                     </Menu>
                   )}
                 </div>
@@ -687,12 +696,6 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                 >
                   <RocketLaunchOutlinedIcon
                     sx={{ color: "var(--body_color)" }}
-                  />
-                  <CustomSnackbar
-                    open={showSnackbar}
-                    message="Your comment are posted."
-                    variant="success"
-                    onClose={handleSnackbarClose}
                   />
                 </IconButton>
               </Stack>

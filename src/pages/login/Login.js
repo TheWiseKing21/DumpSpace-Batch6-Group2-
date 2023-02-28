@@ -20,6 +20,8 @@ const Login = () => {
   const localUser = JSON.parse(localStorage.getItem("authUser"));
   const [errorMessage, setErrorMessage] = useState("");
 
+  const [message, setMessage] = useState("");
+
   const navigate = useNavigate();
 
   const invalid = password.length < 6 || email === "";
@@ -33,21 +35,18 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setShowSnackbar(true);
+    setMessage("Login Successful");
+
     try {
+      
       const loginUser = await login(email, password);
       if (auth.currentUser.emailVerified) {
         localStorage.setItem("authUser", JSON.stringify(loginUser.user));
         setLoading(false);
         navigate("/");
+       
       } else {
         // setErrorMessage("Your email not verified yet.");
-        <CustomSnackbar
-          open={showSnackbar}
-          message="Your email not verified yet."
-          variant="success"
-          onClose={handleSnackbarClose}
-        />;
         await sendEmailVerification(auth.currentUser);
         setLoading(false);
         setIsEmailSend(true);
@@ -63,6 +62,7 @@ const Login = () => {
         }, 2000);
       }
     } catch (error) {
+      setMessage("Your email not verified yet.");
       e.target.reset();
       setLoading(false);
       setErrorMessage(error.message.replace("Firebase:", ""));
@@ -70,6 +70,8 @@ const Login = () => {
         setErrorMessage("");
       }, 5000);
     }
+
+    setShowSnackbar(true);
   };
 
   useEffect(() => {
@@ -143,7 +145,7 @@ const Login = () => {
 
               <CustomSnackbar
                 open={showSnackbar}
-                message="Login successful"
+                message={message}
                 variant="success"
                 onClose={handleSnackbarClose}
               />
