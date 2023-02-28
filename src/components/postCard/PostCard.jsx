@@ -27,8 +27,8 @@ import {
   CardActions,
 } from "@mui/material";
 import Stack from "@mui/material/Stack";
-import RocketLaunchOutlinedIcon from '@mui/icons-material/RocketLaunchOutlined';
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import RocketLaunchOutlinedIcon from "@mui/icons-material/RocketLaunchOutlined";
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import CustomSnackbar from "../snackbar/snackbar";
 
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -38,6 +38,7 @@ import Collapse from "@mui/material/Collapse";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { styled } from "@mui/material/styles";
 import CommentIcon from "@mui/icons-material/Comment";
+import SendIcon from "@mui/icons-material/Send";
 
 
 const ExpandMore = styled((props) => {
@@ -53,45 +54,44 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
   const [setIsClick] = useState(false);
   const currentDate = new Date().toLocaleDateString("en-US");
 
+  const invalid = comments === "";
+  const isLiked = post.likes.filter(
+    (value) => auth.currentUser.displayName === value.username
+  );
 
-    const invalid = comments === "";
-    const isLiked = post.likes.filter(
-      (value) => auth.currentUser.displayName === value.username
-    );
-
-    const handleLikes = async () => {
-      setIsClick(true);
-      try {
-        if (isLiked.length !== 0) {
-          setLikesCount(likesCount - 1);
-          await updateDoc(doc(db, "posts", postId), {
-            likes: arrayRemove({
-              username: auth.currentUser.displayName,
-            }),
-          });
-        } else {
-          setLikesCount(likesCount + 1);
-          await updateDoc(doc(db, "posts", postId), {
-            likes: arrayUnion({
-              username: auth.currentUser.displayName,
-            }),
-          });
-        }
-      } catch (error) {
-        console.log(error);
-        setAlertMessage(error.message);
+  const handleLikes = async () => {
+    setIsClick(true);
+    try {
+      if (isLiked.length !== 0) {
+        setLikesCount(likesCount - 1);
+        await updateDoc(doc(db, "posts", postId), {
+          likes: arrayRemove({
+            username: auth.currentUser.displayName,
+          }),
+        });
+      } else {
+        setLikesCount(likesCount + 1);
+        await updateDoc(doc(db, "posts", postId), {
+          likes: arrayUnion({
+            username: auth.currentUser.displayName,
+          }),
+        });
       }
-  
-      setTimeout(() => {
-        setIsClick(false);
-      }, 1000);
-    };
+    } catch (error) {
+      console.log(error);
+      setAlertMessage(error.message);
+    }
 
-    //new const for snackbar
-    const [showSnackbar, setShowSnackbar] = useState(false);
-    const handleSnackbarClose = () => {
-      setShowSnackbar(false);
-    };
+    setTimeout(() => {
+      setIsClick(false);
+    }, 1000);
+  };
+
+  //new const for snackbar
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const handleSnackbarClose = () => {
+    setShowSnackbar(false);
+  };
 
   const handlePostComments = async () => {
     try {
@@ -100,7 +100,6 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
           username: auth.currentUser.displayName,
           comment: comments,
           commentId: post.comments.length,
-
         }),
       });
       setComments("");
@@ -111,23 +110,23 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
     }
   };
 
-    const commentRef = doc(db, "posts", postId);
-    const handleDeleteComment = async (userName, userComment, userCommentId) => {
-      try {
-        await updateDoc(commentRef, {
-          comments: arrayRemove({
-            username: userName,
-            comment: userComment,
-            commentId: userCommentId,
+  const commentRef = doc(db, "posts", postId);
+  const handleDeleteComment = async (userName, userComment, userCommentId) => {
+    try {
+      await updateDoc(commentRef, {
+        comments: arrayRemove({
+          username: userName,
+          comment: userComment,
+          commentId: userCommentId,
         }),
-        });
-        setComments("");
-        } catch (error) {
-        console.log(error);
-        setAlertMessage(error.message);
-        setComments("");
-      }
-    };
+      });
+      setComments("");
+    } catch (error) {
+      console.log(error);
+      setAlertMessage(error.message);
+      setComments("");
+    }
+  };
 
   const [postAnchor, setPostAnchor] = React.useState(null);
   const openPostOption = Boolean(postAnchor);
@@ -168,34 +167,41 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
     setExpanded(!expanded);
   };
 
-    return (
-      <>
+  return (
+    <>
       <Container maxWidth="md" sx={{ marginBottom: "20px" }}>
-          <Card elevation={24} sx={{ maxWidth: 800, borderRadius: "15px", backgroundColor: "var(--card_color)", color: "var(--text_color)" }}>
-            <CardHeader
-              avatar={
-                <Avatar
-                  sx={{ bgcolor: "#57636F", textDecoration: "none" }}
-                  aria-label="recipe"
-                  component={Link}
-                  to={`/profile/${post.username}`}
-                >
-                  {post.username.charAt(0)}
-                </Avatar>
-              }
-              title={post.username}
-              titleTypographyProps={{ fontWeight: "600", variant: "body1" }}
-              subheader={
-                post.datePostedOn.toDate().toLocaleDateString("en-US") !==
-                  currentDate
-                  ? post.datePostedOn.toDate().toLocaleDateString("en-US")
-                  : post.datePostedOn.toDate().toLocaleTimeString([], {
+        <Card
+          elevation={24}
+          sx={{
+            maxWidth: 800,
+            borderRadius: "15px",
+            backgroundColor: "var(--card_color)",
+            color: "var(--text_color)",
+          }}
+        >
+          <CardHeader
+            avatar={
+              <Avatar
+                sx={{ bgcolor: "#57636F", textDecoration: "none" }}
+                aria-label="recipe"
+                component={Link}
+                to={`/profile/${post.username}`}
+              >
+                {post.username.charAt(0)}
+              </Avatar>
+            }
+            title={post.username}
+            titleTypographyProps={{ fontWeight: "600", variant: "body1" }}
+            subheader={
+              post.datePostedOn.toDate().toLocaleDateString("en-US") !==
+              currentDate
+                ? post.datePostedOn.toDate().toLocaleDateString("en-US")
+                : post.datePostedOn.toDate().toLocaleTimeString([], {
                     hour: "2-digit",
                     minute: "2-digit",
                   })
-
-                }
-              action={
+            }
+            action={
               auth.currentUser.displayName === post.username ? (
                 <div>
                   <IconButton onClick={handlePostOptionClick}>
@@ -216,10 +222,378 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
               )
             }
           />
-            <CardContent onClick={handleClickOpenDetails}>
+          <CardContent onClick={handleClickOpenDetails}>
             <Typography
+              sx={{
+                fontFamily: "monospace",
+                textDecoration: "none",
+                paddingLeft: "30px",
+                marginBottom: "10px",
+                paddingRight: "30px",
+              }}
+            >
+              {post.caption}
+            </Typography>
+            {post.imageUrl !== null ? (
+              <CardMedia
+                component="img"
+                height="100%"
+                image={post.imageUrl}
+                alt="Image Post"
+              />
+            ) : (
+              " "
+            )}
+          </CardContent>
+          <CardContent>
+            <Stack direction="row" spacing={3}>
+              <IconButton onClick={handleLikes}>
+                <FiHeart
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    fill: isLiked.length > 0 && "red",
+                    color: isLiked.length > 0 && "red",
+                  }}
+                />
+              </IconButton>
+
+              <TextField
+                placeholder="Add a comment"
+                onChange={(e) => setComments(e.target.value)}
+                value={comments ?? ""}
+                sx={{ width: "90%" }}
+              />
+              <IconButton
+                disabled={invalid}
+                onClick={handlePostComments}
+                color="inherit"
+              >
+                <SendIcon />
+              </IconButton>
+            </Stack>
+          </CardContent>
+          {post.comments?.length > 3 ? (
+            <>
+              <CardActions>
+                <ExpandMore
+                  expand={expanded}
+                  onClick={handleExpandClick}
+                  aria-expanded={expanded}
+                  aria-label="show more"
+                >
+                  <Typography sx={{ marginRight: "5px" }}>
+                    View other comments
+                  </Typography>
+                  <CommentIcon />
+                </ExpandMore>
+              </CardActions>
+
+              <CardContent>
+                {post.comments?.map((data, index) =>
+                  data.commentId > 2 ? (
+                    <Collapse
+                      key={data.commentId}
+                      in={expanded}
+                      timeout="auto"
+                      unmountOnExit
+                    >
+                      <Stack
+                        direction="column"
+                        sx={{
+                          marginLeft: "20px",
+                          marginBottom: "10px",
+                          overflow: "inherit",
+                        }}
+                        key={index}
+                      >
+                        <Stack direction="row">
+                          <Avatar
+                            sx={{
+                              bgcolor: blueGrey[500],
+                              textDecoration: "none",
+                            }}
+                          >
+                            {data.username.charAt(0)}
+                          </Avatar>
+                          <Box
+                            sx={{
+                              marginLeft: "10px",
+                              marginRight: "10px",
+                              justifyContent: "flex-start",
+                              bgcolor: "lightblue",
+                              borderRadius: "10px",
+                              padding: "10px",
+                            }}
+                          >
+                            <Typography
+                              variant="body1"
+                              sx={{
+                                marginLeft: "5px",
+                                paddingTop: "10px",
+                                fontWeight: "600",
+                                textDecoration: "none",
+                                color: "inherit",
+                              }}
+                              component={Link}
+                              to={`/profile/${data.username}`}
+                            >
+                              {data.username}
+                            </Typography>
+
+                            <Typography
+                              variant="subtitle1"
+                              sx={{
+                                marginLeft: "10px",
+                                paddingBottom: "5px",
+                              }}
+                            >
+                              {data.comment}
+                            </Typography>
+                          </Box>
+                          {auth.currentUser?.displayName != data.username ? (
+                            " "
+                          ) : (
+                            <Button
+                              size="small"
+                              onClick={() =>
+                                handleDeleteComment(
+                                  data.username,
+                                  data.comment,
+                                  data.commentId
+                                )
+                              }
+                            >
+                              <Typography variant="subheader2">
+                                Remove
+                              </Typography>
+                            </Button>
+                          )}
+                        </Stack>
+                      </Stack>
+                    </Collapse>
+                  ) : (
+                    <Stack
+                      direction="column"
+                      sx={{
+                        marginLeft: "20px",
+                        marginBottom: "10px",
+                        overflow: "inherit",
+                      }}
+                      key={index}
+                    >
+                      <Stack direction="row">
+                        <Avatar
+                          sx={{
+                            bgcolor: blueGrey[500],
+                            textDecoration: "none",
+                          }}
+                        >
+                          {data.username.charAt(0)}
+                        </Avatar>
+                        <Box
+                          sx={{
+                            marginLeft: "10px",
+                            marginRight: "10px",
+                            justifyContent: "flex-start",
+                            bgcolor: "lightblue",
+                            borderRadius: "10px",
+                            padding: "10px",
+                          }}
+                        >
+                          <Typography
+                            variant="body1"
+                            sx={{
+                              marginLeft: "5px",
+                              paddingTop: "10px",
+                              fontWeight: "600",
+                              textDecoration: "none",
+                              color: "inherit",
+                            }}
+                            component={Link}
+                            to={`/profile/${data.username}`}
+                          >
+                            {data.username}
+                          </Typography>
+
+                          <Typography
+                            variant="subtitle1"
+                            sx={{
+                              marginLeft: "10px",
+                              paddingBottom: "5px",
+                            }}
+                          >
+                            {data.comment}
+                          </Typography>
+                        </Box>
+                        {auth.currentUser?.displayName != data.username ? (
+                          " "
+                        ) : (
+                          <Button
+                            size="small"
+                            onClick={() =>
+                              handleDeleteComment(
+                                data.username,
+                                data.comment,
+                                data.commentId
+                              )
+                            }
+                          >
+                            <Typography variant="subheader2">Remove</Typography>
+                          </Button>
+                        )}
+                      </Stack>
+                    </Stack>
+                  )
+                )}
+              </CardContent>
+            </>
+          ) : (
+            <CardContent>
+              {post.comments?.map((data, index) => (
+                <Stack
+                  direction="column"
+                  sx={{
+                    marginLeft: "20px",
+                    marginBottom: "10px",
+                    overflow: "inherit",
+                  }}
+                  key={index}
+                >
+                  <Stack direction="row">
+                    <Avatar
+                      sx={{ bgcolor: blueGrey[500], textDecoration: "none" }}
+                    >
+                      {data.username.charAt(0)}
+                    </Avatar>
+                    <Box
+                      sx={{
+                        marginLeft: "10px",
+                        marginRight: "10px",
+                        justifyContent: "flex-start",
+                        bgcolor: "lightblue",
+                        borderRadius: "10px",
+                        padding: "10px",
+                      }}
+                    >
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          marginLeft: "5px",
+                          paddingTop: "10px",
+                          fontWeight: "600",
+                          textDecoration: "none",
+                          color: "inherit",
+                        }}
+                        component={Link}
+                        to={`/profile/${data.username}`}
+                      >
+                        {data.username}
+                      </Typography>
+
+                      <Typography
+                        variant="subtitle1"
+                        sx={{
+                          marginLeft: "10px",
+                          paddingBottom: "5px",
+                        }}
+                      >
+                        {data.comment}
+                      </Typography>
+                    </Box>
+                    {auth.currentUser?.displayName != data.username ? (
+                      " "
+                    ) : (
+                      <Button
+                        size="small"
+                        onClick={() =>
+                          handleDeleteComment(
+                            data.username,
+                            data.comment,
+                            data.commentId
+                          )
+                        }
+                      >
+                        <Typography variant="subheader2">Remove</Typography>
+                      </Button>
+                    )}
+                  </Stack>
+                </Stack>
+              ))}
+            </CardContent>
+          )}
+        </Card>
+
+        <Backdrop
+          sx={{
+            color: "#fff",
+            zIndex: (theme) => theme.zIndex.drawer + 1,
+          }}
+          open={openPostDetails}
+        >
+          <Card
+            elevation={24}
+            sx={{
+              width: 900,
+              borderRadius: "15px",
+              maxHeight: "80%",
+              overflow: "auto",
+            }}
+          >
+            <CardHeader
+              avatar={
+                <Avatar
+                  sx={{ bgcolor: blueGrey[500], textDecoration: "none" }}
+                  aria-label="recipe"
+                  component={Link}
+                  to={`/profile/${post.username}`}
+                >
+                  {post.username.charAt(0)}
+                </Avatar>
+              }
+              title={post.username}
+              titleTypographyProps={{ fontWeight: "600", variant: "body1" }}
+              subheader={
+                post.datePostedOn.toDate().toLocaleDateString("en-US") !==
+                currentDate
+                  ? post.datePostedOn.toDate().toLocaleDateString("en-US")
+                  : post.datePostedOn.toDate().toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })
+              }
+              action={
+                <div>
+                  <IconButton onClick={handlePostDetailsOptionClick}>
+                    <MoreVertIcon />
+                  </IconButton>
+                  {auth.currentUser.displayName === post.username ? (
+                    <Menu
+                      anchorEl={postDetailsAnchor}
+                      open={openPostDetailsOption}
+                      onClose={handlePostDetailsOptionClose}
+                    >
+                      <MenuItem onClick={() => handleDeletePost(postId)}>
+                        Delete Post
+                      </MenuItem>
+                      <MenuItem onClick={handleCloseDetails}>Close</MenuItem>
+                    </Menu>
+                  ) : (
+                    <Menu
+                      anchorEl={postDetailsAnchor}
+                      open={openPostDetailsOption}
+                      onClose={handlePostDetailsOptionClose}
+                    >
+                      <MenuItem onClick={handleCloseDetails}>Close</MenuItem>
+                    </Menu>
+                  )}
+                </div>
+              }
+            />
+            <CardContent onClick={handleClickOpenDetails}>
+              <Typography
                 sx={{
-                      textDecoration: "none",
+                  textDecoration: "none",
                   paddingLeft: "30px",
                   marginBottom: "10px",
                   paddingRight: "30px",
@@ -237,122 +611,122 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
               ) : (
                 " "
               )}
-          </CardContent>
+            </CardContent>
             <CardContent>
               <Stack direction="row" spacing={3}>
-              <IconButton onClick={handleLikes}>
+                <IconButton onClick={handleLikes}>
                   <FiHeart
                     sx={{
                       width: "100%",
                       height: "100%",
                       fill: isLiked.length > 0 && "red",
                       color: isLiked.length > 0 && "red",
-                    
                     }}
                   />
                 </IconButton>
 
-              <TextField className="comment-container"
-                placeholder="Add a comment"
-                onChange={(e) => setComments(e.target.value)}
-                value={comments ?? ""}
-                variant="outlined"
-                sx={{ width: "90%" }}
-              />
-
-              <IconButton
-                disabled={invalid}
-                onClick={handlePostComments}
-                color={"inherit"}
-              >
-                <RocketLaunchOutlinedIcon sx={{ color: "var(--body_color)" }} />
-                <CustomSnackbar
-                  open={showSnackbar}
-                  message="Your comment are posted."
-                  variant="success"
-                  onClose={handleSnackbarClose}
+                <TextField
+                  className="comment-container"
+                  placeholder="Add a comment"
+                  onChange={(e) => setComments(e.target.value)}
+                  value={comments ?? ""}
+                  variant="outlined"
+                  sx={{ width: "90%" }}
                 />
-              </IconButton>
-            </Stack>
-          </CardContent>
-          <CardContent>
-            {post.comments?.map((data, index) => (
-              <Stack
-                direction="column"
-                sx={{
-                  marginLeft: "20px",
-                  marginBottom: "10px",
-                  overflow: "inherit",
-                }}
-                key={index}
-              >
-                <Stack direction="row">
-                  <Avatar sx={{ bgcolor: "#57636F", textDecoration: "none" }}>
-                    {data.username.charAt(0)}
-                  </Avatar>
-                  <Box
-                    sx={{
-                      marginLeft: "10px",
-                      marginRight: "10px",
-                      justifyContent: "flex-start",
-                      backgroundColor: "#F8F9F9 ",
-                      borderRadius: "10px",
-                      padding: "10px",
-                      bgcolor: "var(--body_background)",
-                      // color: "var(--text_color)"
 
-                    }}
-                  >
-                    <Typography
-                      variant="body1"
-                      sx={{
-                        marginLeft: "5px",
-                        paddingTop: "10px",
-                        fontWeight: "600",
-                        textDecoration: "none",
-                        color: "inherit",
-                      }}
-                      component={Link}
-                      to={`/profile/${data.username}`}
-                    >
-                      {data.username}
-                    </Typography>
-                    <Typography
-                      variant="subtitle1"
+                <IconButton
+                  disabled={invalid}
+                  onClick={handlePostComments}
+                  color={"inherit"}
+                >
+                  <RocketLaunchOutlinedIcon
+                    sx={{ color: "var(--body_color)" }}
+                  />
+                  <CustomSnackbar
+                    open={showSnackbar}
+                    message="Your comment are posted."
+                    variant="success"
+                    onClose={handleSnackbarClose}
+                  />
+                </IconButton>
+              </Stack>
+            </CardContent>
+            <CardContent>
+              {post.comments?.map((data, index) => (
+                <Stack
+                  direction="column"
+                  sx={{
+                    marginLeft: "20px",
+                    marginBottom: "10px",
+                    overflow: "inherit",
+                  }}
+                  key={index}
+                >
+                  <Stack direction="row">
+                    <Avatar sx={{ bgcolor: "#57636F", textDecoration: "none" }}>
+                      {data.username.charAt(0)}
+                    </Avatar>
+                    <Box
                       sx={{
                         marginLeft: "10px",
-                        paddingBottom: "5px",
+                        marginRight: "10px",
+                        justifyContent: "flex-start",
+                        backgroundColor: "#F8F9F9 ",
+                        borderRadius: "10px",
+                        padding: "10px",
+                        bgcolor: "var(--body_background)",
+                        // color: "var(--text_color)"
                       }}
                     >
-                      {data.comment}
-                    </Typography>
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          marginLeft: "5px",
+                          paddingTop: "10px",
+                          fontWeight: "600",
+                          textDecoration: "none",
+                          color: "inherit",
+                        }}
+                        component={Link}
+                        to={`/profile/${data.username}`}
+                      >
+                        {data.username}
+                      </Typography>
+                      <Typography
+                        variant="subtitle1"
+                        sx={{
+                          marginLeft: "10px",
+                          paddingBottom: "5px",
+                        }}
+                      >
+                        {data.comment}
+                      </Typography>
+                    </Box>
                     {auth.currentUser?.displayName != data.username ? (
                       " "
                     ) : (
-                      <><IconButton onClick={handleLikes}>
-                          <FiHeart
-                            style={{
-                              width: "100%",
-                              height: "100%",
-                              fill: isLiked.length > 0 && "#A267AC",
-                              color: isLiked.length > 0 && "#A267AC",
-                              color: "var(--body_color);"
-                            }} />
-                        </IconButton><DeleteOutlinedIcon
-                          size="small"
-                          onClick={() => handleDeleteComment(data.username, data.comment, data.commentId)} /></>
-                          
-                      
+                      <Button
+                        size="small"
+                        onClick={() =>
+                          handleDeleteComment(
+                            data.username,
+                            data.comment,
+                            data.commentId
+                          )
+                        }
+                      >
+                        <Typography variant="subheader2">Remove</Typography>
+                      </Button>
                     )}
-                  </Box>
+                  </Stack>
                 </Stack>
-              </Stack>
-            ))}
-          </CardContent>
-        </Card>
-        </Container>
-        </>
-    );
-  };
+              ))}
+            </CardContent>
+          </Card>
+        </Backdrop>
+      </Container>
+    </>
+  );
+};
 
 export default PostCard;

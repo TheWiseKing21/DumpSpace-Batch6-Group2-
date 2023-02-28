@@ -12,7 +12,7 @@ import { Stack } from "@mui/system";
 import IconButton from "@mui/material/IconButton";
 import LinearProgress from "@mui/material/LinearProgress";
 import Box from "@mui/material/Box";
-import CameraAltOutlinedIcon from '@mui/icons-material/CameraAltOutlined';
+import CameraAltOutlinedIcon from "@mui/icons-material/CameraAltOutlined";
 import CustomSnackbar from "../snackbar/snackbar";
 
 import Container from "@mui/material/Container";
@@ -24,8 +24,7 @@ function LinearProgressWithLabel(props) {
         display: "flex",
         alignItems: "center",
         marginLeft: "20px",
-        marginRight: "20px"
-
+        marginRight: "20px",
       }}
     >
       <Box sx={{ width: "100%", mr: 1 }}>
@@ -39,7 +38,6 @@ function LinearProgressWithLabel(props) {
     </Box>
   );
 }
-
 
 const CreatePost = () => {
   const [image, setImage] = useState("");
@@ -142,78 +140,80 @@ const CreatePost = () => {
   };
 
   return (
-    <Card
-      elevation={24}
-      sx={{
-        maxWidth: 800,
-        borderRadius: "15px",
-        marginTop: "20px",
-        marginBottom: "20px",
-        padding: "20px",
-        backgroundColor: "var(--card_color)", color: "var(--text_color)"
-      }}
-    >
-      <CardContent>
-        <Stack direction="column" spacing={3} maxWidth="100%">
-          <TextField
-            id="standard-multiline-flexible"
-            label="Any dump thoughts?"
-            multiline
-            maxRows={4}
-            variant="outlined"
-            onChange={(e) => setCaption(e.target.value)}
-            value={caption}
-            sx={{ maxWidth: "100%", 
-            backgroundColor: "var(--home_background)", 
-            color: "white"}}
-          />
-        </Stack>
-        <Stack direction="row" spacing={3} sx={{ marginTop: "10px" }}>
-          <IconButton
-            color="primary"
-            aria-label="upload picture"
-            component="label"
-            sx={{ justifyContent: "left" }}
-          >
-            <input
-              type="file"
-              title="select image"
-              placeholder="select image"
-              onChange={(e) => setImage(e.target.files[0])}
-              accept="image/*"
-              className="image-select-input"
-              ref={imageRef}
-              hidden
-
+    <Container maxWidth="md" sx={{ marginBottom: "20px" }}>
+      <Card
+        elevation={24}
+        sx={{
+          maxWidth: 800,
+          borderRadius: "15px",
+          marginTop: "20px",
+          marginBottom: "20px",
+          padding: "20px",
+          backgroundColor: "var(--card_color)",
+          color: "var(--text_color)",
+        }}
+      >
+        <CardContent>
+          <Stack direction="column" spacing={3} maxWidth="100%">
+            <TextField
+              id="standard-multiline-flexible"
+              label="Any dump thoughts?"
+              multiline
+              maxRows={4}
+              variant="outlined"
+              onChange={(e) => setCaption(e.target.value)}
+              value={caption}
+              sx={{
+                maxWidth: "100%",
+                backgroundColor: "var(--home_background)",
+                color: "white",
+              }}
             />
-            <CameraAltOutlinedIcon />
-          </IconButton>
-          <Button
-            variant="contained"
-            onClick={handleUpload}
-            disabled={!caption}
-            sx={{ width: "90%", backgroundColor: "#57636F", color: "white" }}
-          >
-            Create post
-            {loading && <Loading />}
-
-          </Button>
-          <CustomSnackbar
-                open={showSnackbar}
-                message="Your dump thoughts are on space."
-                variant="success"
-                onClose={handleSnackbarClose}
+          </Stack>
+          <Stack direction="row" spacing={3} sx={{ marginTop: "10px" }}>
+            <IconButton
+              color="primary"
+              aria-label="upload picture"
+              component="label"
+              sx={{ justifyContent: "left" }}
+            >
+              <input
+                type="file"
+                title="select image"
+                placeholder="select image"
+                onChange={(e) => setImage(e.target.files[0])}
+                accept="image/*"
+                className="image-select-input"
+                ref={imageRef}
+                hidden
               />
-
-        </Stack>
-      </CardContent>
-      {progress > 0 && <LinearProgressWithLabel value={progress} sx={{}} />}
-      {message && (
-        <div>
-          <Typography>{message}</Typography>
-        </div>
-      )}
-    </Card>
+              <CameraAltOutlinedIcon />
+            </IconButton>
+            <Button
+              variant="contained"
+              onClick={handleUpload}
+              disabled={!caption}
+              sx={{ width: "90%", backgroundColor: "#57636F", color: "white" }}
+            >
+              Create post
+              {loading && <Loading />}
+            </Button>
+            <CustomSnackbar
+              open={showSnackbar}
+              message="Your dump thoughts are on space."
+              variant="success"
+              onClose={handleSnackbarClose}
+            />
+          </Stack>
+        </CardContent>
+        {progress > 0 && <LinearProgressWithLabel value={progress} sx={{}} />}
+        {message && (
+          <div>
+            <Typography>{message}</Typography>
+          </div>
+        )}
+      </Card>
+    </Container>
   );
 };
 
