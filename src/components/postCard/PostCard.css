@@ -1,0 +1,27 @@
+.card-container {
+  margin-top: 16px;
+  border-radius: 15px;
+}
+
+@media (max-width: 426px) {
+  .card-container {
+    margin-top: 0;
+    margin-bottom: 10px;
+    border-radius: 0px;
+  }
+}
+
+.MuiCardHeader-root{
+  background-color: var(--card_color);
+  color: var(--text_color);
+  box-shadow: var(--text_color);
+}
+
+.MuiInputLabel-root, .MuiTypography-root, .MuiInputBase-input, .MuiButtonBase-root {
+  color: var(--text_color) !important;
+}
+
+.MuiOutlinedInput-root {
+  color: var(--card_color);
+}
+

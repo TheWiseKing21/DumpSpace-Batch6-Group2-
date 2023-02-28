@@ -26,8 +26,12 @@ import {
   Icon,
   CardActions,
 } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 import Stack from "@mui/material/Stack";
-import SendIcon from "@mui/icons-material/Send";
+import RocketLaunchOutlinedIcon from "@mui/icons-material/RocketLaunchOutlined";
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import CustomSnackbar from "../snackbar/snackbar";
+
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Backdrop from "@mui/material/Backdrop";
 import Container from "@mui/material/Container";
@@ -49,10 +53,11 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
   const [setIsClick] = useState(false);
   const currentDate = new Date().toLocaleDateString("en-US");
 
-  const invalid = comments === "";
-  const isLiked = post.likes.filter(
-    (value) => auth.currentUser.displayName === value.username
-  );
+
+    const invalid = comments === "";
+    const isLiked = post.likes.filter(
+      (value) => auth.currentUser.displayName === value.username
+    );
 
   const handleLikes = async () => {
     setIsClick(true);
@@ -82,6 +87,18 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
     }, 1000);
   };
 
+  //new const for snackbar
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const handleSnackbarClose = () => {
+    setShowSnackbar(false);
+  };
+
+    //new const for snackbar
+    const [showSnackbar, setShowSnackbar] = useState(false);
+    const handleSnackbarClose = () => {
+      setShowSnackbar(false);
+    };
+
   const handlePostComments = async () => {
     try {
       await updateDoc(doc(db, "posts", postId), {
@@ -89,6 +106,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
           username: auth.currentUser.displayName,
           comment: comments,
           commentId: post.comments.length,
+
         }),
       });
       setComments("");
@@ -99,23 +117,23 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
     }
   };
 
-  const commentRef = doc(db, "posts", postId);
-  const handleDeleteComment = async (userName, userComment, userCommentId) => {
-    try {
-      await updateDoc(commentRef, {
-        comments: arrayRemove({
-          username: userName,
-          comment: userComment,
-          commentId: userCommentId,
+    const commentRef = doc(db, "posts", postId);
+    const handleDeleteComment = async (userName, userComment, userCommentId) => {
+      try {
+        await updateDoc(commentRef, {
+          comments: arrayRemove({
+            username: userName,
+            comment: userComment,
+            commentId: userCommentId,
         }),
-      });
-      setComments("");
-    } catch (error) {
-      console.log(error);
-      setAlertMessage(error.message);
-      setComments("");
-    }
-  };
+        });
+        setComments("");
+        } catch (error) {
+        console.log(error);
+        setAlertMessage(error.message);
+        setComments("");
+      }
+    };
 
   const [postAnchor, setPostAnchor] = React.useState(null);
   const openPostOption = Boolean(postAnchor);
@@ -156,14 +174,22 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
     setExpanded(!expanded);
   };
 
-  return (
-    <>
+    return (
+      <>
       <Container maxWidth="md" sx={{ marginBottom: "20px" }}>
-        <Card elevation={24} sx={{ maxWidth: 800, borderRadius: "15px" }}>
+        <Card
+          elevation={24}
+          sx={{
+            maxWidth: 800,
+            borderRadius: "15px",
+            backgroundColor: "var(--card_color)",
+            color: "var(--text_color)",
+          }}
+        >
           <CardHeader
             avatar={
               <Avatar
-                sx={{ bgcolor: blueGrey[500], textDecoration: "none" }}
+                sx={{ bgcolor: "#57636F", textDecoration: "none" }}
                 aria-label="recipe"
                 component={Link}
                 to={`/profile/${post.username}`}
@@ -181,8 +207,9 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                     hour: "2-digit",
                     minute: "2-digit",
                   })
-            }
-            action={
+
+                }
+              action={
               auth.currentUser.displayName === post.username ? (
                 <div>
                   <IconButton onClick={handlePostOptionClick}>
@@ -203,7 +230,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
               )
             }
           />
-          <CardContent onClick={handleClickOpenDetails}>
+            <CardContent onClick={handleClickOpenDetails}>
             <Typography
               sx={{
                 fontFamily: "monospace",
@@ -569,7 +596,6 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
             <CardContent onClick={handleClickOpenDetails}>
               <Typography
                 sx={{
-                  fontFamily: "monospace",
                   textDecoration: "none",
                   paddingLeft: "30px",
                   marginBottom: "10px",
@@ -588,12 +614,12 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
               ) : (
                 " "
               )}
-            </CardContent>
+          </CardContent>
             <CardContent>
               <Stack direction="row" spacing={3}>
                 <IconButton onClick={handleLikes}>
                   <FiHeart
-                    style={{
+                    sx={{
                       width: "100%",
                       height: "100%",
                       fill: isLiked.length > 0 && "red",
@@ -603,17 +629,28 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                 </IconButton>
 
                 <TextField
+                  className="comment-container"
                   placeholder="Add a comment"
                   onChange={(e) => setComments(e.target.value)}
                   value={comments ?? ""}
+                  variant="outlined"
                   sx={{ width: "90%" }}
                 />
+
                 <IconButton
                   disabled={invalid}
                   onClick={handlePostComments}
-                  color="inherit"
+                  color={"inherit"}
                 >
-                  <SendIcon />
+                  <RocketLaunchOutlinedIcon
+                    sx={{ color: "var(--body_color)" }}
+                  />
+                  <CustomSnackbar
+                    open={showSnackbar}
+                    message="Your comment are posted."
+                    variant="success"
+                    onClose={handleSnackbarClose}
+                  />
                 </IconButton>
               </Stack>
             </CardContent>
@@ -629,9 +666,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                   key={index}
                 >
                   <Stack direction="row">
-                    <Avatar
-                      sx={{ bgcolor: blueGrey[500], textDecoration: "none" }}
-                    >
+                    <Avatar sx={{ bgcolor: "#57636F", textDecoration: "none" }}>
                       {data.username.charAt(0)}
                     </Avatar>
                     <Box
@@ -639,9 +674,11 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                         marginLeft: "10px",
                         marginRight: "10px",
                         justifyContent: "flex-start",
-                        bgcolor: "lightblue",
+                        backgroundColor: "#F8F9F9 ",
                         borderRadius: "10px",
                         padding: "10px",
+                        bgcolor: "var(--body_background)",
+                        // color: "var(--text_color)"
                       }}
                     >
                       <Typography
@@ -658,7 +695,6 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                       >
                         {data.username}
                       </Typography>
-
                       <Typography
                         variant="subtitle1"
                         sx={{
@@ -685,15 +721,15 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                         <Typography variant="subheader2">Remove</Typography>
                       </Button>
                     )}
-                  </Stack>
+                  </Box>
                 </Stack>
-              ))}
-            </CardContent>
-          </Card>
-        </Backdrop>
-      </Container>
-    </>
-  );
-};
+              </Stack>
+            ))}
+          </CardContent>
+        </Card>
+        </Container>
+        </>
+    );
+  };
 
 export default PostCard;
