@@ -254,8 +254,9 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                   style={{
                     width: "100%",
                     height: "100%",
-                    fill: isLiked.length > 0 && "red",
-                    color: isLiked.length > 0 && "red",
+                    fill: isLiked.length > 0 && "#57636F",
+                    color: isLiked.length > 0 && "#57636F",
+                    color: "var(--text_color)"
                   }}
                 />
               </IconButton>
@@ -266,8 +267,8 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                 value={comments ?? ""}
                 sx={{
                   width: "90%",
-                  backgroundColor: "var(--home_background)",
-                  color: "var(--text_color)",
+                  // backgroundColor: "var(--home_background)",
+                  // color: "var(--text_color)",
                 }}
               />
               <IconButton
@@ -296,7 +297,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                   aria-expanded={expanded}
                   aria-label="show more"
                 >
-                  <Typography sx={{ marginRight: "5px" }}>
+                  <Typography sx={{ marginRight: "5px", color: "var(--text_color)" }}>
                     View other comments
                   </Typography>
                   <CommentIcon />
