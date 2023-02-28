@@ -2,3 +2,8 @@
     background-color: var(--button);
     color: var(--text_color);
 } */
+
+
+.MuiTextField-root{
+    color: white;
+}

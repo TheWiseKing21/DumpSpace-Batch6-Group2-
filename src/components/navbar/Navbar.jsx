@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import firebaseContex from "../../context/FirebaseContext";
 import { auth } from "../../config/FirebaseConfig";
 import Box from "@mui/material/Box";
-import { AppBar, IconButton, Toolbar, Tooltip } from "@mui/material";
+import { AppBar, IconButton, Toolbar, Tooltip, Button } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import AdbIcon from "@mui/icons-material/Adb";
 import SearchIcon from "@mui/icons-material/Search";
@@ -14,9 +14,9 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
-import DarkMode from "../darkmode/DarkMode"
-import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import DarkMode from "../darkmode/DarkMode";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+
 
 const Navbar = () => {
   const { logout, isSearch, setIsSearch } = useContext(firebaseContex);
@@ -165,10 +165,10 @@ const Navbar = () => {
           <Box sx={{ flexGrow: 0, backgroundColor: "var(--card_color)", color: "var(--text_color)" }}>
             <Tooltip title="Menu">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <FontAwesomeIcon icon={faEllipsisV} style={{ color: "var(--body_color)" }} />
+                <MoreVertIcon style={{ color: "var(--body_color)" }} />
               </IconButton>
             </Tooltip>
-            <Menu
+            <Menu onClick={handleCloseUserMenu}
               sx={{ mt: '45px' }}
               id="menu-appbar"
               anchorEl={anchorElUser}
@@ -183,12 +183,18 @@ const Navbar = () => {
               }}
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
+              PaperProps={{
+                style: { backgroundColor: "var(--home_background)" }
+
+              }}
             >
-              <MenuItem onClick={handleCloseUserMenu} >
-                <Typography textAlign="center" > <h4 onClick={handleLogout}>Logout</h4>
+              {/* <MenuItem onClick={handleCloseUserMenu} > */}
+                <Button onClick={handleLogout} variant="outlined" startIcon={<LogoutIcon />}
+                      sx={{ marginBottom: "5px", color: "#57636F", borderColor: "#57636F", '&:hover': { borderColor: '#57636F', backgroundColor: "var(--button)", color: "var(--text_color)" } }}>
+                      Logout
+                    </Button>
                   <DarkMode />
-                </Typography>
-              </MenuItem>
+              {/* </MenuItem> */}
 
             </Menu>
           </Box>
