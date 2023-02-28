@@ -184,7 +184,7 @@ const Navbar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
               PaperProps={{
-                style: { backgroundColor: "var(--home_background)" }
+                style: { backgroundColor: "var(--home_background)",  boxShadow: "0px 0px 5px #fff" }
 
               }}
             >
