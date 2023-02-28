@@ -170,9 +170,7 @@ const Navbar = () => {
               >
                 <MoreVert />
                 </IconButton>
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <FontAwesomeIcon icon={faEllipsisV} style={{ color: "var(--body_color)" }} />
-              </IconButton>
+              
             </Tooltip>
             <Menu
               sx={{ mt: "45px", padding: "10px" }}
