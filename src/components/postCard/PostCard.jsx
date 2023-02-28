@@ -26,7 +26,6 @@ import {
   Icon,
   CardActions,
 } from "@mui/material";
-import { Box, TextField } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import RocketLaunchOutlinedIcon from "@mui/icons-material/RocketLaunchOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
@@ -39,6 +38,7 @@ import Collapse from "@mui/material/Collapse";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { styled } from "@mui/material/styles";
 import CommentIcon from "@mui/icons-material/Comment";
+import SendIcon from "@mui/icons-material/Send";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -53,11 +53,10 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
   const [setIsClick] = useState(false);
   const currentDate = new Date().toLocaleDateString("en-US");
 
-
-    const invalid = comments === "";
-    const isLiked = post.likes.filter(
-      (value) => auth.currentUser.displayName === value.username
-    );
+  const invalid = comments === "";
+  const isLiked = post.likes.filter(
+    (value) => auth.currentUser.displayName === value.username
+  );
 
   const handleLikes = async () => {
     setIsClick(true);
@@ -93,12 +92,6 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
     setShowSnackbar(false);
   };
 
-    //new const for snackbar
-    const [showSnackbar, setShowSnackbar] = useState(false);
-    const handleSnackbarClose = () => {
-      setShowSnackbar(false);
-    };
-
   const handlePostComments = async () => {
     try {
       await updateDoc(doc(db, "posts", postId), {
@@ -106,7 +99,6 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
           username: auth.currentUser.displayName,
           comment: comments,
           commentId: post.comments.length,
-
         }),
       });
       setComments("");
@@ -117,23 +109,23 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
     }
   };
 
-    const commentRef = doc(db, "posts", postId);
-    const handleDeleteComment = async (userName, userComment, userCommentId) => {
-      try {
-        await updateDoc(commentRef, {
-          comments: arrayRemove({
-            username: userName,
-            comment: userComment,
-            commentId: userCommentId,
+  const commentRef = doc(db, "posts", postId);
+  const handleDeleteComment = async (userName, userComment, userCommentId) => {
+    try {
+      await updateDoc(commentRef, {
+        comments: arrayRemove({
+          username: userName,
+          comment: userComment,
+          commentId: userCommentId,
         }),
-        });
-        setComments("");
-        } catch (error) {
-        console.log(error);
-        setAlertMessage(error.message);
-        setComments("");
-      }
-    };
+      });
+      setComments("");
+    } catch (error) {
+      console.log(error);
+      setAlertMessage(error.message);
+      setComments("");
+    }
+  };
 
   const [postAnchor, setPostAnchor] = React.useState(null);
   const openPostOption = Boolean(postAnchor);
@@ -174,8 +166,8 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
     setExpanded(!expanded);
   };
 
-    return (
-      <>
+  return (
+    <>
       <Container maxWidth="md" sx={{ marginBottom: "20px" }}>
         <Card
           elevation={24}
@@ -207,9 +199,8 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                     hour: "2-digit",
                     minute: "2-digit",
                   })
-
-                }
-              action={
+            }
+            action={
               auth.currentUser.displayName === post.username ? (
                 <div>
                   <IconButton onClick={handlePostOptionClick}>
@@ -230,7 +221,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
               )
             }
           />
-            <CardContent onClick={handleClickOpenDetails}>
+          <CardContent onClick={handleClickOpenDetails}>
             <Typography
               sx={{
                 fontFamily: "monospace",
@@ -300,7 +291,12 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
               <CardContent>
                 {post.comments?.map((data, index) =>
                   data.commentId > 2 ? (
-                    <Collapse in={expanded} timeout="auto" unmountOnExit>
+                    <Collapse
+                      key={data.commentId}
+                      in={expanded}
+                      timeout="auto"
+                      unmountOnExit
+                    >
                       <Stack
                         direction="column"
                         sx={{
@@ -614,7 +610,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
               ) : (
                 " "
               )}
-          </CardContent>
+            </CardContent>
             <CardContent>
               <Stack direction="row" spacing={3}>
                 <IconButton onClick={handleLikes}>
@@ -721,15 +717,15 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                         <Typography variant="subheader2">Remove</Typography>
                       </Button>
                     )}
-                  </Box>
+                  </Stack>
                 </Stack>
-              </Stack>
-            ))}
-          </CardContent>
-        </Card>
-        </Container>
-        </>
-    );
-  };
+              ))}
+            </CardContent>
+          </Card>
+        </Backdrop>
+      </Container>
+    </>
+  );
+};
 
 export default PostCard;

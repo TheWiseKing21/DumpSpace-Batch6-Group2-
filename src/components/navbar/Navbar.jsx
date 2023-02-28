@@ -46,10 +46,18 @@ const Navbar = () => {
     setAnchorElUser(null);
   };
   return (
-    <AppBar position="static" className="appbar" sx={{borderColor: "#000", backgroundColor: "var(--card_color)", color: "var(--text_color)"}}>
+    <AppBar
+      position="static"
+      className="appbar"
+      sx={{
+        borderColor: "#000",
+        backgroundColor: "var(--card_color)",
+        color: "var(--text_color)",
+      }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}/>
+          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
@@ -138,42 +146,43 @@ const Navbar = () => {
             DumpSpace
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            <Tooltip title="Search">
-              <IconButton
-                onClick={() => setIsSearch(!isSearch)}
-                size="large"
-                color="inherit"
-              >
-                <SearchIcon />
-              </IconButton>
-            </Tooltip>
+            <IconButton
+              onClick={() => setIsSearch(!isSearch)}
+              size="large"
+              color="inherit"
+            >
+              <SearchIcon />
+            </IconButton>
 
-            <Tooltip title="Go to Profile">
-              <IconButton
-                size="large"
-                color="inherit"
-                component={Link}
-                to={`/profile/${auth.currentUser?.displayName}`}
-              >
-                <PersonIcon />
-              </IconButton>
-            </Tooltip>
+            <IconButton
+              size="large"
+              color="inherit"
+              component={Link}
+              to={`/profile/${auth.currentUser?.displayName}`}
+            >
+              <PersonIcon />
+            </IconButton>
           </Box>
 
           {/* new */}
-          <Box sx={{ flexGrow: 0, backgroundColor: "var(--card_color)", color: "var(--text_color)" }}>
-            <Tooltip title="Menu">
-              <IconButton
-                onClick={handleOpenUserMenu}
-                sx={{ p: 0 }}
-                color="inherit"
-              >
-                <MoreVert />
-                </IconButton>
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <FontAwesomeIcon icon={faEllipsisV} style={{ color: "var(--body_color)" }} />
-              </IconButton>
-            </Tooltip>
+          <Box
+            sx={{
+              flexGrow: 0,
+              backgroundColor: "var(--card_color)",
+              color: "var(--text_color)",
+            }}
+          >
+            <IconButton
+              onClick={handleOpenUserMenu}
+              sx={{ p: 0 }}
+              color="inherit"
+            >
+              <MoreVert />
+            </IconButton>
+            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <MoreVert style={{ color: "var(--body_color)" }} />
+            </IconButton>
+
             <Menu
               sx={{ mt: "45px", padding: "10px" }}
               id="menu-appbar"
@@ -190,7 +199,7 @@ const Navbar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <MenuItem onClick={handleCloseUserMenu} >
+              <MenuItem onClick={handleCloseUserMenu}>
                 <DarkMode />
               </MenuItem>
               <MenuItem onClick={handleLogout}>
