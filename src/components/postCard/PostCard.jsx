@@ -186,7 +186,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
               title={post.username}
               titleTypographyProps={{ fontWeight: "600", variant: "body1" }}
               subheader={
-                post.datePostedOn.toDate().toLocaleDateString("en-US") !===
+                post.datePostedOn.toDate().toLocaleDateString("en-US") !==
                   currentDate
                   ? post.datePostedOn.toDate().toLocaleDateString("en-US")
                   : post.datePostedOn.toDate().toLocaleTimeString([], {
@@ -194,7 +194,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                     minute: "2-digit",
                   })
 
-              }
+                }
               action={
               auth.currentUser.displayName === post.username ? (
                 <div>
@@ -227,7 +227,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
               >
                 {post.caption}
               </Typography>
-              {post.imageUrl !=== null ? (
+              {post.imageUrl !== null ? (
                 <CardMedia
                   component="img"
                   height="100%"
@@ -350,7 +350,8 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
             ))}
           </CardContent>
         </Card>
-      </div>
+        </Container>
+        </>
     );
   };
 
