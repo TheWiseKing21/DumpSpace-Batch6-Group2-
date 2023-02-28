@@ -43,11 +43,11 @@ const Login = () => {
       } else {
         // setErrorMessage("Your email not verified yet.");
         <CustomSnackbar
-                open={showSnackbar}
-                message="Your email not verified yet."
-                variant="success"
-                onClose={handleSnackbarClose}
-              />
+          open={showSnackbar}
+          message="Your email not verified yet."
+          variant="success"
+          onClose={handleSnackbarClose}
+        />;
         await sendEmailVerification(auth.currentUser);
         setLoading(false);
         setIsEmailSend(true);
@@ -137,7 +137,7 @@ const Login = () => {
                   >
                     Log In
                   </button>
-                  {loading && <Loading />}
+                  {/* {loading && <Loading />} */}
                 </div>
               </form>
 
@@ -193,7 +193,6 @@ const Login = () => {
       {/* <DarkMode /> */}
       {/* <Footer /> */}
     </div>
-
   );
 };
 
