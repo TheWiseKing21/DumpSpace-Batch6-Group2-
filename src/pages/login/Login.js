@@ -1,13 +1,14 @@
 import { sendEmailVerification } from "firebase/auth";
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Loading from "../../components/loading/Loading";
+// import Loading from "../../components/loading/Loading";
 import { auth } from "../../config/FirebaseConfig";
 import firebaseContex from "../../context/FirebaseContext";
 import "./Login.css";
 import "../signup/Signup.css";
 
 import CustomSnackbar from "../../components/snackbar/snackbar";
+// import DarkMode from "../../components/darkmode/DarkMode";
 
 
 const Login = () => {
@@ -41,7 +42,13 @@ const Login = () => {
         setLoading(false);
         navigate("/");
       } else {
-        setErrorMessage("Your email not verified yet.");
+        // setErrorMessage("Your email not verified yet.");
+        <CustomSnackbar
+                open={showSnackbar}
+                message="Your email not verified yet."
+                variant="success"
+                onClose={handleSnackbarClose}
+              />
         await sendEmailVerification(auth.currentUser);
         setLoading(false);
         setIsEmailSend(true);
@@ -190,9 +197,10 @@ const Login = () => {
         </div>
 
       </div>
-
+      {/* <DarkMode /> */}
       {/* <Footer /> */}
     </div>
+
   );
 };
 

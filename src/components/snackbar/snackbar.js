@@ -14,7 +14,7 @@ function CustomSnackbar(props) {
         >
             <SnackbarContent
                 message={message}
-                style={{ backgroundColor: variant === 'success' ? '#064670' : '#fff' }}
+                style={{ backgroundColor: variant === 'success' ? '#57636F' : '#fff' }}
             />
         </Snackbar>
     );

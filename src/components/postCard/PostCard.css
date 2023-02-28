@@ -1,5 +1,4 @@
 .card-container {
-  border: 1px solid var(--border-color);
   margin-top: 16px;
   border-radius: 15px;
 }
@@ -13,6 +12,16 @@
 }
 
 .MuiCardHeader-root{
-  background-color: var(--body_background);
-  color: var(--body_color);
+  background-color: var(--card_color);
+  color: var(--text_color);
+  box-shadow: var(--text_color);
 }
+
+.MuiInputLabel-root, .MuiTypography-root, .MuiInputBase-input, .MuiButtonBase-root {
+  color: var(--text_color) !important;
+}
+
+.MuiOutlinedInput-root {
+  color: var(--card_color);
+}
+

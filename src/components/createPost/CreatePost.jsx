@@ -10,9 +10,11 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import { Stack } from "@mui/system";
 import IconButton from "@mui/material/IconButton";
-import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import LinearProgress from "@mui/material/LinearProgress";
 import Box from "@mui/material/Box";
+import CameraAltOutlinedIcon from '@mui/icons-material/CameraAltOutlined';
+import CustomSnackbar from "../snackbar/snackbar";
+
 
 function LinearProgressWithLabel(props) {
   return (
@@ -21,7 +23,8 @@ function LinearProgressWithLabel(props) {
         display: "flex",
         alignItems: "center",
         marginLeft: "20px",
-        marginRight: "20px",
+        marginRight: "20px"
+
       }}
     >
       <Box sx={{ width: "100%", mr: 1 }}>
@@ -36,6 +39,7 @@ function LinearProgressWithLabel(props) {
   );
 }
 
+
 const CreatePost = () => {
   const [image, setImage] = useState("");
   const [caption, setCaption] = useState("");
@@ -44,7 +48,14 @@ const CreatePost = () => {
   const imageRef = useRef();
   const [loading, setLoading] = useState(false);
 
+  //new const for snackbar
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const handleSnackbarClose = () => {
+    setShowSnackbar(false);
+  };
+
   const handleUpload = () => {
+    setShowSnackbar(true);
     if (image) {
       setLoading(true);
       const storageRef = ref(storage, `/images/${image.name}`);
@@ -138,6 +149,7 @@ const CreatePost = () => {
         marginTop: "20px",
         marginBottom: "20px",
         padding: "20px",
+        backgroundColor: "var(--card_color)", color: "var(--text_color)"
       }}
     >
       <CardContent>
@@ -150,7 +162,9 @@ const CreatePost = () => {
             variant="outlined"
             onChange={(e) => setCaption(e.target.value)}
             value={caption}
-            sx={{ maxWidth: "100%" }}
+            sx={{ maxWidth: "100%", 
+            backgroundColor: "var(--home_background)", 
+            color: "white"}}
           />
         </Stack>
         <Stack direction="row" spacing={3} sx={{ marginTop: "10px" }}>
@@ -169,18 +183,27 @@ const CreatePost = () => {
               className="image-select-input"
               ref={imageRef}
               hidden
+
             />
-            <PhotoCamera />
+            <CameraAltOutlinedIcon />
           </IconButton>
           <Button
             variant="contained"
             onClick={handleUpload}
             disabled={!caption}
-            sx={{ width: "90%" }}
+            sx={{ width: "90%", backgroundColor: "#57636F", color: "white" }}
           >
             Create post
             {loading && <Loading />}
+
           </Button>
+          <CustomSnackbar
+                open={showSnackbar}
+                message="Your dump thoughts are on space."
+                variant="success"
+                onClose={handleSnackbarClose}
+              />
+
         </Stack>
       </CardContent>
       {progress > 0 && <LinearProgressWithLabel value={progress} sx={{}} />}

@@ -1,4 +1,10 @@
-/* .MuiCardHeader-root{
-    background-color: var(--body_background);
-    color: var(--body_color);
-  } */
+.appbar{
+  background-color:#57636F !important;
+   color: white
+}
+
+.MuiCardHeader-root, .MuiList-root{
+  background-color: var(--card_color);
+  color: var(--text_color);
+}
+

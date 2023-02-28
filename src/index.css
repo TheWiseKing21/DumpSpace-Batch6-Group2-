@@ -12,10 +12,6 @@ body {
   overflow-y: scroll;
 }
 
-::-webkit-scrollbar {
-  height: 0px;
-}
-
 /* common classes */
 
 .absolute-center {
@@ -63,13 +59,18 @@ body {
 
 /* CSS variable for the dark theme*/
 :root {
-  --body_background: #fff ;
-  --body_color: black;
-  --link_color: navy;
+  --home_background: #fff ;
+  --card_color: #fff;
+  --text_color: #000;
+
 }
 
 [data-theme="dark"]{
-  --body_background: #243043;
-  --body_color: white;
-  --link_color: cyan;
+  --home_background: #1F1F21;
+  --body_color: #fff;
+  --card_color:  #0D0C12;
+  --text_color: #fff; 
+  --button: #57636F;
 }
+
+
