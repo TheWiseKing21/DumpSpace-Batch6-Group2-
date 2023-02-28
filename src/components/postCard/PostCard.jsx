@@ -474,7 +474,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                           paddingBottom: "5px",
                         }}
                       >
-                        {data.comment + data.commentId}
+                        {data.comment}
                       </Typography>
                     </Box>
                     {auth.currentUser?.displayName != data.username ? (
