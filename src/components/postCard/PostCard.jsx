@@ -16,21 +16,19 @@ import CardContent from "@mui/material/CardContent";
 import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { blueGrey } from "@mui/material/colors";
 import {
   Box,
   Menu,
   Button,
   MenuItem,
   TextField,
-  Icon,
   CardActions,
 } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import RocketLaunchOutlinedIcon from "@mui/icons-material/RocketLaunchOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import CustomSnackbar from "../snackbar/snackbar";
-
+import DeleteIcon from '@mui/icons-material/Delete';
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Backdrop from "@mui/material/Backdrop";
 import Container from "@mui/material/Container";
@@ -214,9 +212,10 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                     open={openPostOption}
                     onClose={handlePostOptionClose}
                   >
-                    <MenuItem onClick={() => handleDeletePost(postId)}>
+                    <Button onClick={() => handleDeletePost(postId)} variant="outlined" startIcon={<DeleteIcon />}
+                      sx={{ color: "#57636F", borderColor: "#57636F", '&:hover': { borderColor: '#57636F', backgroundColor: "var(--button)", color: "var(--text_color)" } }}>
                       Delete Post
-                    </MenuItem>
+                    </Button>
                   </Menu>
                 </div>
               ) : (
@@ -254,8 +253,8 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                   style={{
                     width: "100%",
                     height: "100%",
-                    fill: isLiked.length > 0 && "#57636F",
-                    color: isLiked.length > 0 && "#57636F",
+                    fill: isLiked.length > 0 && "#810955",
+                    color: isLiked.length > 0 && "#810955",
                     color: "var(--text_color)"
                   }}
                 />
@@ -267,8 +266,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                 value={comments ?? ""}
                 sx={{
                   width: "90%",
-                  // backgroundColor: "var(--home_background)",
-                  // color: "var(--text_color)",
+
                 }}
               />
               <IconButton
@@ -300,7 +298,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                   <Typography sx={{ marginRight: "5px", color: "var(--text_color)" }}>
                     View other comments
                   </Typography>
-                  <CommentIcon sx={{color: "var(--text_color)" }}/>
+                  <CommentIcon sx={{ color: "var(--text_color)" }} />
                 </ExpandMore>
               </CardActions>
 
@@ -369,8 +367,9 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                           {auth.currentUser?.displayName != data.username ? (
                             " "
                           ) : (
-                            <Button
+                            <IconButton
                               size="small"
+                              aria-label="delete"
                               onClick={() =>
                                 handleDeleteComment(
                                   data.username,
@@ -378,12 +377,9 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                                   data.commentId
                                 )
                               }
-                              color="white"
                             >
-                              <Typography variant="subheader2" sx={{ color: "var(--text_color)" }}>
-                                <DeleteOutlinedIcon />
-                              </Typography>
-                            </Button>
+                        <DeleteIcon sx={{color: "#57636F", '&:hover': { color: "var(--text_color)" }}}/>
+                            </IconButton>
                           )}
                         </Stack>
                       </Stack>
@@ -445,18 +441,19 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                         {auth.currentUser?.displayName != data.username ? (
                           " "
                         ) : (
-                          <Button
-                            size="small"
-                            onClick={() =>
-                              handleDeleteComment(
-                                data.username,
-                                data.comment,
-                                data.commentId
-                              )
-                            }
-                          >
-                            <Typography variant="subheader2"><DeleteOutlinedIcon /></Typography>
-                          </Button>
+                          <IconButton
+                        size="small"
+                        aria-label="delete"
+                        onClick={() =>
+                          handleDeleteComment(
+                            data.username,
+                            data.comment,
+                            data.commentId
+                          )
+                        }
+                      >
+                        <DeleteIcon sx={{color: "#57636F", '&:hover': { color: "var(--text_color)" }}}/>
+                      </IconButton>
                         )}
                       </Stack>
                     </Stack>
@@ -520,8 +517,9 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                     {auth.currentUser?.displayName != data.username ? (
                       " "
                     ) : (
-                      <Button
+                      <IconButton
                         size="small"
+                        aria-label="delete"
                         onClick={() =>
                           handleDeleteComment(
                             data.username,
@@ -530,8 +528,8 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                           )
                         }
                       >
-                        <Typography variant="subheader2"><DeleteOutlinedIcon /></Typography>
-                      </Button>
+                        <DeleteIcon sx={{color: "#57636F", '&:hover': { color: "var(--text_color)" }}}/>
+                      </IconButton>
                     )}
                   </Stack>
                 </Stack>
@@ -593,9 +591,13 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                       open={openPostDetailsOption}
                       onClose={handlePostDetailsOptionClose}
                     >
-                      <MenuItem onClick={() => handleDeletePost(postId)}>
+                      <Button onClick={() => handleDeletePost(postId)} variant="outlined" startIcon={<DeleteIcon />}
+                        sx={{ color: "#57636F", borderColor: "#57636F", '&:hover': { borderColor: '#57636F', textColor: "#57636F", backgroundColor: "var(--button)", color: "var(--text_color)" } }}>
                         Delete Post
-                      </MenuItem>
+                      </Button>
+                      {/* <MenuItem onClick={() => handleDeletePost(postId)}>
+                        Delete Post
+                      </MenuItem> */}
                       <MenuItem onClick={handleCloseDetails}>Close</MenuItem>
                     </Menu>
                   ) : (
@@ -639,8 +641,9 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                     sx={{
                       width: "100%",
                       height: "100%",
-                      fill: isLiked.length > 0 && "red",
-                      color: isLiked.length > 0 && "red",
+                      fill: isLiked.length > 0 && "#810955",
+                      color: isLiked.length > 0 && "#810955",
+                      color: "var(--text_color)"
                     }}
                   />
                 </IconButton>
@@ -725,8 +728,9 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                     {auth.currentUser?.displayName != data.username ? (
                       " "
                     ) : (
-                      <Button
+                      <IconButton
                         size="small"
+                        aria-label="delete"
                         onClick={() =>
                           handleDeleteComment(
                             data.username,
@@ -735,8 +739,8 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                           )
                         }
                       >
-                        <DeleteOutlinedIcon />
-                      </Button>
+                        <DeleteIcon sx={{color: "#57636F", '&:hover': { color: "var(--text_color)" }}}/>
+                      </IconButton>
                     )}
                   </Stack>
                 </Stack>
