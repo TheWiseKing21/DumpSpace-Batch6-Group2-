@@ -179,9 +179,6 @@ const Navbar = () => {
             >
               <MoreVert />
             </IconButton>
-            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <MoreVert style={{ color: "var(--body_color)" }} />
-            </IconButton>
 
             <Menu
               sx={{ mt: "45px", padding: "10px" }}
