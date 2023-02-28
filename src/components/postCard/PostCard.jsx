@@ -269,7 +269,15 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                 onClick={handlePostComments}
                 color="inherit"
               >
-                <SendIcon />
+                 <RocketLaunchOutlinedIcon
+                    sx={{ color: "var(--body_color)" }}
+                  />
+                  <CustomSnackbar
+                    open={showSnackbar}
+                    message="Your comment are posted."
+                    variant="success"
+                    onClose={handleSnackbarClose}
+                  />
               </IconButton>
             </Stack>
           </CardContent>
@@ -310,7 +318,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                         <Stack direction="row">
                           <Avatar
                             sx={{
-                              bgcolor: blueGrey[500],
+                              bgcolor: "#435c75",
                               textDecoration: "none",
                             }}
                           >
@@ -321,7 +329,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                               marginLeft: "10px",
                               marginRight: "10px",
                               justifyContent: "flex-start",
-                              bgcolor: "lightblue",
+                              bgcolor: "#435c75",
                               borderRadius: "10px",
                               padding: "10px",
                             }}
@@ -363,8 +371,9 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                                   data.commentId
                                 )
                               }
+                              color ="white"
                             >
-                              <Typography variant="subheader2">
+                              <Typography variant="subheader2" >
                                 Remove
                               </Typography>
                             </Button>
@@ -385,7 +394,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                       <Stack direction="row">
                         <Avatar
                           sx={{
-                            bgcolor: blueGrey[500],
+                            bgcolor: "#435c75",
                             textDecoration: "none",
                           }}
                         >
@@ -462,7 +471,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                 >
                   <Stack direction="row">
                     <Avatar
-                      sx={{ bgcolor: blueGrey[500], textDecoration: "none" }}
+                      sx={{ bgcolor: "#435c75", textDecoration: "none" }}
                     >
                       {data.username.charAt(0)}
                     </Avatar>
@@ -471,7 +480,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                         marginLeft: "10px",
                         marginRight: "10px",
                         justifyContent: "flex-start",
-                        bgcolor: "lightblue",
+                        bgcolor: "#435c75",
                         borderRadius: "10px",
                         padding: "10px",
                       }}
