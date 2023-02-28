@@ -1,13 +1,9 @@
-/* .MuiButton-contained {
+/* .create-post {
     background-color: var(--button);
-    color: var(--text_color) !important;
-
+    color: var(--text_color);
 } */
 
-/* .MuiStack-root:focus {
-    outline: none;
-  } */
 
-.MuiPaper-root {
-    border-color: var(--text_color);
+.MuiTextField-root{
+    color: white;
 }

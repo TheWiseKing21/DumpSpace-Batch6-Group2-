@@ -16,21 +16,21 @@ import CardContent from "@mui/material/CardContent";
 import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { blueGrey } from "@mui/material/colors";
 import {
   Box,
   Menu,
   Button,
   MenuItem,
   TextField,
-  Icon,
   CardActions,
+  Tooltip,
 } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import RocketLaunchOutlinedIcon from "@mui/icons-material/RocketLaunchOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import CustomSnackbar from "../snackbar/snackbar";
-
+import CloseIcon from '@mui/icons-material/Close';
+import DeleteIcon from '@mui/icons-material/Delete';
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Backdrop from "@mui/material/Backdrop";
 import Container from "@mui/material/Container";
@@ -40,6 +40,7 @@ import { styled } from "@mui/material/styles";
 import CommentIcon from "@mui/icons-material/Comment";
 import SendIcon from "@mui/icons-material/Send";
 
+
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
@@ -47,11 +48,13 @@ const ExpandMore = styled((props) => {
   marginLeft: "auto",
 }));
 
+
 const PostCard = ({ post, postId, setAlertMessage }) => {
   const [likesCount, setLikesCount] = useState(post.likes);
   const [comments, setComments] = useState("");
   const [isClick, setIsClick] = useState(false);
   const currentDate = new Date().toLocaleDateString("en-US");
+  const [message, setMessage] = useState("");
 
   const invalid = comments === "";
   const isLiked = post.likes.filter(
@@ -102,6 +105,8 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
         }),
       });
       setComments("");
+      setMessage("Your comment is on space.");
+      setShowSnackbar(true);
     } catch (error) {
       console.log(error);
       setAlertMessage(error.message);
@@ -111,6 +116,8 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
 
   const commentRef = doc(db, "posts", postId);
   const handleDeleteComment = async (userName, userComment, userCommentId) => {
+    setMessage("Your comment is out on space.");
+    setShowSnackbar(true);
     try {
       await updateDoc(commentRef, {
         comments: arrayRemove({
@@ -147,6 +154,8 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
 
   const handleDeletePost = async (e) => {
     await deleteDoc(doc(db, "posts", e));
+    setMessage("Your post is out on space.");
+    setShowSnackbar(true);
   };
 
   const [openPostDetails, setOpenPostDetails] = React.useState(false);
@@ -168,7 +177,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
 
   return (
     <>
-      <Container maxWidth="md" sx={{ marginBottom: "20px" }}>
+      <Container maxWidth="md" sx={{ marginBottom: "20px" }} className="card-container">
         <Card
           elevation={24}
           sx={{
@@ -176,6 +185,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
             borderRadius: "15px",
             backgroundColor: "var(--card_color)",
             color: "var(--text_color)",
+            boxShadow: "0px 0px 5px #fff"
           }}
         >
           <CardHeader
@@ -193,27 +203,34 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
             titleTypographyProps={{ fontWeight: "600", variant: "body1" }}
             subheader={
               post.datePostedOn.toDate().toLocaleDateString("en-US") !==
-              currentDate
+                currentDate
                 ? post.datePostedOn.toDate().toLocaleDateString("en-US")
                 : post.datePostedOn.toDate().toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })
             }
+            subheaderTypographyProps={{ color: "var(--text_color)" }}
+
             action={
               auth.currentUser.displayName === post.username ? (
                 <div>
                   <IconButton onClick={handlePostOptionClick}>
-                    <MoreVertIcon />
+                    <MoreVertIcon sx={{ color: "var(--text_color)" }} />
                   </IconButton>
                   <Menu
                     anchorEl={postAnchor}
                     open={openPostOption}
                     onClose={handlePostOptionClose}
+                    PaperProps={{
+                      style: { backgroundColor: "var(--home_background)", boxShadow: "0px 0px 5px #fff" }
+
+                    }}
                   >
-                    <MenuItem onClick={() => handleDeletePost(postId)}>
+                    <Button onClick={() => handleDeletePost(postId)} variant="outlined" startIcon={<DeleteIcon />}
+                      sx={{ color: "#57636F", borderColor: "#57636F", '&:hover': { borderColor: '#57636F', backgroundColor: "var(--button)", color: "var(--text_color)" } }}>
                       Delete Post
-                    </MenuItem>
+                    </Button>
                   </Menu>
                 </div>
               ) : (
@@ -224,7 +241,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
           <CardContent onClick={handleClickOpenDetails}>
             <Typography
               sx={{
-                fontFamily: "monospace",
+                // fontFamily: "monospace",
                 textDecoration: "none",
                 paddingLeft: "30px",
                 marginBottom: "10px",
@@ -251,8 +268,9 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                   style={{
                     width: "100%",
                     height: "100%",
-                    fill: isLiked.length > 0 && "red",
-                    color: isLiked.length > 0 && "red",
+                    fill: isLiked.length > 0 && "#810955",
+                    color: isLiked.length > 0 && "#810955",
+                    color: "var(--text_color)"
                   }}
                 />
               </IconButton>
@@ -260,14 +278,25 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                 placeholder="Add a comment"
                 onChange={(e) => setComments(e.target.value)}
                 value={comments ?? ""}
-                sx={{ width: "90%" }}
+                sx={{
+                  width: "90%",
+
+                }}
               />
               <IconButton
                 disabled={invalid}
                 onClick={handlePostComments}
                 color="inherit"
               >
-                <SendIcon />
+                <RocketLaunchOutlinedIcon
+                  sx={{ color: "var(--body_color)" }}
+                />
+                <CustomSnackbar
+                  open={showSnackbar}
+                  message={message}
+                  variant="success"
+                  onClose={handleSnackbarClose}
+                />
               </IconButton>
             </Stack>
           </CardContent>
@@ -280,10 +309,10 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                   aria-expanded={expanded}
                   aria-label="show more"
                 >
-                  <Typography sx={{ marginRight: "5px" }}>
+                  <Typography sx={{ marginRight: "5px", color: "var(--text_color)" }}>
                     View other comments
                   </Typography>
-                  <CommentIcon />
+                  <CommentIcon sx={{ color: "var(--text_color)" }} />
                 </ExpandMore>
               </CardActions>
 
@@ -308,7 +337,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                         <Stack direction="row">
                           <Avatar
                             sx={{
-                              bgcolor: blueGrey[500],
+                              bgcolor: "#57636F",
                               textDecoration: "none",
                             }}
                           >
@@ -319,7 +348,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                               marginLeft: "10px",
                               marginRight: "10px",
                               justifyContent: "flex-start",
-                              bgcolor: "lightblue",
+                              bgcolor: "#57636F",
                               borderRadius: "10px",
                               padding: "10px",
                             }}
@@ -352,20 +381,21 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                           {auth.currentUser?.displayName != data.username ? (
                             " "
                           ) : (
-                            <Button
-                              size="small"
-                              onClick={() =>
-                                handleDeleteComment(
-                                  data.username,
-                                  data.comment,
-                                  data.commentId
-                                )
-                              }
-                            >
-                              <Typography variant="subheader2">
-                                Remove
-                              </Typography>
-                            </Button>
+                            <Tooltip title="Delete comment">
+                              <IconButton
+                                size="small"
+                                aria-label="delete"
+                                onClick={() =>
+                                  handleDeleteComment(
+                                    data.username,
+                                    data.comment,
+                                    data.commentId
+                                  )
+                                }
+                              >
+                                <DeleteIcon sx={{ color: "#57636F", '&:hover': { color: "var(--text_color)" } }} />
+                              </IconButton>
+                            </Tooltip>
                           )}
                         </Stack>
                       </Stack>
@@ -383,7 +413,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                       <Stack direction="row">
                         <Avatar
                           sx={{
-                            bgcolor: blueGrey[500],
+                            bgcolor: "#57636F",
                             textDecoration: "none",
                           }}
                         >
@@ -394,7 +424,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                             marginLeft: "10px",
                             marginRight: "10px",
                             justifyContent: "flex-start",
-                            bgcolor: "lightblue",
+                            bgcolor: "#57636F",
                             borderRadius: "10px",
                             padding: "10px",
                           }}
@@ -427,18 +457,21 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                         {auth.currentUser?.displayName != data.username ? (
                           " "
                         ) : (
-                          <Button
-                            size="small"
-                            onClick={() =>
-                              handleDeleteComment(
-                                data.username,
-                                data.comment,
-                                data.commentId
-                              )
-                            }
-                          >
-                            <Typography variant="subheader2">Remove</Typography>
-                          </Button>
+                          <Tooltip title="Delete comment">
+                            <IconButton
+                              size="small"
+                              aria-label="delete"
+                              onClick={() =>
+                                handleDeleteComment(
+                                  data.username,
+                                  data.comment,
+                                  data.commentId
+                                )
+                              }
+                            >
+                              <DeleteIcon sx={{ color: "#57636F", '&:hover': { color: "var(--text_color)" } }} />
+                            </IconButton>
+                          </Tooltip>
                         )}
                       </Stack>
                     </Stack>
@@ -460,7 +493,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                 >
                   <Stack direction="row">
                     <Avatar
-                      sx={{ bgcolor: blueGrey[500], textDecoration: "none" }}
+                      sx={{ bgcolor: "#57636F", textDecoration: "none" }}
                     >
                       {data.username.charAt(0)}
                     </Avatar>
@@ -469,7 +502,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                         marginLeft: "10px",
                         marginRight: "10px",
                         justifyContent: "flex-start",
-                        bgcolor: "lightblue",
+                        bgcolor: "#57636F",
                         borderRadius: "10px",
                         padding: "10px",
                       }}
@@ -502,18 +535,21 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                     {auth.currentUser?.displayName != data.username ? (
                       " "
                     ) : (
-                      <Button
-                        size="small"
-                        onClick={() =>
-                          handleDeleteComment(
-                            data.username,
-                            data.comment,
-                            data.commentId
-                          )
-                        }
-                      >
-                        <Typography variant="subheader2">Remove</Typography>
-                      </Button>
+                      <Tooltip title="Delete comment">
+                        <IconButton
+                          size="small"
+                          aria-label="delete"
+                          onClick={() =>
+                            handleDeleteComment(
+                              data.username,
+                              data.comment,
+                              data.commentId
+                            )
+                          }
+                        >
+                          <DeleteIcon sx={{ color: "#57636F", '&:hover': { color: "var(--text_color)" } }} />
+                        </IconButton>
+                      </Tooltip>
                     )}
                   </Stack>
                 </Stack>
@@ -536,12 +572,15 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
               borderRadius: "15px",
               maxHeight: "80%",
               overflow: "auto",
+              backgroundColor: "var(--card_color)",
+              color: "var(--text_color)",
+
             }}
           >
             <CardHeader
               avatar={
                 <Avatar
-                  sx={{ bgcolor: blueGrey[500], textDecoration: "none" }}
+                  sx={{ bgcolor: "#57636F", textDecoration: "none" }}
                   aria-label="recipe"
                   component={Link}
                   to={`/profile/${post.username}`}
@@ -550,39 +589,56 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                 </Avatar>
               }
               title={post.username}
-              titleTypographyProps={{ fontWeight: "600", variant: "body1" }}
+              titleTypographyProps={{ fontWeight: "600", variant: "body1", color: "var(--text_color)" }}
               subheader={
                 post.datePostedOn.toDate().toLocaleDateString("en-US") !==
-                currentDate
+                  currentDate
                   ? post.datePostedOn.toDate().toLocaleDateString("en-US")
                   : post.datePostedOn.toDate().toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
               }
+              subheaderTypographyProps={{ color: "var(--text_color)" }}
               action={
                 <div>
                   <IconButton onClick={handlePostDetailsOptionClick}>
-                    <MoreVertIcon />
+                    <MoreVertIcon sx={{ color: "var(--text_color)" }} />
                   </IconButton>
                   {auth.currentUser.displayName === post.username ? (
                     <Menu
                       anchorEl={postDetailsAnchor}
                       open={openPostDetailsOption}
                       onClose={handlePostDetailsOptionClose}
+                      PaperProps={{
+                        style: { backgroundColor: "var(--home_background)", boxShadow: "0px 0px 5px #fff" }
+
+                      }}
                     >
-                      <MenuItem onClick={() => handleDeletePost(postId)}>
+                      <Button onClick={() => handleDeletePost(postId)} variant="outlined" startIcon={<DeleteIcon />}
+                        sx={{ color: "#57636F", borderColor: "#57636F", '&:hover': { borderColor: '#57636F', textColor: "#57636F", backgroundColor: "var(--button)", color: "var(--text_color)" } }}>
                         Delete Post
-                      </MenuItem>
-                      <MenuItem onClick={handleCloseDetails}>Close</MenuItem>
+                      </Button>
+                      <br></br>
+                      <Button onClick={handleCloseDetails} variant="outlined" startIcon={<CloseIcon />}
+                        sx={{ marginTop: "5px", color: "#57636F", borderColor: "#57636F", '&:hover': { borderColor: '#57636F', backgroundColor: "var(--button)", color: "var(--text_color)" } }}>
+                        Close
+                      </Button>
                     </Menu>
                   ) : (
                     <Menu
                       anchorEl={postDetailsAnchor}
                       open={openPostDetailsOption}
                       onClose={handlePostDetailsOptionClose}
+                      PaperProps={{
+                        style: { backgroundColor: "var(--home_background)", boxShadow: "0px 0px 5px #fff" }
+
+                      }}
                     >
-                      <MenuItem onClick={handleCloseDetails}>Close</MenuItem>
+                      <br></br><Button onClick={handleCloseDetails} variant="outlined" startIcon={<CloseIcon />}
+                        sx={{ marginTop: "5px", color: "#57636F", borderColor: "#57636F", '&:hover': { borderColor: '#57636F', backgroundColor: "var(--button)", color: "var(--text_color)" } }}>
+                        Close
+                      </Button>
                     </Menu>
                   )}
                 </div>
@@ -617,8 +673,9 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                     sx={{
                       width: "100%",
                       height: "100%",
-                      fill: isLiked.length > 0 && "red",
-                      color: isLiked.length > 0 && "red",
+                      fill: isLiked.length > 0 && "#810955",
+                      color: isLiked.length > 0 && "#810955",
+                      color: "var(--text_color)"
                     }}
                   />
                 </IconButton>
@@ -639,12 +696,6 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                 >
                   <RocketLaunchOutlinedIcon
                     sx={{ color: "var(--body_color)" }}
-                  />
-                  <CustomSnackbar
-                    open={showSnackbar}
-                    message="Your comment are posted."
-                    variant="success"
-                    onClose={handleSnackbarClose}
                   />
                 </IconButton>
               </Stack>
@@ -703,18 +754,21 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                     {auth.currentUser?.displayName != data.username ? (
                       " "
                     ) : (
-                      <Button
-                        size="small"
-                        onClick={() =>
-                          handleDeleteComment(
-                            data.username,
-                            data.comment,
-                            data.commentId
-                          )
-                        }
-                      >
-                        <Typography variant="subheader2">Remove</Typography>
-                      </Button>
+                      <Tooltip title="Delete comment">
+                        <IconButton
+                          size="small"
+                          aria-label="delete"
+                          onClick={() =>
+                            handleDeleteComment(
+                              data.username,
+                              data.comment,
+                              data.commentId
+                            )
+                          }
+                        >
+                          <DeleteIcon sx={{ color: "#57636F", '&:hover': { color: "var(--text_color)" } }} />
+                        </IconButton>
+                      </Tooltip>
                     )}
                   </Stack>
                 </Stack>

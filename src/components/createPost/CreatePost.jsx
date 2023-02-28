@@ -93,7 +93,6 @@ const CreatePost = () => {
           setImage("");
           setProgress(0);
           setLoading(false);
-          setMessage("Image Upload Successfully");
           setTimeout(() => {
             setMessage("");
           }, 5000);
@@ -140,7 +139,7 @@ const CreatePost = () => {
   };
 
   return (
-    <Container maxWidth="md" sx={{ marginBottom: "20px" }}>
+    <Container maxWidth="md" sx={{ marginBottom: "20px", color: "var(--text_color)" }}>
       <Card
         elevation={24}
         sx={{
@@ -151,6 +150,7 @@ const CreatePost = () => {
           padding: "20px",
           backgroundColor: "var(--card_color)",
           color: "var(--text_color)",
+          boxShadow: "0px 0px 5px #fff"
         }}
       >
         <CardContent>
@@ -166,7 +166,7 @@ const CreatePost = () => {
               sx={{
                 maxWidth: "100%",
                 backgroundColor: "var(--home_background)",
-                color: "white",
+                color: "var(--text_color)",
               }}
             />
           </Stack>
@@ -187,14 +187,14 @@ const CreatePost = () => {
                 ref={imageRef}
                 hidden
               />
-              <CameraAltOutlinedIcon />
+              <CameraAltOutlinedIcon sx={{ color: "var(--text_color)" }} />
             </IconButton>
-            <Button
+            <Button className="create-post"
               variant="contained"
               onClick={handleUpload}
               disabled={!caption}
-              sx={{ width: "90%", backgroundColor: "#57636F", color: "white" }}
-            >
+              sx={{ width: "90%", color: "#fff", backgroundColor: "#B2B2B2", backgroundColor: "var(--button)", color: "var(--text_color)",  '&:hover': { color: "#fff", bgcolor: "#57636F"} }}>
+              
               Create post
               {loading && <Loading />}
             </Button>
@@ -206,7 +206,7 @@ const CreatePost = () => {
             />
           </Stack>
         </CardContent>
-        {progress > 0 && <LinearProgressWithLabel value={progress} sx={{}} />}
+        {progress > 0 && <LinearProgressWithLabel value={progress} />}
         {message && (
           <div>
             <Typography>{message}</Typography>
