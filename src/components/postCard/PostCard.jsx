@@ -300,7 +300,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                   <Typography sx={{ marginRight: "5px", color: "var(--text_color)" }}>
                     View other comments
                   </Typography>
-                  <CommentIcon />
+                  <CommentIcon sx={{color: "var(--text_color)" }}/>
                 </ExpandMore>
               </CardActions>
 
@@ -325,7 +325,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                         <Stack direction="row">
                           <Avatar
                             sx={{
-                              bgcolor: "#435c75",
+                              bgcolor: "#57636F",
                               textDecoration: "none",
                             }}
                           >
@@ -336,7 +336,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                               marginLeft: "10px",
                               marginRight: "10px",
                               justifyContent: "flex-start",
-                              bgcolor: "#435c75",
+                              bgcolor: "#57636F",
                               borderRadius: "10px",
                               padding: "10px",
                             }}
@@ -380,8 +380,8 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                               }
                               color="white"
                             >
-                              <Typography variant="subheader2" >
-                                Remove
+                              <Typography variant="subheader2" sx={{ color: "var(--text_color)" }}>
+                                <DeleteOutlinedIcon />
                               </Typography>
                             </Button>
                           )}
@@ -401,7 +401,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                       <Stack direction="row">
                         <Avatar
                           sx={{
-                            bgcolor: "#435c75",
+                            bgcolor: "#57636F",
                             textDecoration: "none",
                           }}
                         >
@@ -412,7 +412,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                             marginLeft: "10px",
                             marginRight: "10px",
                             justifyContent: "flex-start",
-                            bgcolor: "lightblue",
+                            bgcolor: "#57636F",
                             borderRadius: "10px",
                             padding: "10px",
                           }}
@@ -455,7 +455,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                               )
                             }
                           >
-                            <Typography variant="subheader2">Remove</Typography>
+                            <Typography variant="subheader2"><DeleteOutlinedIcon /></Typography>
                           </Button>
                         )}
                       </Stack>
@@ -478,7 +478,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                 >
                   <Stack direction="row">
                     <Avatar
-                      sx={{ bgcolor: "#435c75", textDecoration: "none" }}
+                      sx={{ bgcolor: "#57636F", textDecoration: "none" }}
                     >
                       {data.username.charAt(0)}
                     </Avatar>
@@ -487,7 +487,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                         marginLeft: "10px",
                         marginRight: "10px",
                         justifyContent: "flex-start",
-                        bgcolor: "#435c75",
+                        bgcolor: "#57636F",
                         borderRadius: "10px",
                         padding: "10px",
                       }}
@@ -530,7 +530,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                           )
                         }
                       >
-                        <Typography variant="subheader2">Remove</Typography>
+                        <Typography variant="subheader2"><DeleteOutlinedIcon /></Typography>
                       </Button>
                     )}
                   </Stack>
@@ -735,7 +735,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                           )
                         }
                       >
-                        <Typography variant="subheader2">Remove</Typography>
+                        <DeleteOutlinedIcon />
                       </Button>
                     )}
                   </Stack>
