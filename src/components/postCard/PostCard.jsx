@@ -23,11 +23,13 @@ import {
   MenuItem,
   TextField,
   CardActions,
+  Tooltip,
 } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import RocketLaunchOutlinedIcon from "@mui/icons-material/RocketLaunchOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import CustomSnackbar from "../snackbar/snackbar";
+import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Backdrop from "@mui/material/Backdrop";
@@ -211,6 +213,10 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                     anchorEl={postAnchor}
                     open={openPostOption}
                     onClose={handlePostOptionClose}
+                    PaperProps={{
+                      style: {backgroundColor: "var(--home_background)"}
+
+                    }}
                   >
                     <Button onClick={() => handleDeletePost(postId)} variant="outlined" startIcon={<DeleteIcon />}
                       sx={{ color: "#57636F", borderColor: "#57636F", '&:hover': { borderColor: '#57636F', backgroundColor: "var(--button)", color: "var(--text_color)" } }}>
@@ -367,19 +373,21 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                           {auth.currentUser?.displayName != data.username ? (
                             " "
                           ) : (
-                            <IconButton
-                              size="small"
-                              aria-label="delete"
-                              onClick={() =>
-                                handleDeleteComment(
-                                  data.username,
-                                  data.comment,
-                                  data.commentId
-                                )
-                              }
-                            >
-                        <DeleteIcon sx={{color: "#57636F", '&:hover': { color: "var(--text_color)" }}}/>
-                            </IconButton>
+                            <Tooltip title="Delete comment">
+                              <IconButton
+                                size="small"
+                                aria-label="delete"
+                                onClick={() =>
+                                  handleDeleteComment(
+                                    data.username,
+                                    data.comment,
+                                    data.commentId
+                                  )
+                                }
+                              >
+                                <DeleteIcon sx={{ color: "#57636F", '&:hover': { color: "var(--text_color)" } }} />
+                              </IconButton>
+                            </Tooltip>
                           )}
                         </Stack>
                       </Stack>
@@ -441,19 +449,21 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                         {auth.currentUser?.displayName != data.username ? (
                           " "
                         ) : (
-                          <IconButton
-                        size="small"
-                        aria-label="delete"
-                        onClick={() =>
-                          handleDeleteComment(
-                            data.username,
-                            data.comment,
-                            data.commentId
-                          )
-                        }
-                      >
-                        <DeleteIcon sx={{color: "#57636F", '&:hover': { color: "var(--text_color)" }}}/>
-                      </IconButton>
+                          <Tooltip title="Delete comment">
+                            <IconButton
+                              size="small"
+                              aria-label="delete"
+                              onClick={() =>
+                                handleDeleteComment(
+                                  data.username,
+                                  data.comment,
+                                  data.commentId
+                                )
+                              }
+                            >
+                              <DeleteIcon sx={{ color: "#57636F", '&:hover': { color: "var(--text_color)" } }} />
+                            </IconButton>
+                          </Tooltip>
                         )}
                       </Stack>
                     </Stack>
@@ -517,6 +527,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                     {auth.currentUser?.displayName != data.username ? (
                       " "
                     ) : (
+                      <Tooltip  title="Delete comment">
                       <IconButton
                         size="small"
                         aria-label="delete"
@@ -530,6 +541,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                       >
                         <DeleteIcon sx={{color: "#57636F", '&:hover': { color: "var(--text_color)" }}}/>
                       </IconButton>
+                      </Tooltip>
                     )}
                   </Stack>
                 </Stack>
@@ -590,23 +602,34 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                       anchorEl={postDetailsAnchor}
                       open={openPostDetailsOption}
                       onClose={handlePostDetailsOptionClose}
+                      PaperProps={{
+                        style: {backgroundColor: "var(--home_background)"}
+
+                      }}
                     >
                       <Button onClick={() => handleDeletePost(postId)} variant="outlined" startIcon={<DeleteIcon />}
                         sx={{ color: "#57636F", borderColor: "#57636F", '&:hover': { borderColor: '#57636F', textColor: "#57636F", backgroundColor: "var(--button)", color: "var(--text_color)" } }}>
                         Delete Post
-                      </Button>
-                      {/* <MenuItem onClick={() => handleDeletePost(postId)}>
-                        Delete Post
-                      </MenuItem> */}
-                      <MenuItem onClick={handleCloseDetails}>Close</MenuItem>
+                      </Button><br></br>
+                      <Button onClick={handleCloseDetails} variant="outlined" startIcon={<CloseIcon />}
+                      sx={{ marginTop: "5px", color: "#57636F", borderColor: "#57636F", '&:hover': { borderColor: '#57636F', backgroundColor: "var(--button)", color: "var(--text_color)" } }}>
+                      Close
+                    </Button>
                     </Menu>
                   ) : (
                     <Menu
                       anchorEl={postDetailsAnchor}
                       open={openPostDetailsOption}
                       onClose={handlePostDetailsOptionClose}
+                      PaperProps={{
+                        style: {backgroundColor: "var(--home_background)"}
+
+                      }}
                     >
-                      <MenuItem onClick={handleCloseDetails}>Close</MenuItem>
+                      <br></br><Button onClick={handleCloseDetails} variant="outlined" startIcon={<CloseIcon />}
+                      sx={{ marginTop: "5px", color: "#57636F", borderColor: "#57636F", '&:hover': { borderColor: '#57636F', backgroundColor: "var(--button)", color: "var(--text_color)" } }}>
+                      Close
+                    </Button>
                     </Menu>
                   )}
                 </div>
@@ -728,19 +751,21 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                     {auth.currentUser?.displayName != data.username ? (
                       " "
                     ) : (
-                      <IconButton
-                        size="small"
-                        aria-label="delete"
-                        onClick={() =>
-                          handleDeleteComment(
-                            data.username,
-                            data.comment,
-                            data.commentId
-                          )
-                        }
-                      >
-                        <DeleteIcon sx={{color: "#57636F", '&:hover': { color: "var(--text_color)" }}}/>
-                      </IconButton>
+                      <Tooltip title="Delete comment">
+                        <IconButton
+                          size="small"
+                          aria-label="delete"
+                          onClick={() =>
+                            handleDeleteComment(
+                              data.username,
+                              data.comment,
+                              data.commentId
+                            )
+                          }
+                        >
+                          <DeleteIcon sx={{ color: "#57636F", '&:hover': { color: "var(--text_color)" } }} />
+                        </IconButton>
+                      </Tooltip>
                     )}
                   </Stack>
                 </Stack>
