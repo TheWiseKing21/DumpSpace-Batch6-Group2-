@@ -17,12 +17,31 @@ import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { blueGrey } from "@mui/material/colors";
-import { Box, Menu, Button, MenuItem, TextField, Icon } from "@mui/material";
+import {
+  Box,
+  Menu,
+  Button,
+  MenuItem,
+  TextField,
+  Icon,
+  CardActions,
+} from "@mui/material";
 import Stack from "@mui/material/Stack";
 import SendIcon from "@mui/icons-material/Send";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Backdrop from "@mui/material/Backdrop";
 import Container from "@mui/material/Container";
+import Collapse from "@mui/material/Collapse";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { styled } from "@mui/material/styles";
+import CommentIcon from "@mui/icons-material/Comment";
+
+const ExpandMore = styled((props) => {
+  const { expand, ...other } = props;
+  return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+  marginLeft: "auto",
+}));
 
 const PostCard = ({ post, postId, setAlertMessage }) => {
   const [likesCount, setLikesCount] = useState(post.likes);
@@ -131,6 +150,12 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
     handlePostDetailsOptionClose();
   };
 
+  const [expanded, setExpanded] = React.useState(false);
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
+
   return (
     <>
       <Container maxWidth="md" sx={{ marginBottom: "20px" }}>
@@ -229,78 +254,250 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
               </IconButton>
             </Stack>
           </CardContent>
-          <CardContent>
-            {post.comments?.map((data, index) => (
-              <Stack
-                direction="column"
-                sx={{
-                  marginLeft: "20px",
-                  marginBottom: "10px",
-                  overflow: "inherit",
-                }}
-                key={index}
-              >
-                <Stack direction="row">
-                  <Avatar
-                    sx={{ bgcolor: blueGrey[500], textDecoration: "none" }}
-                  >
-                    {data.username.charAt(0)}
-                  </Avatar>
-                  <Box
-                    sx={{
-                      marginLeft: "10px",
-                      marginRight: "10px",
-                      justifyContent: "flex-start",
-                      bgcolor: "lightblue",
-                      borderRadius: "10px",
-                      padding: "10px",
-                    }}
-                  >
-                    <Typography
-                      variant="body1"
-                      sx={{
-                        marginLeft: "5px",
-                        paddingTop: "10px",
-                        fontWeight: "600",
-                        textDecoration: "none",
-                        color: "inherit",
-                      }}
-                      component={Link}
-                      to={`/profile/${data.username}`}
-                    >
-                      {data.username}
-                    </Typography>
+          {post.comments?.length > 3 ? (
+            <>
+              <CardActions>
+                <ExpandMore
+                  expand={expanded}
+                  onClick={handleExpandClick}
+                  aria-expanded={expanded}
+                  aria-label="show more"
+                >
+                  <Typography sx={{ marginRight: "5px" }}>
+                    View other comments
+                  </Typography>
+                  <CommentIcon />
+                </ExpandMore>
+              </CardActions>
 
-                    <Typography
-                      variant="subtitle1"
+              <CardContent>
+                {post.comments?.map((data, index) =>
+                  data.commentId > 2 ? (
+                    <Collapse in={expanded} timeout="auto" unmountOnExit>
+                      <Stack
+                        direction="column"
+                        sx={{
+                          marginLeft: "20px",
+                          marginBottom: "10px",
+                          overflow: "inherit",
+                        }}
+                        key={index}
+                      >
+                        <Stack direction="row">
+                          <Avatar
+                            sx={{
+                              bgcolor: blueGrey[500],
+                              textDecoration: "none",
+                            }}
+                          >
+                            {data.username.charAt(0)}
+                          </Avatar>
+                          <Box
+                            sx={{
+                              marginLeft: "10px",
+                              marginRight: "10px",
+                              justifyContent: "flex-start",
+                              bgcolor: "lightblue",
+                              borderRadius: "10px",
+                              padding: "10px",
+                            }}
+                          >
+                            <Typography
+                              variant="body1"
+                              sx={{
+                                marginLeft: "5px",
+                                paddingTop: "10px",
+                                fontWeight: "600",
+                                textDecoration: "none",
+                                color: "inherit",
+                              }}
+                              component={Link}
+                              to={`/profile/${data.username}`}
+                            >
+                              {data.username}
+                            </Typography>
+
+                            <Typography
+                              variant="subtitle1"
+                              sx={{
+                                marginLeft: "10px",
+                                paddingBottom: "5px",
+                              }}
+                            >
+                              {data.comment}
+                            </Typography>
+                          </Box>
+                          {auth.currentUser?.displayName != data.username ? (
+                            " "
+                          ) : (
+                            <Button
+                              size="small"
+                              onClick={() =>
+                                handleDeleteComment(
+                                  data.username,
+                                  data.comment,
+                                  data.commentId
+                                )
+                              }
+                            >
+                              <Typography variant="subheader2">
+                                Remove
+                              </Typography>
+                            </Button>
+                          )}
+                        </Stack>
+                      </Stack>
+                    </Collapse>
+                  ) : (
+                    <Stack
+                      direction="column"
+                      sx={{
+                        marginLeft: "20px",
+                        marginBottom: "10px",
+                        overflow: "inherit",
+                      }}
+                      key={index}
+                    >
+                      <Stack direction="row">
+                        <Avatar
+                          sx={{
+                            bgcolor: blueGrey[500],
+                            textDecoration: "none",
+                          }}
+                        >
+                          {data.username.charAt(0)}
+                        </Avatar>
+                        <Box
+                          sx={{
+                            marginLeft: "10px",
+                            marginRight: "10px",
+                            justifyContent: "flex-start",
+                            bgcolor: "lightblue",
+                            borderRadius: "10px",
+                            padding: "10px",
+                          }}
+                        >
+                          <Typography
+                            variant="body1"
+                            sx={{
+                              marginLeft: "5px",
+                              paddingTop: "10px",
+                              fontWeight: "600",
+                              textDecoration: "none",
+                              color: "inherit",
+                            }}
+                            component={Link}
+                            to={`/profile/${data.username}`}
+                          >
+                            {data.username}
+                          </Typography>
+
+                          <Typography
+                            variant="subtitle1"
+                            sx={{
+                              marginLeft: "10px",
+                              paddingBottom: "5px",
+                            }}
+                          >
+                            {data.comment}
+                          </Typography>
+                        </Box>
+                        {auth.currentUser?.displayName != data.username ? (
+                          " "
+                        ) : (
+                          <Button
+                            size="small"
+                            onClick={() =>
+                              handleDeleteComment(
+                                data.username,
+                                data.comment,
+                                data.commentId
+                              )
+                            }
+                          >
+                            <Typography variant="subheader2">Remove</Typography>
+                          </Button>
+                        )}
+                      </Stack>
+                    </Stack>
+                  )
+                )}
+              </CardContent>
+            </>
+          ) : (
+            <CardContent>
+              {post.comments?.map((data, index) => (
+                <Stack
+                  direction="column"
+                  sx={{
+                    marginLeft: "20px",
+                    marginBottom: "10px",
+                    overflow: "inherit",
+                  }}
+                  key={index}
+                >
+                  <Stack direction="row">
+                    <Avatar
+                      sx={{ bgcolor: blueGrey[500], textDecoration: "none" }}
+                    >
+                      {data.username.charAt(0)}
+                    </Avatar>
+                    <Box
                       sx={{
                         marginLeft: "10px",
-                        paddingBottom: "5px",
+                        marginRight: "10px",
+                        justifyContent: "flex-start",
+                        bgcolor: "lightblue",
+                        borderRadius: "10px",
+                        padding: "10px",
                       }}
                     >
-                      {data.comment}
-                    </Typography>
-                  </Box>
-                  {auth.currentUser?.displayName != data.username ? (
-                    " "
-                  ) : (
-                    <Button
-                      size="small"
-                      onClick={() =>
-                        handleDeleteComment(
-                          data.username,
-                          data.comment,
-                          data.commentId
-                        )
-                      }
-                    >
-                      <Typography variant="subheader2">Remove</Typography>
-                    </Button>
-                  )}
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          marginLeft: "5px",
+                          paddingTop: "10px",
+                          fontWeight: "600",
+                          textDecoration: "none",
+                          color: "inherit",
+                        }}
+                        component={Link}
+                        to={`/profile/${data.username}`}
+                      >
+                        {data.username}
+                      </Typography>
+
+                      <Typography
+                        variant="subtitle1"
+                        sx={{
+                          marginLeft: "10px",
+                          paddingBottom: "5px",
+                        }}
+                      >
+                        {data.comment + data.commentId}
+                      </Typography>
+                    </Box>
+                    {auth.currentUser?.displayName != data.username ? (
+                      " "
+                    ) : (
+                      <Button
+                        size="small"
+                        onClick={() =>
+                          handleDeleteComment(
+                            data.username,
+                            data.comment,
+                            data.commentId
+                          )
+                        }
+                      >
+                        <Typography variant="subheader2">Remove</Typography>
+                      </Button>
+                    )}
+                  </Stack>
                 </Stack>
-              </Stack>
-            ))}
-          </CardContent>
+              ))}
+            </CardContent>
+          )}
         </Card>
 
         <Backdrop
