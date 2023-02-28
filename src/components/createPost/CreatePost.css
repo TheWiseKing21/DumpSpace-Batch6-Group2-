@@ -1,0 +1,13 @@
+/* .MuiButton-contained {
+    background-color: var(--button);
+    color: var(--text_color) !important;
+
+} */
+
+/* .MuiStack-root:focus {
+    outline: none;
+  } */
+
+.MuiPaper-root {
+    border-color: var(--text_color);
+}
