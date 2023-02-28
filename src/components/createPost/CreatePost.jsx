@@ -192,8 +192,8 @@ const CreatePost = () => {
               variant="contained"
               onClick={handleUpload}
               disabled={!caption}
-              sx={{ width: "90%", backgroundColor: "#57636F", color: "white" }}
-            >
+              sx={{ width: "90%", color: "#fff", backgroundColor: "#B2B2B2", backgroundColor: "var(--button)", color: "var(--text_color)",  '&:hover': { color: "#fff", bgcolor: "#57636F"} }}>
+              
               Create post
               {loading && <Loading />}
             </Button>
