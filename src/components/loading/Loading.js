@@ -6,6 +6,7 @@ const Loading = () => {
     <div className="loading-spinner-wrapper">
       <img
         src="/images/loadSpinner.svg"
+        
         alt="load spinner"
         className='loading-image'
       />

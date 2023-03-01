@@ -18,6 +18,7 @@ const DarkMode = ({ setDarkMode }) => {
     if (e.target.checked) setDarkTheme();
     else setLightTheme();
   };
+  
   return (
     <div className="dark_mode">
       <input

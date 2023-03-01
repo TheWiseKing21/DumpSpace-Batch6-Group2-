@@ -38,9 +38,11 @@ const Home = () => {
     <>
       <Navbar />
       <div className="home-page-container">
+      
         <div>
           <CreatePost />
           <div>
+          {/* <ConnectionBar currentUserInfo={currentUserInfo} /> */}
             {loading ? (
               <PostCardOutline />
             ) : (
@@ -58,7 +60,7 @@ const Home = () => {
         <SearchUser />
       </div>
 
-      <ConnectionBar currentUserInfo={currentUserInfo} />
+      
     </>
   );
 };

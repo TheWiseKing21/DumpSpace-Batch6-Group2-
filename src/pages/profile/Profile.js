@@ -4,6 +4,7 @@ import CreatePost from "../../components/createPost/CreatePost";
 import Navbar from "../../components/navbar/Navbar";
 import firebaseContex from "../../context/FirebaseContext";
 import "./Profile.css";
+import Editprofile from "./Editprofile";
 
 import ProfileSkeleton from "./ProfileSkeleton";
 
@@ -29,17 +30,18 @@ import { useParams } from "react-router-dom";
 import SearchUser from "../../components/searchUser/SearchUser";
 import Loading from "../../components/loading/Loading";
 
-import List from "@mui/material/List";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+// import List from "@mui/material/List";
+// import Card from "@mui/material/Card";
+// import CardHeader from "@mui/material/CardHeader";
+// import CardMedia from "@mui/material/CardMedia";
+// import CardContent from "@mui/material/CardContent";
+// import CardActions from "@mui/material/CardActions";
+// import FavoriteIcon from "@mui/icons-material/Favorite";
+// import ShareIcon from "@mui/icons-material/Share";
+// import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 import { Menu, MenuItem, IconButton, Typography } from "@mui/material";
+import EditIcon from '@mui/icons-material/Edit';
 
 import PostCardOutline from "../../components/postCard/PostCardOutline";
 import PostCard from "../../components/postCard/PostCard";
@@ -50,6 +52,8 @@ import CustomSnackbar from "../../components/snackbar/snackbar";
 import {ref, uploadBytes, getDownloadURL} from "firebase/storage"
 
 import { Avatar } from '@mui/material'
+
+
 
 const Profile = () => {
   const { allUsers, loading, setLoading, posts } = useContext(firebaseContex);
@@ -215,24 +219,25 @@ const Profile = () => {
           <ProfileSkeleton />
         ) : (
           currentUserInfo.map((currentUser) => (
-            <div className="profile-datails-section" key={currentUser.userId}>
-              <div className="profile-image-details-wrapper absolute-center ">
+            <div className="profile-details-section" key={currentUser.userId}>
+              
+              <div className="profile-banner-container">
+                <div className="profile-banner">
+                  <img src = "/images/sample/1.jpg" className="banner"></img>
+      
+                  
+                </div>
                 <div className="profile-image-wrapper">
                   
-                  {/* <img
-                    src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
-                    alt="user-profile"
-                  /> */}
-
                   {currentUserPic.length > 0 &&
                       currentUserPic.map((pic) => 
                       <div>
-                      <Avatar
+                      
+                        <img
                         alt="image"
                         key = {pic?.data().datePostedOn}
                         src = {pic?.data().imageUrl}
-                        sx={{ width: 150, height: 150 }}
-        
+                        
                         /></div>)
                       
                     }
@@ -240,26 +245,25 @@ const Profile = () => {
                     {currentUserPic.length === 0 &&
                      <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="user-profile" />
                     }
-
-                    
-  
-                    
-                   {(localUserData[0].username === currentUser.username) && 
-                   <div>
-                   <input type = "file" accept="image/jpeg,image/png,image/gif" onChange = {handleImageChange}/>
-                   <button onClick={handleSubmit}>Upload profile picture</button>
-                   </div>
-                   } 
-
-
                 </div>
-
+              </div>
+              
+              
+              
+              
+              
+              <div className="profile-image-details-wrapper">
+                
                 <div className="profile-details-wrapper">
                   <div className="profile-username-follow-wrapper ">
                     <div className="profile-username">
-                      {currentUser?.username}
+                      <span id ="username">@{currentUser?.username}</span><br/>
+                      <span id = "fullname">(<i>{currentUser.fullName}</i>)</span>
+                      
                     </div>
+
                     {localUserData[0].username !== currentUser.username && (
+                      
                       <div className="profile-follow-unfollow-btn-wrapper">
                         <button
                           type="button"
@@ -281,13 +285,15 @@ const Profile = () => {
                       </div>
                     )}
                   </div>
+
+
                   <div className="posts-followers-details-wrapper absolute-center">
                     <div className="total-posts-wrapper total-wrapper absolute-center">
                       <span className="font-w-500 total-number">
                         {currentUserPosts.length}
                       </span>
                       Post
-                    </div>
+                    </div>  
                     <div className="total-followers-wrapper total-wrapper absolute-center">
                       <span className="font-w-500 total-number">
                         {currentUser.follower?.length}
@@ -301,20 +307,29 @@ const Profile = () => {
                       following
                     </div>
                   </div>
-                  <div className="profile-fullname-wrapper font-w-500">
-                    {currentUser.fullName}
-                  </div>
                 </div>
               </div>
 
-              <div className="mobile-screen">
-                <div className="profile-fullname-wrapper font-w-500">
-                  {currentUser.fullName}
-                </div>
+              <div className = "edit-profile">
+                {(localUserData[0].username === currentUser.username) && 
+                    <div>
+                      <Editprofile>
+                        <div>
+                        <h4>Change profile picture</h4>
+                        <input type = "file" accept="image/jpeg,image/png,image/gif" onChange = {handleImageChange}/>
+                        <button onClick={handleSubmit}>Upload profile picture</button>
+                        </div>
+                      </Editprofile> 
+                    </div>
+                    }  
               </div>
             </div>
           ))
         )}
+
+
+
+
         <Container maxWidth="md" sx={{ marginBottom: "20px" }}>
           <div>
             <CreatePost />
