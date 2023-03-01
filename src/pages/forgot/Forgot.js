@@ -5,6 +5,7 @@ import firebaseContex from "../../context/FirebaseContext";
 import "./Forgot.css";
 import "../forgot/Forgot.css";
 import CustomSnackbar from "../../components/snackbar/snackbar";
+import "../login/Login.css";
 
 const Forgot = () => {
   const { login, facebookLogin } = useContext(firebaseContex);
@@ -48,15 +49,20 @@ const Forgot = () => {
   }, [localUser]);
 
   return (
+    <section>
     <div className="login-container">
-      <div className="login-poster">
-        <img src="" alt="" className="" />
-      </div>
+      {/* <div className="login-poster">
+        <img src="/images/logo/signup-poster.png" alt="" className="" />
+      </div> */}
       <div className="login-wrapper">
-        <div className="login-box">
+        
+        
+        <div className="forgotpwd-box">
           <div className="logo-wrapper">
-            <img src="" alt="" className="" />
+            <img src="/images/logo/dump-space-logo.png"alt="" className="" />
           </div>
+          
+          
           {!isEmailSend ? (
             <div className="login-form-wrapper">
               <form className="login-form" onSubmit={handleSubmit}>
@@ -91,6 +97,17 @@ const Forgot = () => {
               </form>
 
               {errorMessage && <p className="errorMessage">{errorMessage}</p>}
+              <div className="redirect-box">
+                <div className="redirect-text">
+                  <p>
+                    Go back to{" "}
+                    <Link to="/login" className="cur-point">
+                      Login Page
+                    </Link>
+                    
+                  </p>
+                </div>
+              </div>
             </div>
           ) : (
             // email send confirmation
@@ -109,7 +126,8 @@ const Forgot = () => {
             </div>
           )}
         </div>
-        <div className="redirect-box login-box">
+        
+        {/* <div className="redirect-box login-box">
           <div className="redirect-text">
             <p>
               This is Forgot Page{" "}
@@ -118,7 +136,9 @@ const Forgot = () => {
               </Link>
             </p>
           </div>
-        </div>
+        </div> */}
+
+
         <div
           className="guest-login-info-wrapper login-box"
           style={{ display: "none" }}
@@ -135,6 +155,7 @@ const Forgot = () => {
         </div>
       </div>
     </div>
+    </section>
   );
 };
 

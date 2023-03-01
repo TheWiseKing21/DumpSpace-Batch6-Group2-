@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FiHeart } from "react-icons/fi";
 import {
   updateDoc,
@@ -41,6 +41,9 @@ import CommentIcon from "@mui/icons-material/Comment";
 import SendIcon from "@mui/icons-material/Send";
 
 
+
+import { collection,onSnapshot, query, where, orderBy, Timestamp, limit } from 'firebase/firestore'
+
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
@@ -56,10 +59,14 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
   const currentDate = new Date().toLocaleDateString("en-US");
   const [message, setMessage] = useState("");
 
+  const [currentUserPic, setCurrentUserPic] = useState([]);
+
   const invalid = comments === "";
   const isLiked = post.likes.filter(
     (value) => auth.currentUser.displayName === value.username
   );
+
+
 
   const handleLikes = async () => {
     setIsClick(true);
@@ -182,6 +189,27 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
     setExpanded(!expanded);
   };
 
+  ////////////////////////////////////PROFILE PICTURE/////////////////////////////////////
+  const getUserPic = () => {
+    const postRef = collection(db, "profile");
+    const q = query(postRef, where('username', '==', post.username), orderBy('datePostedOn', "desc"), limit(1));
+
+    onSnapshot(q, (querySnapshot) => {
+      console.log(querySnapshot.docs)
+      setCurrentUserPic(querySnapshot.docs)
+      
+    });
+
+
+
+  }
+
+  useEffect(() => {
+    
+    getUserPic()
+    
+  }, [post.username])
+
   return (
     <>
       <Container maxWidth="md" sx={{ marginBottom: "20px" }} className="card-container">
@@ -196,15 +224,57 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
           }}
         >
           <CardHeader
-            avatar={
-              <Avatar
-                sx={{ bgcolor: "#57636F", textDecoration: "none" }}
-                aria-label="recipe"
-                component={Link}
-                to={`/profile/${post.username}`}
-              >
-                {post.username.charAt(0)}
-              </Avatar>
+
+          
+          //   avatar={
+              
+          //     <Avatar
+          //       sx={{ bgcolor: blueGrey[500], textDecoration: "none" }}
+          //       aria-label="recipe"
+          //       component={Link}
+          //       to={`/profile/${post.username}`}
+          //     >
+
+          //       {post.username.charAt(0)}
+          //     </Avatar>
+
+
+            
+          
+          // }
+
+          
+
+            avatar = {
+              <div>
+
+              
+              {currentUserPic.length > 0 &&
+                      currentUserPic.map((pic) => 
+                      // <img key = {pic.data().datePostedOn} src={pic?.data().imageUrl} alt="user-profile" />
+                      
+                      <div>
+                      <Avatar
+                        alt="image"
+                        key = {pic?.data().datePostedOn}
+                        src = {pic?.data().imageUrl}
+                        sx={{ width: 50, height: 50 }}
+        
+                      /></div>)
+              }
+
+              {currentUserPic.length === 0 &&
+                // <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="user-profile" />
+                <Avatar
+                        alt="image"
+                        src = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                        sx={{ width: 50, height: 50 }}
+        
+                      />
+              }
+
+
+            </div>
             }
             title={post.username}
             titleTypographyProps={{ fontWeight: "600", variant: "body1" }}
