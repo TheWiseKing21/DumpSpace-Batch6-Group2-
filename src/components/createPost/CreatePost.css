@@ -1,9 +1,3 @@
-/* .create-post {
-    background-color: var(--button);
+.MuiButtonBase-root {
     color: var(--text_color);
-} */
-
-
-.MuiTextField-root{
-    color: white;
 }
