@@ -38,15 +38,11 @@ const Home = () => {
     <>
       <Navbar />
       <div className="home-page-container">
-        
-        
-        
-      
+
         <div className="home-page">
         <div className="stars"></div>
           <CreatePost />
           <div className="home-page-feed">
-          {/* <ConnectionBar currentUserInfo={currentUserInfo} /> */}
             {loading ? (
               <PostCardOutline />
             ) : (
@@ -65,8 +61,6 @@ const Home = () => {
         
         <SearchUser />
       </div>
-
-      
     </>
   );
 };

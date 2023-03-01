@@ -6,9 +6,7 @@
   box-sizing: border-box;
   /* font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif; */
-  font-family: "Trirong", serif;  
-
-    
+  font-family: "Trirong", serif;
 }
 
 body {
@@ -61,6 +59,7 @@ body {
 }
 
 /* CSS variable for the dark theme*/
+
 :root{
   --logo_color:  url(/public/images/logo/logo-light.png);
   --image_background: url(/public/images/pagenotfound/star2.png);
@@ -68,19 +67,16 @@ body {
   --card_color: #fff;
   --text_color: #000;
   --box_shadow: 0px 0px 5px #000;
-
 }
+
 
 [data-theme="dark"]{
-  --image_background: url(/public/images/pagenotfound/star1.png);
   --logo_color:  url(/public/images/logo/logo-dark.png);
+  --image_background: url(/public/images/pagenotfound/star1.png);
   --home_background: #1F1F21;
   --body_color: #fff;
-  --card_color:  #0D0C12;
-  --text_color: #fff; 
-  --button: #57636F;
+  --card_color: #0d0c12;
+  --text_color: #fff;
+  --button: #57636f;
   --box_shadow: 0px 0px 5px #fff;
-
 }
-
-

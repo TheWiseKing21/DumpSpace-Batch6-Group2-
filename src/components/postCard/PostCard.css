@@ -1,6 +1,7 @@
 .card-container {
   margin-top: 16px;
   border-radius: 15px;
+  background-color: var(--home_background);
 }
 
 @media (max-width: 426px) {

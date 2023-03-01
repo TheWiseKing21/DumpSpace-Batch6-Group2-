@@ -1,10 +1,7 @@
 .home-page-container {
-  
+
   width: 100%;
   height:auto;
-  /* display: flex;
-  justify-content: center;
-  align-items: center; */
   position: relative;
   background-color: var(--home_background);
   margin-top: -5px;
@@ -40,7 +37,6 @@
   background-color: var(--primary-bg);
 }
 
-/* responsive for large screen */
 @media (min-width: 768px) and (max-width: 1024px) {
   .story-post-wrapper {
     max-width: 370px;
