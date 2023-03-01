@@ -6,7 +6,7 @@ import Avatar from "@mui/material/Avatar";
 
 import CardContent from "@mui/material/CardContent";
 
-const RightNavbar = ({ currentUserInfo, suggestedUsers }) => {
+const ConnectionBar = ({ currentUserInfo, suggestedUsers }) => {
   //   const shuffleArr = suggestedUsers.sort(() => 0.5 - Math.random());
 
   return (
@@ -39,7 +39,7 @@ const RightNavbar = ({ currentUserInfo, suggestedUsers }) => {
               {currentUserInfo.map((users) => (
                 <div key={users.id}>
                   {users.data().following.map((follow, index) => (
-                    <div className="userprofile-wrapper">
+                    <div className="userprofile-wrapper" key={index}>
                       <div className="userprofile-image-wrapper">
                         <img
                           src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
@@ -62,4 +62,4 @@ const RightNavbar = ({ currentUserInfo, suggestedUsers }) => {
   );
 };
 
-export default RightNavbar;
+export default ConnectionBar;
