@@ -12,6 +12,14 @@ import CustomSnackbar from "../../components/snackbar/snackbar";
 import validator from "validator";
 
 const Signup = () => {
+
+  //new const for snackbar
+  const [message, setMessage] = useState(false);
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const handleSnackbarClose = () => {
+    setShowSnackbar(false);
+  };
+
   const { signup } = useContext(firebaseContex);
   const [email, setEmail] = useState("");
   const [fullName, setFullName] = useState("");
@@ -33,10 +41,11 @@ const Signup = () => {
         minSymbols: 1,
       })
     ) {
-      setErrorMessage("Is Strong Password");
+      setMessage("Is Strong Password");
     } else {
-      setErrorMessage("Is Not Strong Password");
+      setMessage("Is Not Strong Password");
     }
+    setShowSnackbar(true);
   };
 
   const invalid =
@@ -44,17 +53,15 @@ const Signup = () => {
 
   console.log(invalid);
 
-  //new const for snackbar
-  const [showSnackbar, setShowSnackbar] = useState(false);
-  const handleSnackbarClose = () => {
-    setShowSnackbar(false);
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setMessage("Sign up successful. Please verify your email.");
     setShowSnackbar(true);
+
     const usernameList = await usernameChecker(username);
+
     if (!usernameList.length) {
       try {
         const createUser = await signup(email, password);
@@ -101,9 +108,11 @@ const Signup = () => {
         }, 5000);
       }
     } else {
-      setErrorMessage("Username already taken");
+      // setErrorMessage("Username already taken");
       setLoading(false);
       setTimeout(() => {
+        setMessage("Username already taken");
+        setShowSnackbar(true);
         setErrorMessage("");
       }, 3000);
     }
@@ -124,11 +133,19 @@ const Signup = () => {
       setLoading(false);
       setIsEmailSend(true);
     } else {
+      setMessage("Is Not Strong Password");
+      setShowSnackbar(true);
       setErrorMessage("Is Not Strong Password");
     }
+
   };
 
   return (
+
+    <div className="login-container">
+      <div className="login-wrapper">
+        <div className="login-box">
+        
     <section>
       <div className="signup-container">
         
@@ -143,6 +160,7 @@ const Signup = () => {
           <div className="logo-wrapper">
             <img src="/images/logo/dump-space-logo.png" alt="" className="" />
           </div>
+
 
           {!isEmailSend ? (
             
@@ -213,6 +231,12 @@ const Signup = () => {
                     </span>
                   </button>
                   {loading && <Loading />}
+                  <CustomSnackbar
+                    open={showSnackbar}
+                    message={message}
+                    variant="success"
+                    onClose={handleSnackbarClose}
+                  />
                 </div>
               </form>
               {errorMessage && <p className="errorMessage">{errorMessage}</p>}
@@ -239,6 +263,7 @@ const Signup = () => {
                 onClose={handleSnackbarClose}
               />
               
+
               <div className="signup-confirm-email-wrapper">
                 <div className="confirm-email-image-wrapper">
                   <img
@@ -249,8 +274,10 @@ const Signup = () => {
                   />
                 </div>
                 <div className="confirm-email-message">
-                  Verification link send to your email (check inbox or spam
-                  folder). Please verify email first...
+
+                  Please make sure your email is verified.
+                  Verification link will be sent to your email, please check inbox or spam
+                  folder.
                 </div>
               </div>
             </>

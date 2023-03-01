@@ -11,6 +11,14 @@ import CustomSnackbar from "../../components/snackbar/snackbar";
 // import DarkMode from "../../components/darkmode/DarkMode";
 
 const Login = () => {
+
+   //new const for snackbar
+   const [message, setMessage] = useState("");
+   const [showSnackbar, setShowSnackbar] = useState(false);
+   const handleSnackbarClose = () => {
+     setShowSnackbar(false);
+   };
+   
   const { login } = useContext(firebaseContex);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,22 +28,13 @@ const Login = () => {
   const localUser = JSON.parse(localStorage.getItem("authUser"));
   const [errorMessage, setErrorMessage] = useState("");
 
-  const [message, setMessage] = useState("");
-
   const navigate = useNavigate();
 
   const invalid = password.length < 6 || email === "";
 
-  //new const for snackbar
-  const [showSnackbar, setShowSnackbar] = useState(false);
-  const handleSnackbarClose = () => {
-    setShowSnackbar(false);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setMessage("Login Successful");
 
     try {
       
@@ -43,10 +42,10 @@ const Login = () => {
       if (auth.currentUser.emailVerified) {
         localStorage.setItem("authUser", JSON.stringify(loginUser.user));
         setLoading(false);
+        setMessage("Login Successful");
         navigate("/");
        
       } else {
-        // setErrorMessage("Your email not verified yet.");
         await sendEmailVerification(auth.currentUser);
         setLoading(false);
         setIsEmailSend(true);

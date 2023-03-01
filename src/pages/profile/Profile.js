@@ -44,6 +44,7 @@ import { Menu, MenuItem, IconButton, Typography } from "@mui/material";
 import PostCardOutline from "../../components/postCard/PostCardOutline";
 import PostCard from "../../components/postCard/PostCard";
 import Container from "@mui/material/Container";
+import CustomSnackbar from "../../components/snackbar/snackbar";
 
 
 import {ref, uploadBytes, getDownloadURL} from "firebase/storage"
@@ -57,6 +58,12 @@ const Profile = () => {
   const [loadingSpinner, setLoadingSpinner] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
 
+  //new const for snackbar
+  const [message, setMessage] = useState(false);
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const handleSnackbarClose = () => {
+    setShowSnackbar(false);
+  };
 
    //UPLOAD PROFILE PICTURE
    const [image, setImage] = useState([]);
@@ -136,6 +143,8 @@ const Profile = () => {
 
   const handleDelete = async (e) => {
     await deleteDoc(doc(db, "posts", e));
+    setMessage("Your post is out on space.");
+    setShowSnackbar(true);
   };
 
 
@@ -334,6 +343,12 @@ const Profile = () => {
           </div>
         </Container>
       </div>
+      <CustomSnackbar
+                  open={showSnackbar}
+                  message={message}
+                  variant="success"
+                  onClose={handleSnackbarClose}
+                />
 
       <SearchUser />
     </div>
