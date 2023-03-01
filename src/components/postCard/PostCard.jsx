@@ -225,35 +225,12 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
         >
           <CardHeader
 
-
-            //   avatar={
-
-            //     <Avatar
-            //       sx={{ bgcolor: blueGrey[500], textDecoration: "none" }}
-            //       aria-label="recipe"
-            //       component={Link}
-            //       to={`/profile/${post.username}`}
-            //     >
-
-            //       {post.username.charAt(0)}
-            //     </Avatar>
-
-
-
-
-            // }
-
-
-
-            avatar={
+            avatar = {
               <div>
+              {currentUserPic.length > 0 &&
+                      currentUserPic.map((pic) => 
+                      <div>
 
-
-                {currentUserPic.length > 0 &&
-                  currentUserPic.map((pic) =>
-                    // <img key = {pic.data().datePostedOn} src={pic?.data().imageUrl} alt="user-profile" />
-
-                    <div>
                       <Avatar
                         alt="image"
                         key={pic?.data().datePostedOn}
@@ -263,8 +240,8 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                       /></div>)
                 }
 
+
                 {currentUserPic.length === 0 &&
-                  // <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="user-profile" />
                   <Avatar
                     alt="image"
                     src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
@@ -273,9 +250,9 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                   />
                 }
 
-
               </div>
             }
+
             title={post.username}
             titleTypographyProps={{ fontWeight: "600", variant: "body1" }}
             subheader={
@@ -287,8 +264,8 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                   minute: "2-digit",
                 })
             }
-            subheaderTypographyProps={{ color: "var(--text_color)" }}
 
+            subheaderTypographyProps={{ color: "var(--text_color)" }}
             action={
               auth.currentUser.displayName === post.username ? (
                 <div>
@@ -305,7 +282,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                     }}
                   >
                     <Button onClick={() => handleDeletePost(postId)} variant="outlined" startIcon={<DeleteIcon />}
-                      sx={{ color: "#57636F", borderColor: "#57636F", '&:hover': { borderColor: '#57636F', backgroundColor: "var(--button)", color: "var(--text_color)" } }}>
+                      sx={{ color: "#57636F", border: "none", '&:hover': { border: "none", backgroundColor: "var(--button)", color: "var(--text_color)" } }}>
                       Delete Post
                     </Button>
                   </Menu>
