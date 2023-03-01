@@ -150,7 +150,7 @@ const CreatePost = () => {
           padding: "20px",
           backgroundColor: "var(--card_color)",
           color: "var(--text_color)",
-          boxShadow: "0px 0px 5px #fff"
+          boxShadow: "var(--box_shadow)"
         }}
       >
         <CardContent>
@@ -193,11 +193,12 @@ const CreatePost = () => {
               variant="contained"
               onClick={handleUpload}
               disabled={!caption}
-              sx={{ width: "90%", color: "#fff", backgroundColor: "#B2B2B2", backgroundColor: "var(--button)", color: "var(--text_color)",  '&:hover': { color: "#fff", bgcolor: "#57636F"} }}>
-              
+              sx={{ width: "90%", color: "#fff", backgroundColor: "#B2B2B2", backgroundColor: "var(--button)", color: "var(--text_color)", '&:hover': { color: "#fff", bgcolor: "#57636F" } }}>
+
               Create post
               {loading && <Loading />}
             </Button>
+            
             <CustomSnackbar
               open={showSnackbar}
               message="Your dump thoughts are on space."
