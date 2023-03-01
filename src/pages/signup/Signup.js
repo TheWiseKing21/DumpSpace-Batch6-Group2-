@@ -142,10 +142,6 @@ const Signup = () => {
 
   return (
 
-    <div className="login-container">
-      <div className="login-wrapper">
-        <div className="login-box">
-        
     <section>
       <div className="signup-container">
         
@@ -160,7 +156,6 @@ const Signup = () => {
           <div className="logo-wrapper">
             <img src="/images/logo/dump-space-logo.png" alt="" className="" />
           </div>
-
 
           {!isEmailSend ? (
             
@@ -230,13 +225,7 @@ const Signup = () => {
                       Sign Up
                     </span>
                   </button>
-                  {loading && <Loading />}
-                  <CustomSnackbar
-                    open={showSnackbar}
-                    message={message}
-                    variant="success"
-                    onClose={handleSnackbarClose}
-                  />
+                  {/* {loading && <Loading />} */}
                 </div>
               </form>
               {errorMessage && <p className="errorMessage">{errorMessage}</p>}
@@ -263,7 +252,6 @@ const Signup = () => {
                 onClose={handleSnackbarClose}
               />
               
-
               <div className="signup-confirm-email-wrapper">
                 <div className="confirm-email-image-wrapper">
                   <img
@@ -274,10 +262,8 @@ const Signup = () => {
                   />
                 </div>
                 <div className="confirm-email-message">
-
-                  Please make sure your email is verified.
-                  Verification link will be sent to your email, please check inbox or spam
-                  folder.
+                  Verification link send to your email (check inbox or spam
+                  folder). Please verify email first...
                 </div>
               </div>
             </>
