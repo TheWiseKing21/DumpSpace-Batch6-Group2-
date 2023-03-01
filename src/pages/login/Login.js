@@ -148,7 +148,7 @@ const Login = () => {
                   </button>
 
 
-                  {loading && <Loading />}
+                  {/* {loading && <Loading />} */}
               </div>
 
               <div className="forgot-pass">
