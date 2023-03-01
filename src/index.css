@@ -61,8 +61,10 @@ body {
 }
 
 /* CSS variable for the dark theme*/
-:root {
-  --home_background: #fff ;
+:root{
+  --logo_color:  url(/public/images/logo/logo-light.png);
+  --image_background: url(/public/images/pagenotfound/star2.png);
+  --home_background: #d5dde4 ;
   --card_color: #fff;
   --text_color: #000;
   --box_shadow: 0px 0px 5px #000;
@@ -70,6 +72,8 @@ body {
 }
 
 [data-theme="dark"]{
+  --image_background: url(/public/images/pagenotfound/star1.png);
+  --logo_color:  url(/public/images/logo/logo-dark.png);
   --home_background: #1F1F21;
   --body_color: #fff;
   --card_color:  #0D0C12;

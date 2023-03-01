@@ -333,7 +333,7 @@ const Profile = () => {
         <Container maxWidth="md" sx={{ marginBottom: "20px" }}>
           <div>
             <CreatePost />
-            <div>
+            <div className="profile-post-container">
               {loading ? (
                 <PostCardOutline />
               ) : (

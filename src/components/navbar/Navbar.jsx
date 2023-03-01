@@ -133,14 +133,18 @@ const Navbar = () => {
               textDecoration: "none",
             }}
           >
-            <a href ="/"><img src = "/images/logo/logo-light.png" ></img></a>
+            {/* <a href ="/"><img src = "/images/logo/logo-light.png" ></img></a> */}
+            <div className="logo-image" 
+            
+            style={{ 
+            width: "200px", 
+            height: "40px", 
+            backgroundImage: "var(--logo_color)",
+            backgroundSize:"cover",
+            backgroundRepeat: "no-repeat"}}></div>
+            
           </Typography>
 
-          {/* <a href ="/"><img src = "/images/logo/logo-light.png" ></img></a> */}
-
-          
-
-          {/* <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} /> */}
           <Typography
             variant="h5"
             noWrap

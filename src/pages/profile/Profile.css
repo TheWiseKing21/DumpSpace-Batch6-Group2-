@@ -1,3 +1,4 @@
+
 .profile-banner-container{
   
   overflow: hidden;
@@ -43,9 +44,22 @@
 .profile-bg{
   background-color: var(--home_background);
   color: var(--text_color);
+  
+
+
+  background-image: var(--image_background);
+  background-size: contain;
+  background-repeat: repeat;
+  width: 100%;
 }
 
 .profile-details-section {
+  background-image: var(--image_background);
+  background-size: contain;
+  background-repeat: repeat;
+  width: 100%;
+
+
   padding: 1%;
   display: flex;
   flex-direction: column;
