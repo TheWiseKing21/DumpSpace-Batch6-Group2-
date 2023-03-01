@@ -16,6 +16,7 @@ import CameraAltOutlinedIcon from "@mui/icons-material/CameraAltOutlined";
 import CustomSnackbar from "../snackbar/snackbar";
 
 import Container from "@mui/material/Container";
+import { InputBase } from "@mui/material";
 
 function LinearProgressWithLabel(props) {
   return (
@@ -155,9 +156,9 @@ const CreatePost = () => {
       >
         <CardContent>
           <Stack direction="column" spacing={3} maxWidth="100%">
-            <TextField
+            <InputBase
               id="standard-multiline-flexible"
-              label="Any dump thoughts?"
+              placeholder="Any dump thoughts?"
               multiline
               maxRows={4}
               variant="outlined"
@@ -165,8 +166,11 @@ const CreatePost = () => {
               value={caption}
               sx={{
                 maxWidth: "100%",
-                backgroundColor: "var(--home_background)",
+                borderRadius: "15px",
+                padding: "10px",
+                backgroundColor: "var(--card)",
                 color: "var(--text_color)",
+                boxShadow: "var(--box_shadow)"
               }}
             />
           </Stack>
@@ -192,13 +196,14 @@ const CreatePost = () => {
             <Button className="create-post"
               variant="contained"
               onClick={handleUpload}
-              disabled={!caption}
-              sx={{ width: "90%", color: "#fff", backgroundColor: "#B2B2B2", backgroundColor: "var(--button)", color: "var(--text_color)", '&:hover': { color: "#fff", bgcolor: "#57636F" } }}>
+              // disabled={!caption}
+              sx={{ width: "90%", backgroundColor: "var(--button)", color: "var(--text_color)", 
+              '&:hover': { color: "#fff", bgcolor: "#57636F" } }}>
 
               Create post
               {loading && <Loading />}
             </Button>
-            
+
             <CustomSnackbar
               open={showSnackbar}
               message="Your dump thoughts are on space."
