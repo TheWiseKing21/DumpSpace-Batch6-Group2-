@@ -2,6 +2,12 @@
   width: auto;
   margin-left: auto;
   /* display: flex; */
+  
+}
+
+.profile-bg{
+  background-color: var(--home_background);
+  color: var(--text_color);
 }
 
 .profile-datails-section {

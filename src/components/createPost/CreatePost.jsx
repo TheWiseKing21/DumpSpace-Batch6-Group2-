@@ -10,10 +10,13 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import { Stack } from "@mui/system";
 import IconButton from "@mui/material/IconButton";
-import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import LinearProgress from "@mui/material/LinearProgress";
 import Box from "@mui/material/Box";
+import CameraAltOutlinedIcon from "@mui/icons-material/CameraAltOutlined";
+import CustomSnackbar from "../snackbar/snackbar";
+
 import Container from "@mui/material/Container";
+import { InputBase } from "@mui/material";
 
 function LinearProgressWithLabel(props) {
   return (
@@ -45,7 +48,14 @@ const CreatePost = () => {
   const imageRef = useRef();
   const [loading, setLoading] = useState(false);
 
+  //new const for snackbar
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const handleSnackbarClose = () => {
+    setShowSnackbar(false);
+  };
+
   const handleUpload = () => {
+    setShowSnackbar(true);
     if (image) {
       setLoading(true);
       const storageRef = ref(storage, `/images/${image.name}`);
@@ -84,7 +94,6 @@ const CreatePost = () => {
           setImage("");
           setProgress(0);
           setLoading(false);
-          setMessage("Image Upload Successfully");
           setTimeout(() => {
             setMessage("");
           }, 5000);
@@ -131,7 +140,7 @@ const CreatePost = () => {
   };
 
   return (
-    <Container maxWidth="md" sx={{ marginBottom: "20px" }}>
+    <Container maxWidth="md" sx={{ marginBottom: "20px", color: "var(--text_color)" }}>
       <Card
         elevation={24}
         sx={{
@@ -140,19 +149,29 @@ const CreatePost = () => {
           marginTop: "20px",
           marginBottom: "20px",
           padding: "20px",
+          backgroundColor: "var(--card_color)",
+          color: "var(--text_color)",
+          boxShadow: "var(--box_shadow)"
         }}
       >
         <CardContent>
           <Stack direction="column" spacing={3} maxWidth="100%">
-            <TextField
+            <InputBase
               id="standard-multiline-flexible"
-              label="Any dump thoughts?"
+              placeholder="Any dump thoughts?"
               multiline
               maxRows={4}
               variant="outlined"
               onChange={(e) => setCaption(e.target.value)}
               value={caption}
-              sx={{ maxWidth: "100%" }}
+              sx={{
+                maxWidth: "100%",
+                borderRadius: "15px",
+                padding: "10px",
+                backgroundColor: "var(--card)",
+                color: "var(--text_color)",
+                boxShadow: "var(--box_shadow)"
+              }}
             />
           </Stack>
           <Stack direction="row" spacing={3} sx={{ marginTop: "10px" }}>
@@ -172,20 +191,28 @@ const CreatePost = () => {
                 ref={imageRef}
                 hidden
               />
-              <PhotoCamera />
+              <CameraAltOutlinedIcon sx={{ color: "var(--text_color)" }} />
             </IconButton>
-            <Button
+            <Button className="create-post"
               variant="contained"
               onClick={handleUpload}
-              disabled={!caption}
-              sx={{ width: "90%" }}
-            >
+              // disabled={!caption}
+              sx={{ width: "90%", backgroundColor: "var(--button)", color: "var(--text_color)", 
+              '&:hover': { color: "#fff", bgcolor: "#57636F" } }}>
+
               Create post
               {loading && <Loading />}
             </Button>
+
+            <CustomSnackbar
+              open={showSnackbar}
+              message="Your dump thoughts are on space."
+              variant="success"
+              onClose={handleSnackbarClose}
+            />
           </Stack>
         </CardContent>
-        {progress > 0 && <LinearProgressWithLabel value={progress} sx={{}} />}
+        {progress > 0 && <LinearProgressWithLabel value={progress} />}
         {message && (
           <div>
             <Typography>{message}</Typography>

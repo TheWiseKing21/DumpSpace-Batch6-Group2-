@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import firebaseContex from "../../context/FirebaseContext";
 import { useNavigate } from "react-router-dom";
-import { Divider, TextField, Typography } from "@mui/material";
+import { Divider, InputBase, TextField, Typography } from "@mui/material";
 import { Box, Stack } from "@mui/system";
 import Dialog from "@mui/material/Dialog";
 import Avatar from "@mui/material/Avatar";
@@ -26,13 +26,16 @@ const SearchUser = () => {
     <Dialog onClose={() => setIsSearch(false)} open={isSearch}>
       <Box
         sx={{
-          bgcolor: "white",
+          // bgcolor: "white",
           position: "fixed",
           top: "0",
           left: "30px",
           borderBottomRightRadius: "15px",
           borderBottomLeftRadius: "15px",
           width: "400px",
+          backgroundColor: "var(--home_background)",
+          color: "var(--text_color)",
+          boxShadow: "var(--box_shadow)"
         }}
       >
         <Stack direction={"column"} sx={{ width: "100%" }}>
@@ -41,7 +44,7 @@ const SearchUser = () => {
           </Typography>
         </Stack>
 
-        <TextField
+        <InputBase
           type="text"
           placeholder="Search by username"
           aria-label="Search user by username"
@@ -51,9 +54,12 @@ const SearchUser = () => {
           value={searchQuery}
           sx={{
             width: "100%",
+            border: "none",
             paddingRight: "20px",
             paddingLeft: "20px",
             marginBottom: "15px",
+            backgroundColor: "var(--card)",
+            color: "var(--text_color)"
           }}
         />
         <Divider />
@@ -67,7 +73,6 @@ const SearchUser = () => {
             <Stack
               direction="row"
               sx={{
-                bgcolor: "lightgray",
                 margin: "10px",
                 padding: "10px",
               }}

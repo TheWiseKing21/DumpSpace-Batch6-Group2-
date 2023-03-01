@@ -5,13 +5,17 @@ import CreatePost from "../../components/createPost/CreatePost";
 import PostCard from "../../components/postCard/PostCard";
 import PostCardOutline from "../../components/postCard/PostCardOutline";
 import SearchUser from "../../components/searchUser/SearchUser";
+import ConnectionBar from "../../components/connectionBar/ConnectionBar";
 import firebaseContex from "../../context/FirebaseContext";
-import Container from "@mui/material/Container";
+import "./Home.css";
+import { RxCross2 } from "react-icons/rx";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../config/FirebaseConfig";
 
 const Home = () => {
-  const { posts, allUsers, loading } = useContext(firebaseContex);
+  const { posts, allUsers, loading, setIsUpload } = useContext(firebaseContex);
   const navigate = useNavigate();
-  const [setAlertMessage] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
 
   const localUser = JSON.parse(localStorage.getItem("authUser"));
 
@@ -25,10 +29,15 @@ const Home = () => {
     return localUser?.uid === val.id;
   });
 
+  // const connectionRef = doc(db, "userinfo", localUser.uid);
+  // const connections = async () => {
+  //   await getDoc(connectionRef);
+  // };
+
   return (
     <>
       <Navbar />
-      <Container maxWidth="md">
+      <div className="home-page-container">
         <div>
           <CreatePost />
           <div>
@@ -47,7 +56,9 @@ const Home = () => {
           </div>
         </div>
         <SearchUser />
-      </Container>
+      </div>
+
+      <ConnectionBar currentUserInfo={currentUserInfo} />
     </>
   );
 };

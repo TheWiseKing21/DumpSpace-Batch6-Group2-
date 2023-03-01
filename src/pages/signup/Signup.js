@@ -12,6 +12,13 @@ import CustomSnackbar from "../../components/snackbar/snackbar";
 import validator from "validator";
 
 const Signup = () => {
+  //new const for snackbar
+  const [message, setMessage] = useState(false);
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const handleSnackbarClose = () => {
+    setShowSnackbar(false);
+  };
+
   const { signup } = useContext(firebaseContex);
   const [email, setEmail] = useState("");
   const [fullName, setFullName] = useState("");
@@ -44,17 +51,14 @@ const Signup = () => {
 
   console.log(invalid);
 
-  //new const for snackbar
-  const [showSnackbar, setShowSnackbar] = useState(false);
-  const handleSnackbarClose = () => {
-    setShowSnackbar(false);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setMessage("Sign up successful. Please verify your email.");
     setShowSnackbar(true);
+
     const usernameList = await usernameChecker(username);
+
     if (!usernameList.length) {
       try {
         const createUser = await signup(email, password);
@@ -92,7 +96,9 @@ const Signup = () => {
           await auth.currentUser.reload();
         }, 2000);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
+        setMessage("Email is already taken.");
+        setShowSnackbar(true);
         e.target.reset();
         setLoading(false);
         setErrorMessage(error.message.replace("Firebase:", ""));
@@ -101,10 +107,12 @@ const Signup = () => {
         }, 5000);
       }
     } else {
-      setErrorMessage("Username already taken");
+      // setErrorMessage("Username already taken");
       setLoading(false);
       setTimeout(() => {
-        setErrorMessage("");
+        setMessage("Username already taken");
+        setShowSnackbar(true);
+        // setErrorMessage("");
       }, 3000);
     }
 
@@ -124,114 +132,148 @@ const Signup = () => {
       setLoading(false);
       setIsEmailSend(true);
     } else {
-      setErrorMessage("Is Not Strong Password");
+      setMessage("Is Not Strong Password");
+      setShowSnackbar(true);
+      // setErrorMessage("Is Not Strong Password");
     }
   };
 
   return (
-    <div className="login-container">
-      <div className="login-wrapper">
-        <div className="login-box">
-          <div className="logo-wrapper">
-            <img src="" alt="" className="" />
-          </div>
 
-          {!isEmailSend ? (
-            <div className="login-form-wrapper">
-              <form className="login-form" onSubmit={handleSubmit}>
-                <div className="input-label">
-                  <input
-                    type="email"
-                    placeholder="Email address"
-                    aria-label="Enter your email address"
-                    aria-required="true"
-                    autoComplete="off"
-                    name="email"
-                    required
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
-                <div className="input-label">
-                  <input
-                    type="text"
-                    placeholder="FullName"
-                    aria-label="Enter your full name"
-                    aria-required="true"
-                    autoComplete="off"
-                    name="fullName"
-                    required
-                    onChange={(e) => setFullName(e.target.value)}
-                  />
-                </div>
-                <div className="input-label">
-                  <input
-                    type="text"
-                    placeholder="Username"
-                    aria-label="Enter your username"
-                    aria-required="true"
-                    autoComplete="off"
-                    name="username"
-                    required
-                    onChange={(e) => setUsername(e.target.value)}
-                    onKeyDown={(e) => e.code === "Space" && e.preventDefault()}
-                  />
-                </div>
-                <div className="input-label">
-                  <input
-                    type="password"
-                    placeholder="Password"
-                    aria-label="Enter your password"
-                    aria-required="true"
-                    autoComplete="off"
-                    name="password"
-                    required
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </div>
 
-                <div className="button-wrapper ">
-                  <button
-                    disabled={invalid}
-                    type="submit"
-                    className="login-button cur-point"
-                    style={{
-                      opacity: (invalid || loading) && "0.5",
-                    }}
-                  >
-                    Sign Up
-                  </button>
-                  {loading && <Loading />}
-                </div>
-              </form>
-              {errorMessage && <p className="errorMessage">{errorMessage}</p>}
+    <section>
+      <div className="signup-container">
+
+
+        <div className="signup-poster">
+          <img
+            src="/images/logo/signup-poster-1.png"
+            alt=""
+            className="signup-poster-image"
+          />
+        </div>
+
+
+        <div className="signup-wrapper">
+
+          <div className="signup-box">
+            <div className="logo-wrapper">
+              <img src="/images/logo/dump-space-logo.png" alt="" className="" />
             </div>
-          ) : (
-            // email send confirmation
 
-            <>
-              <CustomSnackbar
-                open={showSnackbar}
-                message="Sign up successful"
-                variant="success"
-                onClose={handleSnackbarClose}
-              />
-              <div className="signup-confirm-email-wrapper">
-                <div className="confirm-email-image-wrapper">
-                  <img
-                    src="/images/confirm-email.svg"
-                    alt="confirm-email"
-                    className="confirm-email-image"
-                  />
-                </div>
-                <div className="confirm-email-message">
-                  Verification link send to your email (check inbox or spam
-                  folder). Please verify email first.
+            {!isEmailSend ? (
+
+              <div className="login-form-wrapper">
+                <form className="login-form" onSubmit={handleSubmit}>
+                  <div className="input-label">
+                    <input
+                      type="email"
+                      placeholder="Email address"
+                      aria-label="Enter your email address"
+                      aria-required="true"
+                      autoComplete="off"
+                      name="email"
+                      required
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </div>
+                  <div className="input-label">
+                    <input
+                      type="text"
+                      placeholder="FullName"
+                      aria-label="Enter your full name"
+                      aria-required="true"
+                      autoComplete="off"
+                      name="fullName"
+                      required
+                      onChange={(e) => setFullName(e.target.value)}
+                    />
+                  </div>
+                  <div className="input-label">
+                    <input
+                      type="text"
+                      placeholder="Username"
+                      aria-label="Enter your username"
+                      aria-required="true"
+                      autoComplete="off"
+                      name="username"
+                      required
+                      onChange={(e) => setUsername(e.target.value)}
+                      onKeyDown={(e) => e.code === "Space" && e.preventDefault()}
+                    />
+                  </div>
+                  <div className="input-label">
+                    <input
+                      type="password"
+                      placeholder="Password"
+                      aria-label="Enter your password"
+                      aria-required="true"
+                      autoComplete="off"
+                      name="password"
+                      required
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="button-wrapper ">
+                    <button
+                      disabled={invalid}
+                      type="submit"
+                      className="pushable"
+                      style={{
+                        opacity: (invalid || loading) && "0.5",
+                      }}
+                    >
+                      <span class="front">
+                        {/* Start dumping... */}
+                        Sign Up
+                      </span>
+                    </button>
+                    <CustomSnackbar
+                      open={showSnackbar}
+                      message="Sign up successful"
+                      variant="success"
+                      onClose={handleSnackbarClose}
+                    />
+                    {/* {loading && <Loading />} */}
+                  </div>
+                </form>
+                {errorMessage && <p className="errorMessage">{errorMessage}</p>}
+
+                <div className="redirect-box">
+                  <div className="redirect-text">
+                    <p>
+                      Have an account?{" "}
+                      <Link to="/login" className="cur-point">
+                        Log In
+                      </Link>
+                    </p>
+                  </div>
+
                 </div>
               </div>
-            </>
-          )}
-        </div>
-        <div className="redirect-box login-box">
+            ) : (
+              // email send confirmation
+
+                <div className="signup-confirm-email-wrapper">
+                  <div className="confirm-email-image-wrapper">
+                    <img
+                      // src="/images/confirm-email.svg"
+                      src="/images/logo/confirm-img.png"
+                      alt="confirm-email"
+                      className="confirm-email-image"
+                    />
+                  </div>
+                  <div className="confirm-email-message">
+                    Verification link send to your email (check inbox or spam
+                    folder). Please verify email first...
+                  </div>
+                </div>
+              
+            )}
+          </div>
+
+          {/* <div className="redirect-box login-box">
           <div className="redirect-text">
             <p>
               Have an account?{" "}
@@ -240,10 +282,11 @@ const Signup = () => {
               </Link>
             </p>
           </div>
+        </div> */}
         </div>
+        {/* <Footer /> */}
       </div>
-      {/* <Footer /> */}
-    </div>
+    </section>
   );
 };
 
