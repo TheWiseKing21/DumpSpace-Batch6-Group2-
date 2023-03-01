@@ -1,7 +1,6 @@
 .home-page-container {
-  /* display: flex;
-  justify-content: center;
-  position: relative; */
+  margin-top: -5px;
+  padding-top: 1%;
   background-color: var(--home_background);
 }
 
@@ -18,7 +17,6 @@
   background-color: var(--primary-bg);
 }
 
-/* responsive for large screen */
 @media (min-width: 768px) and (max-width: 1024px) {
   .story-post-wrapper {
     max-width: 370px;
