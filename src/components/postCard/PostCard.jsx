@@ -258,7 +258,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                         alt="image"
                         key={pic?.data().datePostedOn}
                         src={pic?.data().imageUrl}
-                        sx={{ width: 50, height: 50 }}
+                        sx={{ width: 50, height: 50, boxShadow: "var(--box_shadow)" }}
 
                       /></div>)
                 }
@@ -268,7 +268,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                   <Avatar
                     alt="image"
                     src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-                    sx={{ width: 50, height: 50 }}
+                    sx={{ width: 50, height: 50, boxShadow: "var(--box_shadow)" }}
 
                   />
                 }
@@ -421,6 +421,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                             sx={{
                               bgcolor: "#57636F",
                               textDecoration: "none",
+                              boxShadow: "var(--box_shadow)"
                             }}
                           >
                             {data.username.charAt(0)}
@@ -433,6 +434,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                               bgcolor: "#57636F",
                               borderRadius: "10px",
                               padding: "10px",
+                              
                             }}
                           >
                             <Typography
@@ -497,6 +499,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                           sx={{
                             bgcolor: "#57636F",
                             textDecoration: "none",
+                            boxShadow: "var(--box_shadow)"
                           }}
                         >
                           {data.username.charAt(0)}
@@ -575,7 +578,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                 >
                   <Stack direction="row">
                     <Avatar
-                      sx={{ bgcolor: "#57636F", textDecoration: "none" }}
+                      sx={{ bgcolor: "#57636F", textDecoration: "none", boxShadow: "var(--box_shadow)" }}
                     >
                       {data.username.charAt(0)}
                     </Avatar>
@@ -662,7 +665,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
             <CardHeader
               avatar={
                 <Avatar
-                  sx={{ bgcolor: "#57636F", textDecoration: "none" }}
+                  sx={{ bgcolor: "#57636F", textDecoration: "none", boxShadow: "var(--box_shadow)" }}
                   aria-label="recipe"
                   component={Link}
                   to={`/profile/${post.username}`}
@@ -801,7 +804,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                   key={index}
                 >
                   <Stack direction="row">
-                    <Avatar sx={{ bgcolor: "#57636F", textDecoration: "none" }}>
+                    <Avatar sx={{ bgcolor: "#57636F", textDecoration: "none", boxShadow: "var(--box_shadow)" }}>
                       {data.username.charAt(0)}
                     </Avatar>
                     <Box

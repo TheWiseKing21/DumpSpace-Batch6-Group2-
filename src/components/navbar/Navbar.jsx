@@ -186,7 +186,7 @@ const Navbar = () => {
           >
             <Tooltip title="Menu">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <MoreVertIcon style={{ color: "var(--body_color)" }} />
+                <MoreVertIcon style={{ color: "var(--text_color)" }} />
               </IconButton>
             </Tooltip>
             <Menu
