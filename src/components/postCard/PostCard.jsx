@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FiHeart } from "react-icons/fi";
 import {
   updateDoc,
@@ -41,6 +41,9 @@ import CommentIcon from "@mui/icons-material/Comment";
 import SendIcon from "@mui/icons-material/Send";
 
 
+
+import { collection,onSnapshot, query, where, orderBy, Timestamp, limit } from 'firebase/firestore'
+
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
@@ -56,10 +59,14 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
   const currentDate = new Date().toLocaleDateString("en-US");
   const [message, setMessage] = useState("");
 
+  const [currentUserPic, setCurrentUserPic] = useState([]);
+
   const invalid = comments === "";
   const isLiked = post.likes.filter(
     (value) => auth.currentUser.displayName === value.username
   );
+
+
 
   const handleLikes = async () => {
     setIsClick(true);
@@ -153,9 +160,16 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
   };
 
   const handleDeletePost = async (e) => {
-    await deleteDoc(doc(db, "posts", e));
     setMessage("Your post is out on space.");
     setShowSnackbar(true);
+    try {
+      await deleteDoc(doc(db, "posts", e));
+    } catch (error){
+      console.log(error);
+    }
+    setTimeout(() => {
+      setShowSnackbar(false);
+    }, 10000);
   };
 
   const [openPostDetails, setOpenPostDetails] = React.useState(false);
@@ -175,6 +189,27 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
     setExpanded(!expanded);
   };
 
+  ////////////////////////////////////PROFILE PICTURE/////////////////////////////////////
+  const getUserPic = () => {
+    const postRef = collection(db, "profile");
+    const q = query(postRef, where('username', '==', post.username), orderBy('datePostedOn', "desc"), limit(1));
+
+    onSnapshot(q, (querySnapshot) => {
+      console.log(querySnapshot.docs)
+      setCurrentUserPic(querySnapshot.docs)
+      
+    });
+
+
+
+  }
+
+  useEffect(() => {
+    
+    getUserPic()
+    
+  }, [post.username])
+
   return (
     <>
       <Container maxWidth="md" sx={{ marginBottom: "20px" }} className="card-container">
@@ -185,19 +220,61 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
             borderRadius: "15px",
             backgroundColor: "var(--card_color)",
             color: "var(--text_color)",
-            boxShadow: "0px 0px 5px #fff"
+            boxShadow: "var(--box_shadow)"
           }}
         >
           <CardHeader
-            avatar={
-              <Avatar
-                sx={{ bgcolor: "#57636F", textDecoration: "none" }}
-                aria-label="recipe"
-                component={Link}
-                to={`/profile/${post.username}`}
-              >
-                {post.username.charAt(0)}
-              </Avatar>
+
+          
+          //   avatar={
+              
+          //     <Avatar
+          //       sx={{ bgcolor: blueGrey[500], textDecoration: "none" }}
+          //       aria-label="recipe"
+          //       component={Link}
+          //       to={`/profile/${post.username}`}
+          //     >
+
+          //       {post.username.charAt(0)}
+          //     </Avatar>
+
+
+            
+          
+          // }
+
+          
+
+            avatar = {
+              <div>
+
+              
+              {currentUserPic.length > 0 &&
+                      currentUserPic.map((pic) => 
+                      // <img key = {pic.data().datePostedOn} src={pic?.data().imageUrl} alt="user-profile" />
+                      
+                      <div>
+                      <Avatar
+                        alt="image"
+                        key = {pic?.data().datePostedOn}
+                        src = {pic?.data().imageUrl}
+                        sx={{ width: 50, height: 50 }}
+        
+                      /></div>)
+              }
+
+              {currentUserPic.length === 0 &&
+                // <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="user-profile" />
+                <Avatar
+                        alt="image"
+                        src = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                        sx={{ width: 50, height: 50 }}
+        
+                      />
+              }
+
+
+            </div>
             }
             title={post.username}
             titleTypographyProps={{ fontWeight: "600", variant: "body1" }}
@@ -223,7 +300,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                     open={openPostOption}
                     onClose={handlePostOptionClose}
                     PaperProps={{
-                      style: { backgroundColor: "var(--home_background)", boxShadow: "0px 0px 5px #fff" }
+                      style: { backgroundColor: "var(--home_background)", boxShadow: "var(--box_shadow)" }
 
                     }}
                   >
@@ -309,10 +386,10 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                   aria-expanded={expanded}
                   aria-label="show more"
                 >
-                  <Typography sx={{ marginRight: "5px", color: "var(--text_color)" }}>
+                  <Typography sx={{ marginRight: "5px", color:  "var(--button)", '&:hover': { color: "var(--text_color)"} }}>
                     View other comments
                   </Typography>
-                  <CommentIcon sx={{ color: "var(--text_color)" }} />
+                  <CommentIcon sx={{ color: "var(--button)", '&:hover': { color: "var(--text_color)" } }} />
                 </ExpandMore>
               </CardActions>
 
@@ -611,7 +688,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                       open={openPostDetailsOption}
                       onClose={handlePostDetailsOptionClose}
                       PaperProps={{
-                        style: { backgroundColor: "var(--home_background)", boxShadow: "0px 0px 5px #fff" }
+                        style: { backgroundColor: "var(--home_background)", boxShadow: "var(--box_shadow)" }
 
                       }}
                     >
@@ -631,7 +708,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                       open={openPostDetailsOption}
                       onClose={handlePostDetailsOptionClose}
                       PaperProps={{
-                        style: { backgroundColor: "var(--home_background)", boxShadow: "0px 0px 5px #fff" }
+                        style: { backgroundColor: "var(--home_background)", boxShadow: "var(--box_shadow)" }
 
                       }}
                     >

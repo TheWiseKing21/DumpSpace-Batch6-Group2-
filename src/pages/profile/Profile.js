@@ -6,6 +6,7 @@ import firebaseContex from "../../context/FirebaseContext";
 import "./Profile.css";
 
 import ProfileSkeleton from "./ProfileSkeleton";
+
 import {
   arrayRemove,
   arrayUnion,
@@ -16,12 +17,18 @@ import {
   updateDoc,
   deleteDoc,
   where,
+  addDoc,
+  serverTimestamp,
+  orderBy,
+  limit
 } from "firebase/firestore";
-import { auth, db } from "../../config/FirebaseConfig";
+
+import { auth, db, storage } from "../../config/FirebaseConfig";
 import { useParams } from "react-router-dom";
 
 import SearchUser from "../../components/searchUser/SearchUser";
 import Loading from "../../components/loading/Loading";
+
 import List from "@mui/material/List";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
@@ -31,11 +38,18 @@ import CardActions from "@mui/material/CardActions";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+
 import { Menu, MenuItem, IconButton, Typography } from "@mui/material";
 
 import PostCardOutline from "../../components/postCard/PostCardOutline";
 import PostCard from "../../components/postCard/PostCard";
 import Container from "@mui/material/Container";
+import CustomSnackbar from "../../components/snackbar/snackbar";
+
+
+import {ref, uploadBytes, getDownloadURL} from "firebase/storage"
+
+import { Avatar } from '@mui/material'
 
 const Profile = () => {
   const { allUsers, loading, setLoading, posts } = useContext(firebaseContex);
@@ -43,6 +57,17 @@ const Profile = () => {
   const [currentUserPosts, setCurrentUserPosts] = useState([]);
   const [loadingSpinner, setLoadingSpinner] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+
+  //new const for snackbar
+  const [message, setMessage] = useState(false);
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const handleSnackbarClose = () => {
+    setShowSnackbar(false);
+  };
+
+   //UPLOAD PROFILE PICTURE
+   const [image, setImage] = useState([]);
+   const [currentUserPic, setCurrentUserPic] = useState([]);
 
   // get username form param
   const { username } = useParams();
@@ -103,6 +128,7 @@ const Profile = () => {
 
   useEffect(() => {
     getCurrentUserPosts();
+    getUserPic();
   }, [username]);
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -117,7 +143,68 @@ const Profile = () => {
 
   const handleDelete = async (e) => {
     await deleteDoc(doc(db, "posts", e));
+    setMessage("Your post is out on space.");
+    setShowSnackbar(true);
   };
+
+
+  /////////////////////////////PROFILE PICTURE///////////////////////////////////////
+  const handleImageChange = (e) =>{
+    const imageFile = e.target.files[0]
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+
+    if(allowedTypes.includes(imageFile.type)){
+      setImage(imageFile)
+      console.log(imageFile)
+    }else{
+      alert('Please select an image file (jpg, png or gif)');
+      e.target.value = ''; // Reset the input field to clear the selected file
+    }
+  }
+
+  const handleSubmit = async () =>{
+    const imageName = image.name; //the name of the file in the database will be the same name file as uploaded
+    const imageRef = ref(storage, `/images/${imageName}`);
+    
+    await uploadBytes(imageRef, image).then
+    ( //uploading the file to firebase
+      () => {
+        getDownloadURL(imageRef).then(
+          (url) => {
+            addDoc(collection(db,'profile'),{
+              userId: auth.currentUser.uid,
+              datePostedOn: serverTimestamp(),
+              imageUrl: url,
+              username: auth.currentUser.displayName,
+              
+
+            })
+        }).catch((error) => {
+          console.log(error.message, "ERROR GETTING THE IMAGE URL")
+
+        });
+      }).catch((error)=>{
+        console.log(error.message)
+
+      })
+  }
+
+
+   // get current user's posts
+   const getUserPic = () => {
+    const postRef = collection(db, "profile");
+    const q = query(postRef, where('username', '==', username), orderBy('datePostedOn', "desc"), limit(1));
+
+    onSnapshot(q, (querySnapshot) => {
+      
+      setCurrentUserPic(querySnapshot.docs)
+      
+    })
+
+
+
+  }
+
 
   return (
     <div className="profile-page-section" >
@@ -131,10 +218,40 @@ const Profile = () => {
             <div className="profile-datails-section" key={currentUser.userId}>
               <div className="profile-image-details-wrapper absolute-center ">
                 <div className="profile-image-wrapper">
-                  <img
+                  
+                  {/* <img
                     src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
                     alt="user-profile"
-                  />
+                  /> */}
+
+                  {currentUserPic.length > 0 &&
+                      currentUserPic.map((pic) => 
+                      <div>
+                      <Avatar
+                        alt="image"
+                        key = {pic?.data().datePostedOn}
+                        src = {pic?.data().imageUrl}
+                        sx={{ width: 150, height: 150 }}
+        
+                        /></div>)
+                      
+                    }
+
+                    {currentUserPic.length === 0 &&
+                     <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="user-profile" />
+                    }
+
+                    
+  
+                    
+                   {(localUserData[0].username === currentUser.username) && 
+                   <div>
+                   <input type = "file" accept="image/jpeg,image/png,image/gif" onChange = {handleImageChange}/>
+                   <button onClick={handleSubmit}>Upload profile picture</button>
+                   </div>
+                   } 
+
+
                 </div>
 
                 <div className="profile-details-wrapper">
@@ -226,6 +343,12 @@ const Profile = () => {
           </div>
         </Container>
       </div>
+      <CustomSnackbar
+                  open={showSnackbar}
+                  message={message}
+                  variant="success"
+                  onClose={handleSnackbarClose}
+                />
 
       <SearchUser />
     </div>

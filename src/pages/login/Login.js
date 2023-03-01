@@ -11,6 +11,14 @@ import CustomSnackbar from "../../components/snackbar/snackbar";
 // import DarkMode from "../../components/darkmode/DarkMode";
 
 const Login = () => {
+
+   //new const for snackbar
+   const [message, setMessage] = useState("");
+   const [showSnackbar, setShowSnackbar] = useState(false);
+   const handleSnackbarClose = () => {
+     setShowSnackbar(false);
+   };
+   
   const { login } = useContext(firebaseContex);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,22 +28,13 @@ const Login = () => {
   const localUser = JSON.parse(localStorage.getItem("authUser"));
   const [errorMessage, setErrorMessage] = useState("");
 
-  const [message, setMessage] = useState("");
-
   const navigate = useNavigate();
 
   const invalid = password.length < 6 || email === "";
 
-  //new const for snackbar
-  const [showSnackbar, setShowSnackbar] = useState(false);
-  const handleSnackbarClose = () => {
-    setShowSnackbar(false);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setMessage("Login Successful");
 
     try {
       
@@ -43,10 +42,10 @@ const Login = () => {
       if (auth.currentUser.emailVerified) {
         localStorage.setItem("authUser", JSON.stringify(loginUser.user));
         setLoading(false);
+        setMessage("Login Successful");
         navigate("/");
        
       } else {
-        // setErrorMessage("Your email not verified yet.");
         await sendEmailVerification(auth.currentUser);
         setLoading(false);
         setIsEmailSend(true);
@@ -81,23 +80,31 @@ const Login = () => {
   }, [localUser]);
 
   return (
+
+    <section>
+      <div class = "star star1"></div>
+      <div class = "star star2"></div>
+      <div class = "star star3"></div>
     <div className="login-container">
       <div className="login-poster">
         <img
-          src="/images/iphone.png"
+          src="/images/logo/login-poster.png"
           alt="iphone-poster"
           className="login-poster-image"
         />
       </div>
+
       <div className="login-wrapper">
+        
         <div className="login-box">
           <div className="logo-wrapper">
             <img
-              src="/images/Instagram_logo.svg"
+              src="/images/logo/dump-space-logo.png"
               alt="instagram logo"
               className="instagram-logo"
             />
           </div>
+
           {!isEmailSend ? (
             <div className="login-form-wrapper">
               <form className="login-form" onSubmit={handleSubmit}>
@@ -124,23 +131,32 @@ const Login = () => {
                   />
                 </div>
 
-                <div className="forgot-pass">
-                  <Link to="/forgot" className="cur-point">
-                    Forgot Password?
-                  </Link>
-                </div>
+                
 
                 <div className="button-wrapper ">
                   <button
                     disabled={invalid}
                     type="submit"
-                    className="login-button cur-point"
-                    style={{ opacity: (invalid || loading) && "0.5" }}
+                    className="pushable"
+                    style={{ opacity: (invalid || loading) && "1" }}
                   >
-                    Log In
+                    
+                    <span class="front">
+                      {/* Start dumping... */}
+                      Log In
+                    </span>
                   </button>
-                  {/* {loading && <Loading />} */}
-                </div>
+
+
+                  {loading && <Loading />}
+              </div>
+
+              <div className="forgot-pass">
+                  <Link to="/forgot" className="cur-point">
+                    Forgot Password?
+                  </Link>
+              </div>
+
               </form>
 
               <CustomSnackbar
@@ -150,12 +166,14 @@ const Login = () => {
                 onClose={handleSnackbarClose}
               />
             </div>
+
           ) : (
+
             // email send confirmation
             <div className="signup-confirm-email-wrapper">
               <div className="confirm-email-image-wrapper">
                 <img
-                  src="/images/confirm-email.svg"
+                  src="/images/logo/dump-space-logo.png"
                   alt="confirm-email"
                   className="confirm-email-image"
                 />
@@ -194,7 +212,8 @@ const Login = () => {
       </div>
       {/* <DarkMode /> */}
       {/* <Footer /> */}
-    </div>
+      </div>
+    </section>
   );
 };
 
