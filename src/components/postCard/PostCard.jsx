@@ -153,9 +153,16 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
   };
 
   const handleDeletePost = async (e) => {
-    await deleteDoc(doc(db, "posts", e));
     setMessage("Your post is out on space.");
     setShowSnackbar(true);
+    try {
+      await deleteDoc(doc(db, "posts", e));
+    } catch (error){
+      console.log(error);
+    }
+    setTimeout(() => {
+      setShowSnackbar(false);
+    }, 10000);
   };
 
   const [openPostDetails, setOpenPostDetails] = React.useState(false);
@@ -310,10 +317,10 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                   aria-expanded={expanded}
                   aria-label="show more"
                 >
-                  <Typography sx={{ marginRight: "5px", color: "var(--text_color)" }}>
+                  <Typography sx={{ marginRight: "5px", color:  "var(--button)", '&:hover': { color: "var(--text_color)"} }}>
                     View other comments
                   </Typography>
-                  <CommentIcon sx={{ color: "var(--text_color)" }} />
+                  <CommentIcon sx={{ color: "var(--button)", '&:hover': { color: "var(--text_color)" } }} />
                 </ExpandMore>
               </CardActions>
 
