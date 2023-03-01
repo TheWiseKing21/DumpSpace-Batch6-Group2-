@@ -12,13 +12,13 @@ import CustomSnackbar from "../../components/snackbar/snackbar";
 
 const Login = () => {
 
-   //new const for snackbar
-   const [message, setMessage] = useState("");
-   const [showSnackbar, setShowSnackbar] = useState(false);
-   const handleSnackbarClose = () => {
-     setShowSnackbar(false);
-   };
-   
+  //new const for snackbar
+  const [message, setMessage] = useState("");
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const handleSnackbarClose = () => {
+    setShowSnackbar(false);
+  };
+
   const { login } = useContext(firebaseContex);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -37,14 +37,15 @@ const Login = () => {
     setLoading(true);
 
     try {
-      
+
       const loginUser = await login(email, password);
       if (auth.currentUser.emailVerified) {
         localStorage.setItem("authUser", JSON.stringify(loginUser.user));
         setLoading(false);
         setMessage("Login Successful");
+        setShowSnackbar(true);
         navigate("/");
-       
+
       } else {
         await sendEmailVerification(auth.currentUser);
         setLoading(false);
@@ -61,12 +62,12 @@ const Login = () => {
         }, 2000);
       }
     } catch (error) {
-      setMessage("Your email not verified yet.");
+      setMessage("Account doesn't exist.");
       e.target.reset();
       setLoading(false);
       setErrorMessage(error.message.replace("Firebase:", ""));
       setTimeout(() => {
-        setErrorMessage("");
+        setMessage("Your email not verified yet.");
       }, 5000);
     }
 
@@ -82,136 +83,136 @@ const Login = () => {
   return (
 
     <section>
-      <div class = "star star1"></div>
-      <div class = "star star2"></div>
-      <div class = "star star3"></div>
-    <div className="login-container">
-      <div className="login-poster">
-        <img
-          src="/images/logo/login-poster.png"
-          alt="iphone-poster"
-          className="login-poster-image"
-        />
-      </div>
+      <div class="star star1"></div>
+      <div class="star star2"></div>
+      <div class="star star3"></div>
+      <div className="login-container">
+        <div className="login-poster">
+          <img
+            src="/images/logo/login-poster.png"
+            alt="iphone-poster"
+            className="login-poster-image"
+          />
+        </div>
 
-      <div className="login-wrapper">
-        
-        <div className="login-box">
-          <div className="logo-wrapper">
-            <img
-              src="/images/logo/dump-space-logo.png"
-              alt="instagram logo"
-              className="instagram-logo"
-            />
-          </div>
+        <div className="login-wrapper">
 
-          {!isEmailSend ? (
-            <div className="login-form-wrapper">
-              <form className="login-form" onSubmit={handleSubmit}>
-                <div className="input-label">
-                  <input
-                    type="email"
-                    placeholder="Email address"
-                    aria-label="Enter your email address"
-                    aria-required="true"
-                    autoComplete="off"
-                    name="email"
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
-                <div className="input-label">
-                  <input
-                    type="password"
-                    placeholder="Password"
-                    aria-label="Enter your password"
-                    aria-required="true"
-                    autoComplete="off"
-                    name="password"
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </div>
-
-                
-
-                <div className="button-wrapper ">
-                  <button
-                    disabled={invalid}
-                    type="submit"
-                    className="pushable"
-                    style={{ opacity: (invalid || loading) && "1" }}
-                  >
-                    
-                    <span class="front">
-                      {/* Start dumping... */}
-                      Log In
-                    </span>
-                  </button>
-
-
-                  {/* {loading && <Loading />} */}
-              </div>
-
-              <div className="forgot-pass">
-                  <Link to="/forgot" className="cur-point">
-                    Forgot Password?
-                  </Link>
-              </div>
-
-              </form>
-
-              <CustomSnackbar
-                open={showSnackbar}
-                message={message}
-                variant="success"
-                onClose={handleSnackbarClose}
+          <div className="login-box">
+            <div className="logo-wrapper">
+              <img
+                src="/images/logo/dump-space-logo.png"
+                alt="instagram logo"
+                className="instagram-logo"
               />
             </div>
 
-          ) : (
+            {!isEmailSend ? (
+              <div className="login-form-wrapper">
+                <form className="login-form" onSubmit={handleSubmit}>
+                  <div className="input-label">
+                    <input
+                      type="email"
+                      placeholder="Email address"
+                      aria-label="Enter your email address"
+                      aria-required="true"
+                      autoComplete="off"
+                      name="email"
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </div>
+                  <div className="input-label">
+                    <input
+                      type="password"
+                      placeholder="Password"
+                      aria-label="Enter your password"
+                      aria-required="true"
+                      autoComplete="off"
+                      name="password"
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </div>
 
-            // email send confirmation
-            <div className="signup-confirm-email-wrapper">
-              <div className="confirm-email-image-wrapper">
-                <img
-                  src="/images/logo/dump-space-logo.png"
-                  alt="confirm-email"
-                  className="confirm-email-image"
-                />
+
+
+                  <div className="button-wrapper ">
+                    <button
+                      disabled={invalid}
+                      type="submit"
+                      className="pushable"
+                      style={{ opacity: (invalid || loading) && "1" }}
+                    >
+
+                      <span class="front">
+                        {/* Start dumping... */}
+                        Log In
+                      </span>
+                    </button>
+                    <CustomSnackbar
+                      open={showSnackbar}
+                      message={message}
+                      variant="success"
+                      onClose={handleSnackbarClose}
+                    />
+
+
+                    {/* {loading && <Loading />} */}
+                  </div>
+
+                  <div className="forgot-pass">
+                    <Link to="/forgot" className="cur-point">
+                      Forgot Password?
+                    </Link>
+                  </div>
+
+                </form>
+                
               </div>
-              <div className="confirm-email-message">
-                Your email not verified yet, so please verify email first.
-                Verification link send to your email (check inbox or spam
-                folder).
+
+            ) : (
+
+              // email send confirmation
+              <div className="signup-confirm-email-wrapper">
+                <div className="confirm-email-image-wrapper">
+                  <img
+                    src="/images/logo/dump-space-logo.png"
+                    alt="confirm-email"
+                    className="confirm-email-image"
+                  />
+                </div>
+                <div className="confirm-email-message">
+                  Your email not verified yet, so please verify email first.
+                  Verification link send to your email (check inbox or spam
+                  folder).
+                </div>
+              </div>
+            )}
+
+            <div className="redirect-text">
+              <p>
+                Don't have an account?{" "}
+                <Link to="/signup" className="cur-point">
+                  Sign up
+                </Link>
+              </p>
+            </div>
+          </div>
+          <div
+            className="guest-login-info-wrapper login-box"
+            style={{ display: "none" }}
+          >
+            <div className="title">Create new account or login as a guest</div>
+            <div className="guest-login-credential">
+              <div className="guest-email">
+                <p>Email: guest@gmail.com</p>
+              </div>
+              <div className="guest-password">
+                <p>Password: guest@1234</p>
               </div>
             </div>
-          )}
-
-          <div className="redirect-text">
-            <p>
-              Don't have an account?{" "}
-              <Link to="/signup" className="cur-point">
-                Sign up
-              </Link>
-            </p>
           </div>
         </div>
-        <div
-          className="guest-login-info-wrapper login-box"
-          style={{ display: "none" }}
-        >
-          <div className="title">Create new account or login as a guest</div>
-          <div className="guest-login-credential">
-            <div className="guest-email">
-              <p>Email: guest@gmail.com</p>
-            </div>
-            <div className="guest-password">
-              <p>Password: guest@1234</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* <DarkMode /> */}
-      {/* <Footer /> */}
+        {/* <DarkMode /> */}
+        {/* <Footer /> */}
       </div>
     </section>
   );

@@ -24,6 +24,7 @@ import {
   TextField,
   CardActions,
   Tooltip,
+  InputBase,
 } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import RocketLaunchOutlinedIcon from "@mui/icons-material/RocketLaunchOutlined";
@@ -42,7 +43,7 @@ import SendIcon from "@mui/icons-material/Send";
 
 
 
-import { collection,onSnapshot, query, where, orderBy, Timestamp, limit } from 'firebase/firestore'
+import { collection, onSnapshot, query, where, orderBy, Timestamp, limit } from 'firebase/firestore'
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -162,14 +163,13 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
   const handleDeletePost = async (e) => {
     setMessage("Your post is out on space.");
     setShowSnackbar(true);
-    try {
-      await deleteDoc(doc(db, "posts", e));
-    } catch (error){
-      console.log(error);
-    }
-    setTimeout(() => {
-      setShowSnackbar(false);
-    }, 10000);
+    setTimeout(async () => {
+      try {
+        await deleteDoc(doc(db, "posts", e));
+      } catch (error) {
+        console.log(error);
+      }
+    }, 2000);
   };
 
   const [openPostDetails, setOpenPostDetails] = React.useState(false);
@@ -197,7 +197,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
     onSnapshot(q, (querySnapshot) => {
       console.log(querySnapshot.docs)
       setCurrentUserPic(querySnapshot.docs)
-      
+
     });
 
 
@@ -205,9 +205,9 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
   }
 
   useEffect(() => {
-    
+
     getUserPic()
-    
+
   }, [post.username])
 
   return (
@@ -225,56 +225,56 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
         >
           <CardHeader
 
-          
-          //   avatar={
-              
-          //     <Avatar
-          //       sx={{ bgcolor: blueGrey[500], textDecoration: "none" }}
-          //       aria-label="recipe"
-          //       component={Link}
-          //       to={`/profile/${post.username}`}
-          //     >
 
-          //       {post.username.charAt(0)}
-          //     </Avatar>
+            //   avatar={
+
+            //     <Avatar
+            //       sx={{ bgcolor: blueGrey[500], textDecoration: "none" }}
+            //       aria-label="recipe"
+            //       component={Link}
+            //       to={`/profile/${post.username}`}
+            //     >
+
+            //       {post.username.charAt(0)}
+            //     </Avatar>
 
 
-            
-          
-          // }
 
-          
 
-            avatar = {
+            // }
+
+
+
+            avatar={
               <div>
 
-              
-              {currentUserPic.length > 0 &&
-                      currentUserPic.map((pic) => 
-                      // <img key = {pic.data().datePostedOn} src={pic?.data().imageUrl} alt="user-profile" />
-                      
-                      <div>
+
+                {currentUserPic.length > 0 &&
+                  currentUserPic.map((pic) =>
+                    // <img key = {pic.data().datePostedOn} src={pic?.data().imageUrl} alt="user-profile" />
+
+                    <div>
                       <Avatar
                         alt="image"
-                        key = {pic?.data().datePostedOn}
-                        src = {pic?.data().imageUrl}
+                        key={pic?.data().datePostedOn}
+                        src={pic?.data().imageUrl}
                         sx={{ width: 50, height: 50 }}
-        
+
                       /></div>)
-              }
+                }
 
-              {currentUserPic.length === 0 &&
-                // <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="user-profile" />
-                <Avatar
-                        alt="image"
-                        src = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-                        sx={{ width: 50, height: 50 }}
-        
-                      />
-              }
+                {currentUserPic.length === 0 &&
+                  // <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="user-profile" />
+                  <Avatar
+                    alt="image"
+                    src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                    sx={{ width: 50, height: 50 }}
+
+                  />
+                }
 
 
-            </div>
+              </div>
             }
             title={post.username}
             titleTypographyProps={{ fontWeight: "600", variant: "body1" }}
@@ -351,12 +351,17 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                   }}
                 />
               </IconButton>
-              <TextField
+              <InputBase
                 placeholder="Add a comment"
                 onChange={(e) => setComments(e.target.value)}
                 value={comments ?? ""}
                 sx={{
                   width: "90%",
+                  borderRadius: "15px",
+                  padding: "10px",
+                  backgroundColor: "var(--card)",
+                  color: "var(--text_color)",
+                  boxShadow: "var(--box_shadow)"
 
                 }}
               />
@@ -386,7 +391,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                   aria-expanded={expanded}
                   aria-label="show more"
                 >
-                  <Typography sx={{ marginRight: "5px", color:  "var(--button)", '&:hover': { color: "var(--text_color)"} }}>
+                  <Typography sx={{ marginRight: "5px", color: "var(--button)", '&:hover': { color: "var(--text_color)" } }}>
                     View other comments
                   </Typography>
                   <CommentIcon sx={{ color: "var(--button)", '&:hover': { color: "var(--text_color)" } }} />
@@ -747,7 +752,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
               <Stack direction="row" spacing={3}>
                 <IconButton onClick={handleLikes}>
                   <FiHeart
-                    sx={{
+                    style={{
                       width: "100%",
                       height: "100%",
                       fill: isLiked.length > 0 && "#810955",
@@ -757,13 +762,20 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                   />
                 </IconButton>
 
-                <TextField
+                <InputBase
                   className="comment-container"
                   placeholder="Add a comment"
                   onChange={(e) => setComments(e.target.value)}
                   value={comments ?? ""}
                   variant="outlined"
-                  sx={{ width: "90%" }}
+                  sx={{
+                    width: "90%",
+                    borderRadius: "15px",
+                    padding: "10px",
+                    backgroundColor: "var(--card)",
+                    color: "var(--text_color)",
+                    boxShadow: "var(--box_shadow)"
+                  }}
                 />
 
                 <IconButton
