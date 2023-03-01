@@ -4,6 +4,7 @@ import firebaseContex from "../../context/FirebaseContext";
 
 import "./Forgot.css";
 import "../forgot/Forgot.css";
+import CustomSnackbar from "../../components/snackbar/snackbar";
 
 const Forgot = () => {
   const { login, facebookLogin } = useContext(firebaseContex);
@@ -20,9 +21,16 @@ const Forgot = () => {
 
   const invalid = email === "";
 
+  // new const for snackbar
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const handleSnackbarClose = () => {
+    setShowSnackbar(false);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setShowSnackbar(true);
 
     forgotPassword(email)
       .then((Response) => {
@@ -73,8 +81,15 @@ const Forgot = () => {
                   >
                     Send
                   </button>
+                  <CustomSnackbar
+                    open={showSnackbar}
+                    message="Please check your email."
+                    variant="success"
+                    onClose={handleSnackbarClose} />
+
                 </div>
               </form>
+
               {errorMessage && <p className="errorMessage">{errorMessage}</p>}
             </div>
           ) : (
@@ -84,13 +99,12 @@ const Forgot = () => {
                 <img
                   src="/images/confirm-email.svg"
                   alt="confirm-email"
-                  className="confirm-email-image"
-                />
+                  className="confirm-email-image" />
               </div>
               <div className="confirm-email-message">
-                Your Email not Verified yet, So Please verify email first.
-                Varification link send to your email (check inbox or spam
-                folder).
+                Please make sure your email is verified.
+                Verification link will be sent to your email, please check inbox or spam
+                folder.
               </div>
             </div>
           )}

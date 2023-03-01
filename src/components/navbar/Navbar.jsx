@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import firebaseContex from "../../context/FirebaseContext";
 import { auth } from "../../config/FirebaseConfig";
@@ -16,16 +16,29 @@ import MenuItem from "@mui/material/MenuItem";
 
 import DarkMode from "../darkmode/DarkMode";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import CustomSnackbar from "../snackbar/snackbar";
 
 
 const Navbar = () => {
+
+   //new const for snackbar
+   const [message, setMessage] = useState(false);
+   const [showSnackbar, setShowSnackbar] = useState(false);
+   const handleSnackbarClose = () => {
+     setShowSnackbar(false);
+   };
+
+
   const { logout, isSearch, setIsSearch } = useContext(firebaseContex);
 
   const navigate = useNavigate();
 
   const handleLogout = async () => {
+    // setMessage("Come back. You are out on space.");
+    setShowSnackbar(true);
     navigate("/login");
     await logout();
+
   };
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -46,11 +59,14 @@ const Navbar = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+
+
   return (
-    <AppBar position="static" className="appbar" sx={{borderColor: "#000", backgroundColor: "var(--card_color)", color: "var(--text_color)"}}>
+    <AppBar position="static" className="appbar" sx={{ borderColor: "#000", backgroundColor: "var(--card_color)", color: "var(--text_color)" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}/>
+          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
@@ -139,25 +155,25 @@ const Navbar = () => {
             DumpSpace
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-          <Tooltip title="Search">
-            <IconButton
-              onClick={() => setIsSearch(!isSearch)}
-              size="large"
-              color="inherit"
-            >
-              <SearchIcon />
-            </IconButton>
+            <Tooltip title="Search">
+              <IconButton
+                onClick={() => setIsSearch(!isSearch)}
+                size="large"
+                color="inherit"
+              >
+                <SearchIcon />
+              </IconButton>
             </Tooltip>
 
             <Tooltip title="Go to Profile">
-            <IconButton
-              size="large"
-              color="inherit"
-              component={Link}
-              to={`/profile/${auth.currentUser?.displayName}`}
-            >
-              <PersonIcon />
-            </IconButton>
+              <IconButton
+                size="large"
+                color="inherit"
+                component={Link}
+                to={`/profile/${auth.currentUser?.displayName}`}
+              >
+                <PersonIcon />
+              </IconButton>
             </Tooltip>
           </Box>
 
@@ -184,18 +200,23 @@ const Navbar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
               PaperProps={{
-                style: { backgroundColor: "var(--home_background)", boxShadow: "var(--box_shadow)"
-              }
+                style: {
+                  backgroundColor: "var(--home_background)", boxShadow: "var(--box_shadow)"
+                }
 
               }}
             >
-              {/* <MenuItem onClick={handleCloseUserMenu} > */}
-                <Button onClick={handleLogout} variant="outlined" startIcon={<LogoutIcon />}
-                      sx={{ marginBottom: "5px", color: "#57636F", borderColor: "#57636F", '&:hover': { borderColor: '#57636F', backgroundColor: "var(--button)", color: "var(--text_color)" } }}>
-                      Logout
-                    </Button>
-                  <DarkMode />
-              {/* </MenuItem> */}
+              <Button onClick={handleLogout} variant="outlined" startIcon={<LogoutIcon />}
+                sx={{ marginBottom: "5px", color: "#57636F", borderColor: "#57636F", '&:hover': { borderColor: '#57636F', backgroundColor: "var(--button)", color: "var(--text_color)" } }}>
+                Logout
+              </Button>
+              <CustomSnackbar
+                open={showSnackbar}
+                message="Come back. You are out on space."
+                variant="success"
+                onClose={handleSnackbarClose}
+              />
+              <DarkMode />
 
             </Menu>
           </Box>
