@@ -237,7 +237,6 @@ const Profile = () => {
                         alt="image"
                         key = {pic?.data().datePostedOn}
                         src = {pic?.data().imageUrl}
-                        
                         /></div>)
                       
                     }

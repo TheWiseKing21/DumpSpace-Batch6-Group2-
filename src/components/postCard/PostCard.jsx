@@ -24,6 +24,7 @@ import {
   TextField,
   CardActions,
   Tooltip,
+  InputBase,
 } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import RocketLaunchOutlinedIcon from "@mui/icons-material/RocketLaunchOutlined";
@@ -42,7 +43,7 @@ import SendIcon from "@mui/icons-material/Send";
 
 
 
-import { collection,onSnapshot, query, where, orderBy, Timestamp, limit } from 'firebase/firestore'
+import { collection, onSnapshot, query, where, orderBy, Timestamp, limit } from 'firebase/firestore'
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -162,14 +163,13 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
   const handleDeletePost = async (e) => {
     setMessage("Your post is out on space.");
     setShowSnackbar(true);
-    try {
-      await deleteDoc(doc(db, "posts", e));
-    } catch (error){
-      console.log(error);
-    }
-    setTimeout(() => {
-      setShowSnackbar(false);
-    }, 10000);
+    setTimeout(async () => {
+      try {
+        await deleteDoc(doc(db, "posts", e));
+      } catch (error) {
+        console.log(error);
+      }
+    }, 2000);
   };
 
   const [openPostDetails, setOpenPostDetails] = React.useState(false);
@@ -197,7 +197,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
     onSnapshot(q, (querySnapshot) => {
       console.log(querySnapshot.docs)
       setCurrentUserPic(querySnapshot.docs)
-      
+
     });
 
 
@@ -205,9 +205,9 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
   }
 
   useEffect(() => {
-    
+
     getUserPic()
-    
+
   }, [post.username])
 
   return (
@@ -224,31 +224,33 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
           }}
         >
           <CardHeader
+
             avatar = {
               <div>
               {currentUserPic.length > 0 &&
                       currentUserPic.map((pic) => 
                       <div>
+
                       <Avatar
                         alt="image"
-                        key = {pic?.data().datePostedOn}
-                        src = {pic?.data().imageUrl}
-                        sx={{ width: 50, height: 50 }}
-        
+                        key={pic?.data().datePostedOn}
+                        src={pic?.data().imageUrl}
+                        sx={{ width: 50, height: 50, boxShadow: "var(--box_shadow)" }}
+
                       /></div>)
-              }
-
-              {currentUserPic.length === 0 &&
-                <Avatar
-                        alt="image"
-                        src = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-                        sx={{ width: 50, height: 50 }}
-        
-                      />
-              }
+                }
 
 
-            </div>
+                {currentUserPic.length === 0 &&
+                  <Avatar
+                    alt="image"
+                    src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                    sx={{ width: 50, height: 50, boxShadow: "var(--box_shadow)" }}
+
+                  />
+                }
+
+              </div>
             }
 
             title={post.username}
@@ -326,12 +328,17 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                   }}
                 />
               </IconButton>
-              <TextField
+              <InputBase
                 placeholder="Add a comment"
                 onChange={(e) => setComments(e.target.value)}
                 value={comments ?? ""}
                 sx={{
                   width: "90%",
+                  borderRadius: "15px",
+                  padding: "10px",
+                  backgroundColor: "var(--card)",
+                  color: "var(--text_color)",
+                  boxShadow: "var(--box_shadow)"
 
                 }}
               />
@@ -361,7 +368,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                   aria-expanded={expanded}
                   aria-label="show more"
                 >
-                  <Typography sx={{ marginRight: "5px", color:  "var(--button)", '&:hover': { color: "var(--text_color)"} }}>
+                  <Typography sx={{ marginRight: "5px", color: "var(--button)", '&:hover': { color: "var(--text_color)" } }}>
                     View other comments
                   </Typography>
                   <CommentIcon sx={{ color: "var(--button)", '&:hover': { color: "var(--text_color)" } }} />
@@ -391,6 +398,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                             sx={{
                               bgcolor: "#57636F",
                               textDecoration: "none",
+                              boxShadow: "var(--box_shadow)"
                             }}
                           >
                             {data.username.charAt(0)}
@@ -403,6 +411,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                               bgcolor: "#57636F",
                               borderRadius: "10px",
                               padding: "10px",
+                              
                             }}
                           >
                             <Typography
@@ -467,6 +476,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                           sx={{
                             bgcolor: "#57636F",
                             textDecoration: "none",
+                            boxShadow: "var(--box_shadow)"
                           }}
                         >
                           {data.username.charAt(0)}
@@ -545,7 +555,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                 >
                   <Stack direction="row">
                     <Avatar
-                      sx={{ bgcolor: "#57636F", textDecoration: "none" }}
+                      sx={{ bgcolor: "#57636F", textDecoration: "none", boxShadow: "var(--box_shadow)" }}
                     >
                       {data.username.charAt(0)}
                     </Avatar>
@@ -632,7 +642,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
             <CardHeader
               avatar={
                 <Avatar
-                  sx={{ bgcolor: "#57636F", textDecoration: "none" }}
+                  sx={{ bgcolor: "#57636F", textDecoration: "none", boxShadow: "var(--box_shadow)" }}
                   aria-label="recipe"
                   component={Link}
                   to={`/profile/${post.username}`}
@@ -722,7 +732,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
               <Stack direction="row" spacing={3}>
                 <IconButton onClick={handleLikes}>
                   <FiHeart
-                    sx={{
+                    style={{
                       width: "100%",
                       height: "100%",
                       fill: isLiked.length > 0 && "#810955",
@@ -732,13 +742,20 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                   />
                 </IconButton>
 
-                <TextField
+                <InputBase
                   className="comment-container"
                   placeholder="Add a comment"
                   onChange={(e) => setComments(e.target.value)}
                   value={comments ?? ""}
                   variant="outlined"
-                  sx={{ width: "90%" }}
+                  sx={{
+                    width: "90%",
+                    borderRadius: "15px",
+                    padding: "10px",
+                    backgroundColor: "var(--card)",
+                    color: "var(--text_color)",
+                    boxShadow: "var(--box_shadow)"
+                  }}
                 />
 
                 <IconButton
@@ -764,7 +781,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                   key={index}
                 >
                   <Stack direction="row">
-                    <Avatar sx={{ bgcolor: "#57636F", textDecoration: "none" }}>
+                    <Avatar sx={{ bgcolor: "#57636F", textDecoration: "none", boxShadow: "var(--box_shadow)" }}>
                       {data.username.charAt(0)}
                     </Avatar>
                     <Box
