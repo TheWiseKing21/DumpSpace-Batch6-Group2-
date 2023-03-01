@@ -198,10 +198,10 @@ const Profile = () => {
 
 
   return (
-    <div className="profile-page-section">
+    <div className="profile-page-section" >
       <Navbar />
 
-      <div>
+      <div className="profile-bg">
         {loading ? (
           <ProfileSkeleton />
         ) : (

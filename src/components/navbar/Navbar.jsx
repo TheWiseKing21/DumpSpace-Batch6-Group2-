@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import firebaseContex from "../../context/FirebaseContext";
 import { auth } from "../../config/FirebaseConfig";
 import Box from "@mui/material/Box";
-import { AppBar, IconButton, Toolbar, Tooltip } from "@mui/material";
+import { AppBar, IconButton, Toolbar, Tooltip, Button } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import AdbIcon from "@mui/icons-material/Adb";
 import SearchIcon from "@mui/icons-material/Search";
@@ -15,7 +15,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
 import DarkMode from "../darkmode/DarkMode";
-import { MoreVert } from "@mui/icons-material";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+
 
 const Navbar = () => {
   const { logout, isSearch, setIsSearch } = useContext(firebaseContex);
@@ -46,10 +47,10 @@ const Navbar = () => {
     setAnchorElUser(null);
   };
   return (
-    <AppBar position="static" sx={{ bgcolor: "#0c1222" }}>
+    <AppBar position="static" className="appbar" sx={{borderColor: "#000", backgroundColor: "var(--card_color)", color: "var(--text_color)"}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}/>
           <Typography
             variant="h6"
             noWrap
@@ -114,9 +115,6 @@ const Navbar = () => {
                 >
                   <PersonIcon />
                 </IconButton>
-                {/* <IconButton size="large" color="inherit" onClick={handleLogout}>
-                  <LogoutIcon />
-                </IconButton> */}
               </MenuItem>
             </Menu>
           </Box>
@@ -141,62 +139,64 @@ const Navbar = () => {
             DumpSpace
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            <Tooltip title="Search">
-              <IconButton
-                onClick={() => setIsSearch(!isSearch)}
-                size="large"
-                color="inherit"
-              >
-                <SearchIcon />
-              </IconButton>
+          <Tooltip title="Search">
+            <IconButton
+              onClick={() => setIsSearch(!isSearch)}
+              size="large"
+              color="inherit"
+            >
+              <SearchIcon />
+            </IconButton>
             </Tooltip>
 
             <Tooltip title="Go to Profile">
-              <IconButton
-                size="large"
-                color="inherit"
-                component={Link}
-                to={`/profile/${auth.currentUser?.displayName}`}
-              >
-                <PersonIcon />
-              </IconButton>
+            <IconButton
+              size="large"
+              color="inherit"
+              component={Link}
+              to={`/profile/${auth.currentUser?.displayName}`}
+            >
+              <PersonIcon />
+            </IconButton>
             </Tooltip>
           </Box>
 
           {/* new */}
-          <Box sx={{ flexGrow: 0 }}>
+          <Box sx={{ flexGrow: 0, backgroundColor: "var(--card_color)", color: "var(--text_color)" }}>
             <Tooltip title="Menu">
-              <IconButton
-                onClick={handleOpenUserMenu}
-                sx={{ p: 0 }}
-                color="inherit"
-              >
-                <MoreVert />
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <MoreVertIcon style={{ color: "var(--body_color)" }} />
               </IconButton>
             </Tooltip>
-            <Menu
-              sx={{ mt: "45px", padding: "10px" }}
+            <Menu onClick={handleCloseUserMenu}
+              sx={{ mt: '45px' }}
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
+                vertical: 'top',
+                horizontal: 'right',
               }}
               keepMounted
               transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
+                vertical: 'top',
+                horizontal: 'right',
               }}
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
+              PaperProps={{
+                style: { backgroundColor: "var(--home_background)", boxShadow: "var(--box_shadow)"
+              }
+
+              }}
             >
-              <MenuItem onClick={handleCloseUserMenu}>
-                <DarkMode />
-              </MenuItem>
-              <MenuItem onClick={handleLogout}>
-                <LogoutIcon />
-                <Typography sx={{ marginLeft: "10px" }}>Logout</Typography>
-              </MenuItem>
+              {/* <MenuItem onClick={handleCloseUserMenu} > */}
+                <Button onClick={handleLogout} variant="outlined" startIcon={<LogoutIcon />}
+                      sx={{ marginBottom: "5px", color: "#57636F", borderColor: "#57636F", '&:hover': { borderColor: '#57636F', backgroundColor: "var(--button)", color: "var(--text_color)" } }}>
+                      Logout
+                    </Button>
+                  <DarkMode />
+              {/* </MenuItem> */}
+
             </Menu>
           </Box>
         </Toolbar>

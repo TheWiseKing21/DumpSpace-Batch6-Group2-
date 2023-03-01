@@ -6,12 +6,13 @@ import PostCard from "../../components/postCard/PostCard";
 import PostCardOutline from "../../components/postCard/PostCardOutline";
 import SearchUser from "../../components/searchUser/SearchUser";
 import firebaseContex from "../../context/FirebaseContext";
-import Container from "@mui/material/Container";
+import "./Home.css";
+import { RxCross2 } from "react-icons/rx";
 
 const Home = () => {
-  const { posts, allUsers, loading } = useContext(firebaseContex);
+  const { posts, allUsers, loading, setIsUpload } = useContext(firebaseContex);
   const navigate = useNavigate();
-  const [setAlertMessage] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
 
   const localUser = JSON.parse(localStorage.getItem("authUser"));
 
@@ -28,7 +29,7 @@ const Home = () => {
   return (
     <>
       <Navbar />
-      <Container maxWidth="md">
+      <div className="home-page-container">
         <div>
           <CreatePost />
           <div>
@@ -47,7 +48,7 @@ const Home = () => {
           </div>
         </div>
         <SearchUser />
-      </Container>
+      </div>
     </>
   );
 };
