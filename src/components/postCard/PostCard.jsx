@@ -752,7 +752,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
               <Stack direction="row" spacing={3}>
                 <IconButton onClick={handleLikes}>
                   <FiHeart
-                    sx={{
+                    style={{
                       width: "100%",
                       height: "100%",
                       fill: isLiked.length > 0 && "#810955",
