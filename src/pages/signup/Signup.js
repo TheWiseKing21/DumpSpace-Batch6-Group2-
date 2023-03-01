@@ -12,7 +12,6 @@ import CustomSnackbar from "../../components/snackbar/snackbar";
 import validator from "validator";
 
 const Signup = () => {
-
   //new const for snackbar
   const [message, setMessage] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
@@ -51,7 +50,6 @@ const Signup = () => {
     password.length < 8 || email === "" || fullName === "" || username === "";
 
   console.log(invalid);
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -138,16 +136,21 @@ const Signup = () => {
       setShowSnackbar(true);
       // setErrorMessage("Is Not Strong Password");
     }
-
   };
 
   return (
 
+
     <section>
       <div className="signup-container">
 
+
         <div className="signup-poster">
-          <img src="/images/logo/signup-poster-1.png" alt="" className="signup-poster-image" />
+          <img
+            src="/images/logo/signup-poster-1.png"
+            alt=""
+            className="signup-poster-image"
+          />
         </div>
 
 
@@ -246,6 +249,7 @@ const Signup = () => {
                       </Link>
                     </p>
                   </div>
+
                 </div>
               </div>
             ) : (
@@ -283,7 +287,6 @@ const Signup = () => {
         {/* <Footer /> */}
       </div>
     </section>
-
   );
 };
 
