@@ -5,9 +5,12 @@ import CreatePost from "../../components/createPost/CreatePost";
 import PostCard from "../../components/postCard/PostCard";
 import PostCardOutline from "../../components/postCard/PostCardOutline";
 import SearchUser from "../../components/searchUser/SearchUser";
+import ConnectionBar from "../../components/connectionBar/ConnectionBar";
 import firebaseContex from "../../context/FirebaseContext";
 import "./Home.css";
 import { RxCross2 } from "react-icons/rx";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../config/FirebaseConfig";
 
 const Home = () => {
   const { posts, allUsers, loading, setIsUpload } = useContext(firebaseContex);
@@ -25,6 +28,11 @@ const Home = () => {
   const currentUserInfo = allUsers.filter((val) => {
     return localUser?.uid === val.id;
   });
+
+  // const connectionRef = doc(db, "userinfo", localUser.uid);
+  // const connections = async () => {
+  //   await getDoc(connectionRef);
+  // };
 
   return (
     <>
@@ -49,6 +57,8 @@ const Home = () => {
         </div>
         <SearchUser />
       </div>
+
+      <ConnectionBar currentUserInfo={currentUserInfo} />
     </>
   );
 };
