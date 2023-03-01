@@ -185,7 +185,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
             borderRadius: "15px",
             backgroundColor: "var(--card_color)",
             color: "var(--text_color)",
-            boxShadow: "0px 0px 5px #fff"
+            boxShadow: "var(--box_shadow)"
           }}
         >
           <CardHeader
@@ -223,7 +223,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                     open={openPostOption}
                     onClose={handlePostOptionClose}
                     PaperProps={{
-                      style: { backgroundColor: "var(--home_background)", boxShadow: "0px 0px 5px #fff" }
+                      style: { backgroundColor: "var(--home_background)", boxShadow: "var(--box_shadow)" }
 
                     }}
                   >
@@ -612,7 +612,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                       open={openPostDetailsOption}
                       onClose={handlePostDetailsOptionClose}
                       PaperProps={{
-                        style: { backgroundColor: "var(--home_background)", boxShadow: "0px 0px 5px #fff" }
+                        style: { backgroundColor: "var(--home_background)", boxShadow: "var(--box_shadow)" }
 
                       }}
                     >
@@ -632,7 +632,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                       open={openPostDetailsOption}
                       onClose={handlePostDetailsOptionClose}
                       PaperProps={{
-                        style: { backgroundColor: "var(--home_background)", boxShadow: "0px 0px 5px #fff" }
+                        style: { backgroundColor: "var(--home_background)", boxShadow: "var(--box_shadow)" }
 
                       }}
                     >
