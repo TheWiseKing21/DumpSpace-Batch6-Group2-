@@ -1,7 +1,7 @@
 .home-page-container {
-  display: flex;
+  /* display: flex;
   justify-content: center;
-  position: relative;
+  position: relative; */
   background-color: var(--home_background);
 }
 
@@ -18,12 +18,9 @@
   background-color: var(--primary-bg);
 }
 
-
 /* responsive for large screen */
-@media (min-width:768px) and (max-width:1024px){
-  .story-post-wrapper{
+@media (min-width: 768px) and (max-width: 1024px) {
+  .story-post-wrapper {
     max-width: 370px;
   }
-  
 }
-

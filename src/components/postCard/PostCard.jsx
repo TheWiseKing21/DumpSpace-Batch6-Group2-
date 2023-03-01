@@ -351,7 +351,6 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                   }}
                 />
               </IconButton>
-
               <TextField
                 placeholder="Add a comment"
                 onChange={(e) => setComments(e.target.value)}

@@ -18,7 +18,6 @@ import DarkMode from "../darkmode/DarkMode";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CustomSnackbar from "../snackbar/snackbar";
 
-
 const Navbar = () => {
 
    //new const for snackbar
@@ -178,24 +177,31 @@ const Navbar = () => {
           </Box>
 
           {/* new */}
-          <Box sx={{ flexGrow: 0, backgroundColor: "var(--card_color)", color: "var(--text_color)" }}>
+          <Box
+            sx={{
+              flexGrow: 0,
+              backgroundColor: "var(--card_color)",
+              color: "var(--text_color)",
+            }}
+          >
             <Tooltip title="Menu">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <MoreVertIcon style={{ color: "var(--body_color)" }} />
               </IconButton>
             </Tooltip>
-            <Menu onClick={handleCloseUserMenu}
-              sx={{ mt: '45px' }}
+            <Menu
+              onClick={handleCloseUserMenu}
+              sx={{ mt: "45px" }}
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
               }}
               keepMounted
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
               }}
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
@@ -217,7 +223,6 @@ const Navbar = () => {
                 onClose={handleSnackbarClose}
               />
               <DarkMode />
-
             </Menu>
           </Box>
         </Toolbar>
