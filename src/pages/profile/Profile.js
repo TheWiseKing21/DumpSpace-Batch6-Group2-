@@ -231,7 +231,7 @@ const Profile = () => {
                         alt="image"
                         key = {pic?.data().datePostedOn}
                         src = {pic?.data().imageUrl}
-                        sx={{ width: 150, height: 150 }}
+                        sx={{ width: 150, height: 150, boxShadow: "var(--box_shadow)" }}
         
                         /></div>)
                       
