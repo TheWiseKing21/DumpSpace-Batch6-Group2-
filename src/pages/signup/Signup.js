@@ -129,14 +129,23 @@ const Signup = () => {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-wrapper">
-        <div className="login-box">
+    <section>
+      <div className="signup-container">
+        
+        <div className="signup-poster">
+          <img src="/images/logo/signup-poster-1.png" alt="" className="signup-poster-image" />
+        </div>
+      
+      
+      <div className="signup-wrapper">
+        
+        <div className="signup-box">
           <div className="logo-wrapper">
-            <img src="" alt="" className="" />
+            <img src="/images/logo/dump-space-logo.png" alt="" className="" />
           </div>
 
           {!isEmailSend ? (
+            
             <div className="login-form-wrapper">
               <form className="login-form" onSubmit={handleSubmit}>
                 <div className="input-label">
@@ -193,17 +202,31 @@ const Signup = () => {
                   <button
                     disabled={invalid}
                     type="submit"
-                    className="login-button cur-point"
+                    className="pushable"
                     style={{
                       opacity: (invalid || loading) && "0.5",
                     }}
                   >
-                    Sign Up
+                    <span class="front">
+                      {/* Start dumping... */}
+                      Sign Up
+                    </span>
                   </button>
                   {loading && <Loading />}
                 </div>
               </form>
               {errorMessage && <p className="errorMessage">{errorMessage}</p>}
+              
+              <div className="redirect-box">
+                <div className="redirect-text">
+                  <p>
+                    Have an account?{" "}
+                    <Link to="/login" className="cur-point">
+                      Log In
+                    </Link>
+                  </p>
+                </div>
+              </div>
             </div>
           ) : (
             // email send confirmation
@@ -215,23 +238,26 @@ const Signup = () => {
                 variant="success"
                 onClose={handleSnackbarClose}
               />
+              
               <div className="signup-confirm-email-wrapper">
                 <div className="confirm-email-image-wrapper">
                   <img
-                    src="/images/confirm-email.svg"
+                    // src="/images/confirm-email.svg"
+                    src = "/images/logo/confirm-img.png"
                     alt="confirm-email"
                     className="confirm-email-image"
                   />
                 </div>
                 <div className="confirm-email-message">
                   Verification link send to your email (check inbox or spam
-                  folder). Please verify email first.
+                  folder). Please verify email first...
                 </div>
               </div>
             </>
           )}
         </div>
-        <div className="redirect-box login-box">
+        
+        {/* <div className="redirect-box login-box">
           <div className="redirect-text">
             <p>
               Have an account?{" "}
@@ -240,10 +266,12 @@ const Signup = () => {
               </Link>
             </p>
           </div>
-        </div>
+        </div> */}
       </div>
       {/* <Footer /> */}
     </div>
+    </section>
+
   );
 };
 
