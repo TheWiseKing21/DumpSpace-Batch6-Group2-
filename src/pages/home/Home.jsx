@@ -10,7 +10,7 @@ import firebaseContex from "../../context/FirebaseContext";
 import "./Home.css";
 import { RxCross2 } from "react-icons/rx";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../../config/FirebaseConfig";
+import { auth, db } from "../../config/FirebaseConfig";
 
 const Home = () => {
   const { posts, allUsers, loading, setIsUpload } = useContext(firebaseContex);
@@ -23,7 +23,7 @@ const Home = () => {
     if (localUser === null) {
       navigate("/login");
     }
-  }, [localUser]);
+  }, [localUser, auth.currentUser]);
 
   const currentUserInfo = allUsers.filter((val) => {
     return localUser?.uid === val.id;

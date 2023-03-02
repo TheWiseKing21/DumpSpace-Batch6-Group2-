@@ -235,10 +235,17 @@ const Navbar = () => {
               color: "var(--text_color)",
               display: "flex",
               paddingBottom: "5px",
-              margin: "10px",
             }}
           >
+            <Typography sx={{ marginTop: "8px", fontWeight: 400 }}>
+              OuterSpace mode
+            </Typography>
             <DarkMode />
+            <Typography
+              sx={{ marginTop: "8px", fontWeight: 600, marginLeft: "10px" }}
+            >
+              {auth.currentUser.displayName}
+            </Typography>
             <Tooltip title="Menu">
               <IconButton
                 onClick={handleOpenUserMenu}
@@ -255,8 +262,8 @@ const Navbar = () => {
                           key={pic?.data().datePostedOn}
                           src={pic?.data().imageUrl}
                           sx={{
-                            width: 50,
-                            height: 50,
+                            width: 35,
+                            height: 35,
                             boxShadow: "var(--box_shadow)",
                           }}
                         />
@@ -268,8 +275,8 @@ const Navbar = () => {
                       alt="image"
                       src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
                       sx={{
-                        width: 50,
-                        height: 50,
+                        width: 35,
+                        height: 35,
                         boxShadow: "var(--box_shadow)",
                       }}
                     />
