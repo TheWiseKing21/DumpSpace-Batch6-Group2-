@@ -5,9 +5,9 @@
   position: relative;
   background-color: var(--home_background);
   margin-top: -5px;
-  padding-top: 1%
+  padding-top: 1%;
+  padding-bottom: 2%;
   
- 
 }
 
 
@@ -17,6 +17,7 @@
   background-size: contain;
   background-repeat: repeat;
   width: 100%;
+  padding-bottom: 2%;
  
 }
 

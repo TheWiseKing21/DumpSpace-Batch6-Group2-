@@ -223,7 +223,7 @@ const Profile = () => {
               
               <div className="profile-banner-container">
                 <div className="profile-banner">
-                  <img src = "/images/sample/1.jpg" className="banner"></img>
+                  <img src = "/images/sample/1.gif" className="banner"></img>
       
                   
                 </div>
@@ -297,13 +297,13 @@ const Profile = () => {
                       <span className="font-w-500 total-number">
                         {currentUser.follower?.length}
                       </span>
-                      followers
+                      Followers
                     </div>
                     <div className="total-following-wrapper total-wrapper absolute-center">
                       <span className="font-w-500 total-number">
                         {currentUser.following?.length}
                       </span>
-                      following
+                      Following
                     </div>
                   </div>
                 </div>

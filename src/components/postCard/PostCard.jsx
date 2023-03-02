@@ -277,12 +277,12 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                     open={openPostOption}
                     onClose={handlePostOptionClose}
                     PaperProps={{
-                      style: { backgroundColor: "var(--home_background)", boxShadow: "var(--box_shadow)" }
+                      style: { backgroundColor: "transparent"}
 
                     }}
                   >
                     <Button onClick={() => handleDeletePost(postId)} variant="outlined" startIcon={<DeleteIcon />}
-                      sx={{ color: "#57636F", border: "none", '&:hover': { border: "none", backgroundColor: "var(--button)", color: "var(--text_color)" } }}>
+                      sx={{ color: "#57636F", border: "none", borderRadius: "25px", fontStyle: "italic", '&:hover': {  border: "none", backgroundColor: "#064670", color: "#fff", fontStyle: "normal" } }}>
                       Delete Post
                     </Button>
                   </Menu>
@@ -636,6 +636,8 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
               overflow: "auto",
               backgroundColor: "var(--card_color)",
               color: "var(--text_color)",
+             boxShadow: "var(--box_shadow)"
+
 
             }}
           >
@@ -673,18 +675,18 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                       open={openPostDetailsOption}
                       onClose={handlePostDetailsOptionClose}
                       PaperProps={{
-                        style: { backgroundColor: "var(--home_background)", boxShadow: "var(--box_shadow)" }
+                        style: { backgroundColor: "transparent" }
 
                       }}
                     >
                       <Button onClick={() => handleDeletePost(postId)} variant="outlined" startIcon={<DeleteIcon />}
-                        sx={{ color: "#57636F", borderColor: "#57636F", '&:hover': { borderColor: '#57636F', textColor: "#57636F", backgroundColor: "var(--button)", color: "var(--text_color)" } }}>
-                        Delete Post
+                      sx={{ color: "#57636F", border: "none", borderRadius: "25px", fontStyle: "italic", '&:hover': {  border: "none", backgroundColor: "#064670", color: "#fff", fontStyle: "normal" } }}>
+                      Delete Post
                       </Button>
                       <br></br>
                       <Button onClick={handleCloseDetails} variant="outlined" startIcon={<CloseIcon />}
-                        sx={{ marginTop: "5px", color: "#57636F", borderColor: "#57636F", '&:hover': { borderColor: '#57636F', backgroundColor: "var(--button)", color: "var(--text_color)" } }}>
-                        Close
+                      sx={{ color: "#57636F", border: "none", borderRadius: "25px", fontStyle: "italic", '&:hover': {  border: "none", backgroundColor: "#064670", color: "#fff", fontStyle: "normal" } }}>
+                      Close
                       </Button>
                     </Menu>
                   ) : (
@@ -693,13 +695,13 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                       open={openPostDetailsOption}
                       onClose={handlePostDetailsOptionClose}
                       PaperProps={{
-                        style: { backgroundColor: "var(--home_background)", boxShadow: "var(--box_shadow)" }
+                        style: { backgroundColor: "transparent" }
 
                       }}
                     >
                       <br></br><Button onClick={handleCloseDetails} variant="outlined" startIcon={<CloseIcon />}
-                        sx={{ marginTop: "5px", color: "#57636F", borderColor: "#57636F", '&:hover': { borderColor: '#57636F', backgroundColor: "var(--button)", color: "var(--text_color)" } }}>
-                        Close
+                      sx={{ color: "#57636F", border: "none", fontStyle: "italic", '&:hover': {  border: "none", backgroundColor: "#57636f", color: "#fff", fontStyle: "normal" } }}>
+                      Close
                       </Button>
                     </Menu>
                   )}
