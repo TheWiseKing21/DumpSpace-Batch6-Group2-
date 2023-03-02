@@ -11,6 +11,7 @@ import "./Home.css";
 import { RxCross2 } from "react-icons/rx";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../config/FirebaseConfig";
+import RightNavbar from "../../components/rightNavbar/RightNavbar";
 
 const Home = () => {
   const { posts, allUsers, loading, setIsUpload } = useContext(firebaseContex);
@@ -25,6 +26,10 @@ const Home = () => {
     }
   }, [localUser]);
 
+  const suggestedUsers = allUsers.filter((val) => {
+    return localUser?.uid !== val.id;
+  });
+
   const currentUserInfo = allUsers.filter((val) => {
     return localUser?.uid === val.id;
   });
@@ -38,9 +43,8 @@ const Home = () => {
     <>
       <Navbar />
       <div className="home-page-container">
-
         <div className="home-page">
-        <div className="stars"></div>
+          <div className="stars"></div>
           <CreatePost />
           <div className="home-page-feed">
             {loading ? (
@@ -56,10 +60,14 @@ const Home = () => {
               ))
             )}
           </div>
-          
         </div>
-        
+
         <SearchUser />
+        <RightNavbar
+          currentUserInfo={currentUserInfo}
+          suggestedUsers={suggestedUsers}
+          localUser={localUser}
+        />
       </div>
     </>
   );
