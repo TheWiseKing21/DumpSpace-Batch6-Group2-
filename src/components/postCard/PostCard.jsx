@@ -303,6 +303,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                       style: { backgroundColor: "transparent" },
                     }}
                   >
+
                     <Button
                       // onClick={() => handleDeletePost(postId)}
                       onClick={handleClickOpenDeleteDialog}
@@ -320,6 +321,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                         },
                       }}
                     >
+
                       Delete Post
                     </Button>
                   </Menu>

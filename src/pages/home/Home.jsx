@@ -10,7 +10,9 @@ import firebaseContex from "../../context/FirebaseContext";
 import "./Home.css";
 import { RxCross2 } from "react-icons/rx";
 import { doc, getDoc } from "firebase/firestore";
-import { auth, db } from "../../config/FirebaseConfig";
+import { db } from "../../config/FirebaseConfig";
+import RightNavbar from "../../components/rightNavbar/RightNavbar";
+
 
 const Home = () => {
   const { posts, allUsers, loading, setIsUpload } = useContext(firebaseContex);
@@ -23,7 +25,11 @@ const Home = () => {
     if (localUser === null) {
       navigate("/login");
     }
-  }, [localUser, auth.currentUser]);
+  }, [localUser]);
+
+  const suggestedUsers = allUsers.filter((val) => {
+    return localUser?.uid !== val.id;
+  });
 
   const currentUserInfo = allUsers.filter((val) => {
     return localUser?.uid === val.id;
@@ -58,6 +64,11 @@ const Home = () => {
         </div>
 
         <SearchUser />
+        <RightNavbar
+          currentUserInfo={currentUserInfo}
+          suggestedUsers={suggestedUsers}
+          localUser={localUser}
+        />
       </div>
     </>
   );

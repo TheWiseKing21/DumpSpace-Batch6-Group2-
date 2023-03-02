@@ -197,7 +197,7 @@ const CreatePost = () => {
               variant="contained"
               onClick={handleUpload}
               // disabled={!caption}
-              sx={{ width: "90%", backgroundColor: "var(--button)", color: "var(--text_color)", fontStyle: "italic",
+              sx={{ width: "90%", backgroundColor: "var(--button)", color: "var(--text_color)", fontStyle: "italic", borderRadius: "25px",
               '&:hover': { color: "#fff", bgcolor: "#064670", fontStyle: "normal" } }}>
 
               Create post

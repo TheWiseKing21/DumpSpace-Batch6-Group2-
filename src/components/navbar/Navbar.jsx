@@ -41,9 +41,9 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    // setMessage("Come back. You are out on space.");
-    setShowSnackbar(true);
     navigate("/login");
+    setMessage("Come back. You are out on space.");
+    setShowSnackbar(true);
     await logout();
   };
 
@@ -66,6 +66,7 @@ const Navbar = () => {
     setAnchorElUser(null);
   };
 
+
   const [currentUserPic, setCurrentUserPic] = useState([]);
   const getUserPic = () => {
     const postRef = collection(db, "profile");
@@ -87,6 +88,7 @@ const Navbar = () => {
       getUserPic();
     }
   });
+
 
   return (
     <AppBar
@@ -356,6 +358,7 @@ const Navbar = () => {
                   onClose={handleSnackbarClose}
                 />
               </MenuItem>
+
             </Menu>
           </Box>
         </Toolbar>
