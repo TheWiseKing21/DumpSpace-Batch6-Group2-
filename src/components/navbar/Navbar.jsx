@@ -26,16 +26,15 @@ const Navbar = () => {
   const handleSnackbarClose = () => {
     setShowSnackbar(false);
   };
-
-
+  
   const { logout, isSearch, setIsSearch } = useContext(firebaseContex);
 
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    // setMessage("Come back. You are out on space.");
-    setShowSnackbar(true);
     navigate("/login");
+    setMessage("Come back. You are out on space.");
+    setShowSnackbar(true);
     await logout();
 
   };
@@ -58,8 +57,6 @@ const Navbar = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-
-
 
   return (
     <AppBar position="static" className="appbar" sx={{ borderColor: "#000", backgroundColor: "var(--card_color)", color: "var(--text_color)" }}>
@@ -234,7 +231,7 @@ const Navbar = () => {
               </Button>
               <CustomSnackbar
                 open={showSnackbar}
-                message="Come back. You are out on space."
+                message={message}
                 variant="success"
                 onClose={handleSnackbarClose}
               />
