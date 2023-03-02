@@ -35,15 +35,13 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
     try {
-
+      setMessage("Login Successful");
+      setShowSnackbar(true);
       const loginUser = await login(email, password);
       if (auth.currentUser.emailVerified) {
         localStorage.setItem("authUser", JSON.stringify(loginUser.user));
         setLoading(false);
-        setMessage("Login Successful");
-        setShowSnackbar(true);
         navigate("/");
 
       } else {
@@ -165,7 +163,7 @@ const Login = () => {
                   </div>
 
                 </form>
-                
+
               </div>
 
             ) : (

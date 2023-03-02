@@ -23,8 +23,8 @@ export default function Editprofile(props) {
         
         <Button variant="outlined" color="primary" 
                 onClick={handleClickToOpen}
-                sx={{ marginBottom: "5px", color: "#57636F", border: "none", fontStyle: "italic", '&:hover': { border: "none", backgroundColor: "#57636f", color: "#fff", fontStyle: "normal" } }}>
-          Edit Profile
+                sx={{ marginBottom: "5px", color: "#57636F", border: "none", borderRadius: "25px", fontStyle: "italic", '&:hover': {  border: "none", backgroundColor: "#064670", color: "#fff", fontStyle: "normal" } }}>
+                Edit Profile
         </Button>
         <Dialog open={open} onClose={handleToClose}>
           <DialogTitle>{"Edit Profile"}</DialogTitle>

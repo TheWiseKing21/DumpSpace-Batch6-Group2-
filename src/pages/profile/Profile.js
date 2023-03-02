@@ -320,6 +320,7 @@ const Profile = () => {
               <div className="profile-banner-container">
                 <div className="profile-banner">
 
+
                 {currentUserCover.length > 0 &&
                       currentUserCover.map((cover) => 
                       <div>
@@ -336,6 +337,7 @@ const Profile = () => {
                     {currentUserCover.length === 0 &&
                      <img src = "/images/sample/1.jpg" className="banner"></img>
                     }
+
                 </div>
 
                 <div className="profile-image-wrapper">
@@ -408,13 +410,13 @@ const Profile = () => {
                       <span className="font-w-500 total-number">
                         {currentUser.follower?.length}
                       </span>
-                      followers
+                      Followers
                     </div>
                     <div className="total-following-wrapper total-wrapper absolute-center">
                       <span className="font-w-500 total-number">
                         {currentUser.following?.length}
                       </span>
-                      following
+                      Following
                     </div>
                   </div>
                 </div>
