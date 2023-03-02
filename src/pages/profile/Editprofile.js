@@ -22,7 +22,8 @@ export default function Editprofile(props) {
       <div stlye={{}}>
         
         <Button variant="outlined" color="primary" 
-                onClick={handleClickToOpen}>
+                onClick={handleClickToOpen}
+                sx={{ marginBottom: "5px", color: "#57636F", border: "none", fontStyle: "italic", '&:hover': { border: "none", backgroundColor: "#57636f", color: "#fff", fontStyle: "normal" } }}>
           Edit Profile
         </Button>
         <Dialog open={open} onClose={handleToClose}>
