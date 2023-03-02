@@ -1,7 +1,7 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import firebaseContex from "../../context/FirebaseContext";
-import { auth } from "../../config/FirebaseConfig";
+import { db, auth } from "../../config/FirebaseConfig";
 import Box from "@mui/material/Box";
 import { AppBar, IconButton, Toolbar, Tooltip, Button } from "@mui/material";
 import Typography from "@mui/material/Typography";
@@ -13,20 +13,29 @@ import Container from "@mui/material/Container";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-
+import Avatar from "@mui/material/Avatar";
 import DarkMode from "../darkmode/DarkMode";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CustomSnackbar from "../snackbar/snackbar";
+import { margin } from "@mui/system";
+import {
+  collection,
+  onSnapshot,
+  query,
+  where,
+  orderBy,
+  Timestamp,
+  limit,
+} from "firebase/firestore";
 
 const Navbar = () => {
-
   //new const for snackbar
   const [message, setMessage] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const handleSnackbarClose = () => {
     setShowSnackbar(false);
   };
-  
+
   const { logout, isSearch, setIsSearch } = useContext(firebaseContex);
 
   const navigate = useNavigate();
@@ -36,7 +45,6 @@ const Navbar = () => {
     setMessage("Come back. You are out on space.");
     setShowSnackbar(true);
     await logout();
-
   };
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -58,11 +66,42 @@ const Navbar = () => {
     setAnchorElUser(null);
   };
 
+
+  const [currentUserPic, setCurrentUserPic] = useState([]);
+  const getUserPic = () => {
+    const postRef = collection(db, "profile");
+    const q = query(
+      postRef,
+      where("username", "==", auth.currentUser.displayName),
+      orderBy("datePostedOn", "desc"),
+      limit(1)
+    );
+
+    onSnapshot(q, (querySnapshot) => {
+      console.log(querySnapshot.docs);
+      setCurrentUserPic(querySnapshot.docs);
+    });
+  };
+
+  useEffect(() => {
+    if (auth.currentUser) {
+      getUserPic();
+    }
+  });
+
+
   return (
-    <AppBar position="static" className="appbar" sx={{ borderColor: "#000", backgroundColor: "var(--card_color)", color: "var(--text_color)" }}>
+    <AppBar
+      position="static"
+      className="appbar"
+      sx={{
+        borderColor: "#000",
+        backgroundColor: "var(--card_color)",
+        color: "var(--text_color)",
+      }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
@@ -109,7 +148,6 @@ const Navbar = () => {
                 >
                   <PersonIcon />
                 </IconButton>
-
               </MenuItem>
             </Menu>
           </Box>
@@ -131,16 +169,16 @@ const Navbar = () => {
             }}
           >
             {/* <a href ="/"><img src = "/images/logo/logo-light.png" ></img></a> */}
-            <div className="logo-image"
-
+            <div
+              className="logo-image"
               style={{
                 width: "200px",
                 height: "40px",
                 backgroundImage: "var(--logo_color)",
                 backgroundSize: "cover",
-                backgroundRepeat: "no-repeat"
-              }}></div>
-
+                backgroundRepeat: "no-repeat",
+              }}
+            ></div>
           </Typography>
 
           <Typography
@@ -160,9 +198,12 @@ const Navbar = () => {
             }}
           >
             {/* <a href ="/"><img src = "/images/logo/logo-light.png" ></img></a> */}
-            <a href="/"><img src="/images/logo/rocket-3d-logo.png"
-              style={{ height: "50px", width: "auto", marginTop: "5px" }} ></img></a>
-
+            <a href="/">
+              <img
+                src="/images/logo/rocket-3d-logo.png"
+                style={{ height: "50px", width: "auto", marginTop: "5px" }}
+              ></img>
+            </a>
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
@@ -176,7 +217,7 @@ const Navbar = () => {
               </IconButton>
             </Tooltip>
 
-            <Tooltip title="Go to Profile">
+            {/* <Tooltip title="Go to Profile">
               <IconButton
                 size="large"
                 color="inherit"
@@ -185,7 +226,7 @@ const Navbar = () => {
               >
                 <PersonIcon />
               </IconButton>
-            </Tooltip>
+            </Tooltip> */}
           </Box>
 
           {/* new */}
@@ -194,11 +235,55 @@ const Navbar = () => {
               flexGrow: 0,
               backgroundColor: "var(--card_color)",
               color: "var(--text_color)",
+              display: "flex",
+              paddingBottom: "5px",
             }}
           >
+            <Typography sx={{ marginTop: "8px", fontWeight: 400 }}>
+              OuterSpace mode
+            </Typography>
+            <DarkMode />
+            <Typography
+              sx={{ marginTop: "8px", fontWeight: 600, marginLeft: "10px" }}
+            >
+              {auth.currentUser.displayName}
+            </Typography>
             <Tooltip title="Menu">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <MoreVertIcon style={{ color: "var(--text_color)" }} />
+              <IconButton
+                onClick={handleOpenUserMenu}
+                sx={{ p: 0, marginLeft: "10px" }}
+              >
+                {/* <MoreVertIcon style={{ color: "var(--text_color)" }} /> */}
+                {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" /> */}
+                <div>
+                  {currentUserPic.length > 0 &&
+                    currentUserPic.map((pic) => (
+                      <div>
+                        <Avatar
+                          alt="image"
+                          key={pic?.data().datePostedOn}
+                          src={pic?.data().imageUrl}
+                          sx={{
+                            width: 35,
+                            height: 35,
+                            boxShadow: "var(--box_shadow)",
+                          }}
+                        />
+                      </div>
+                    ))}
+
+                  {currentUserPic.length === 0 && (
+                    <Avatar
+                      alt="image"
+                      src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                      sx={{
+                        width: 35,
+                        height: 35,
+                        boxShadow: "var(--box_shadow)",
+                      }}
+                    />
+                  )}
+                </div>
               </IconButton>
             </Tooltip>
             <Menu
@@ -220,22 +305,60 @@ const Navbar = () => {
               PaperProps={{
                 style: {
                   backgroundColor: "transparent",
-                  border: "none"
-                }
-
+                  border: "none",
+                },
               }}
             >
-              <Button onClick={handleLogout} variant="outlined" startIcon={<LogoutIcon />}
-                sx={{ marginBottom: "5px", color: "#57636F", border: "none", fontStyle: "italic", '&:hover': { border: "none", backgroundColor: "#57636f", color: "#fff", fontStyle: "normal" } }}>
-                Logout
-              </Button>
-              <CustomSnackbar
-                open={showSnackbar}
-                message={message}
-                variant="success"
-                onClose={handleSnackbarClose}
-              />
-              <DarkMode />
+              <MenuItem>
+                <Button
+                  component={Link}
+                  to={`/profile/${auth.currentUser?.displayName}`}
+                  variant="outlined"
+                  startIcon={<PersonIcon />}
+                  sx={{
+                    marginBottom: "5px",
+                    color: "#57636F",
+                    border: "none",
+                    fontStyle: "italic",
+                    "&:hover": {
+                      border: "none",
+                      backgroundColor: "#57636f",
+                      color: "#fff",
+                      fontStyle: "normal",
+                    },
+                  }}
+                >
+                  Profile
+                </Button>
+              </MenuItem>
+              <MenuItem>
+                <Button
+                  onClick={handleLogout}
+                  variant="outlined"
+                  startIcon={<LogoutIcon />}
+                  sx={{
+                    marginBottom: "5px",
+                    color: "#57636F",
+                    border: "none",
+                    fontStyle: "italic",
+                    "&:hover": {
+                      border: "none",
+                      backgroundColor: "#57636f",
+                      color: "#fff",
+                      fontStyle: "normal",
+                    },
+                  }}
+                >
+                  Logout
+                </Button>
+                <CustomSnackbar
+                  open={showSnackbar}
+                  message="Come back. You are out on space."
+                  variant="success"
+                  onClose={handleSnackbarClose}
+                />
+              </MenuItem>
+
             </Menu>
           </Box>
         </Toolbar>

@@ -13,6 +13,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../config/FirebaseConfig";
 import RightNavbar from "../../components/rightNavbar/RightNavbar";
 
+
 const Home = () => {
   const { posts, allUsers, loading, setIsUpload } = useContext(firebaseContex);
   const navigate = useNavigate();
