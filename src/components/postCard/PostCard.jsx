@@ -30,8 +30,8 @@ import Stack from "@mui/material/Stack";
 import RocketLaunchOutlinedIcon from "@mui/icons-material/RocketLaunchOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import CustomSnackbar from "../snackbar/snackbar";
-import CloseIcon from '@mui/icons-material/Close';
-import DeleteIcon from '@mui/icons-material/Delete';
+import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/Delete";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Backdrop from "@mui/material/Backdrop";
 import Container from "@mui/material/Container";
@@ -40,10 +40,22 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { styled } from "@mui/material/styles";
 import CommentIcon from "@mui/icons-material/Comment";
 import SendIcon from "@mui/icons-material/Send";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import moment from "moment";
 
-
-
-import { collection, onSnapshot, query, where, orderBy, Timestamp, limit } from 'firebase/firestore'
+import {
+  collection,
+  onSnapshot,
+  query,
+  where,
+  orderBy,
+  Timestamp,
+  limit,
+} from "firebase/firestore";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -51,7 +63,6 @@ const ExpandMore = styled((props) => {
 })(({ theme, expand }) => ({
   marginLeft: "auto",
 }));
-
 
 const PostCard = ({ post, postId, setAlertMessage }) => {
   const [likesCount, setLikesCount] = useState(post.likes);
@@ -66,8 +77,6 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
   const isLiked = post.likes.filter(
     (value) => auth.currentUser.displayName === value.username
   );
-
-
 
   const handleLikes = async () => {
     setIsClick(true);
@@ -110,6 +119,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
           username: auth.currentUser.displayName,
           comment: comments,
           commentId: post.comments.length,
+          dateCommentedOn: new Date(),
         }),
       });
       setComments("");
@@ -132,6 +142,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
           username: userName,
           comment: userComment,
           commentId: userCommentId,
+          dateCommentedOn: new Date(),
         }),
       });
       setComments("");
@@ -192,27 +203,40 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
   ////////////////////////////////////PROFILE PICTURE/////////////////////////////////////
   const getUserPic = () => {
     const postRef = collection(db, "profile");
-    const q = query(postRef, where('username', '==', post.username), orderBy('datePostedOn', "desc"), limit(1));
+    const q = query(
+      postRef,
+      where("username", "==", post.username),
+      orderBy("datePostedOn", "desc"),
+      limit(1)
+    );
 
     onSnapshot(q, (querySnapshot) => {
-      console.log(querySnapshot.docs)
-      setCurrentUserPic(querySnapshot.docs)
-
+      console.log(querySnapshot.docs);
+      setCurrentUserPic(querySnapshot.docs);
     });
-
-
-
-  }
+  };
 
   useEffect(() => {
+    getUserPic();
+  }, [post.username]);
 
-    getUserPic()
+  const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
 
-  }, [post.username])
+  const handleClickOpenDeleteDialog = () => {
+    setOpenDeleteDialog(true);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false);
+  };
 
   return (
     <>
-      <Container maxWidth="md" sx={{ marginBottom: "20px" }} className="card-container">
+      <Container
+        maxWidth="md"
+        sx={{ marginBottom: "20px" }}
+        className="card-container"
+      >
         <Card
           elevation={24}
           sx={{
@@ -220,51 +244,44 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
             borderRadius: "15px",
             backgroundColor: "var(--card_color)",
             color: "var(--text_color)",
-            boxShadow: "var(--box_shadow)"
+            boxShadow: "var(--box_shadow)",
           }}
         >
           <CardHeader
-
-            avatar = {
+            avatar={
               <div>
-              {currentUserPic.length > 0 &&
-                      currentUserPic.map((pic) => 
-                      <div>
-
+                {currentUserPic.length > 0 &&
+                  currentUserPic.map((pic) => (
+                    <div>
                       <Avatar
                         alt="image"
                         key={pic?.data().datePostedOn}
                         src={pic?.data().imageUrl}
-                        sx={{ width: 50, height: 50, boxShadow: "var(--box_shadow)" }}
+                        sx={{
+                          width: 50,
+                          height: 50,
+                          boxShadow: "var(--box_shadow)",
+                        }}
+                      />
+                    </div>
+                  ))}
 
-                      /></div>)
-                }
-
-
-                {currentUserPic.length === 0 &&
+                {currentUserPic.length === 0 && (
                   <Avatar
                     alt="image"
                     src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-                    sx={{ width: 50, height: 50, boxShadow: "var(--box_shadow)" }}
-
+                    sx={{
+                      width: 50,
+                      height: 50,
+                      boxShadow: "var(--box_shadow)",
+                    }}
                   />
-                }
-
+                )}
               </div>
             }
-
             title={post.username}
             titleTypographyProps={{ fontWeight: "600", variant: "body1" }}
-            subheader={
-              post.datePostedOn.toDate().toLocaleDateString("en-US") !==
-                currentDate
-                ? post.datePostedOn.toDate().toLocaleDateString("en-US")
-                : post.datePostedOn.toDate().toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })
-            }
-
+            subheader={moment(post.datePostedOn.toDate()).fromNow()}
             subheaderTypographyProps={{ color: "var(--text_color)" }}
             action={
               auth.currentUser.displayName === post.username ? (
@@ -277,12 +294,26 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                     open={openPostOption}
                     onClose={handlePostOptionClose}
                     PaperProps={{
-                      style: { backgroundColor: "transparent"}
-
+                      style: { backgroundColor: "transparent" },
                     }}
                   >
-                    <Button onClick={() => handleDeletePost(postId)} variant="outlined" startIcon={<DeleteIcon />}
-                      sx={{ color: "#57636F", border: "none", fontStyle: "italic", '&:hover': {  border: "none", backgroundColor: "#57636f", color: "#fff", fontStyle: "normal" } }}>
+                    <Button
+                      // onClick={() => handleDeletePost(postId)}
+                      onClick={handleClickOpenDeleteDialog}
+                      variant="outlined"
+                      startIcon={<DeleteIcon />}
+                      sx={{
+                        color: "#57636F",
+                        border: "none",
+                        fontStyle: "italic",
+                        "&:hover": {
+                          border: "none",
+                          backgroundColor: "#57636f",
+                          color: "#fff",
+                          fontStyle: "normal",
+                        },
+                      }}
+                    >
                       Delete Post
                     </Button>
                   </Menu>
@@ -316,6 +347,26 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
             )}
           </CardContent>
           <CardContent>
+            <Stack
+              direction="row"
+              sx={{
+                margin: "5px",
+                justifyContent: "flex-end",
+                width: "100%",
+              }}
+            >
+              <Typography sx={{ margin: "5px" }}>
+                {post.likes.length > 1
+                  ? post.likes.length + " likes "
+                  : post.likes.length + " like "}
+              </Typography>
+              <Typography sx={{ margin: "5px" }}>
+                {post.comments.length > 1
+                  ? post.comments.length + " comments "
+                  : post.comments.length + " comment "}
+              </Typography>
+            </Stack>
+
             <Stack direction="row" spacing={3}>
               <IconButton onClick={handleLikes}>
                 <FiHeart
@@ -324,7 +375,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                     height: "100%",
                     fill: isLiked.length > 0 && "#810955",
                     color: isLiked.length > 0 && "#810955",
-                    color: "var(--text_color)"
+                    color: "var(--text_color)",
                   }}
                 />
               </IconButton>
@@ -338,8 +389,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                   padding: "10px",
                   backgroundColor: "var(--card)",
                   color: "var(--text_color)",
-                  boxShadow: "var(--box_shadow)"
-
+                  boxShadow: "var(--box_shadow)",
                 }}
               />
               <IconButton
@@ -347,9 +397,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                 onClick={handlePostComments}
                 color="inherit"
               >
-                <RocketLaunchOutlinedIcon
-                  sx={{ color: "var(--body_color)" }}
-                />
+                <RocketLaunchOutlinedIcon sx={{ color: "var(--body_color)" }} />
                 <CustomSnackbar
                   open={showSnackbar}
                   message={message}
@@ -368,10 +416,21 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                   aria-expanded={expanded}
                   aria-label="show more"
                 >
-                  <Typography sx={{ marginRight: "5px", color: "var(--button)", '&:hover': { color: "var(--text_color)" } }}>
+                  <Typography
+                    sx={{
+                      marginRight: "5px",
+                      color: "var(--button)",
+                      "&:hover": { color: "var(--text_color)" },
+                    }}
+                  >
                     View other comments
                   </Typography>
-                  <CommentIcon sx={{ color: "var(--button)", '&:hover': { color: "var(--text_color)" } }} />
+                  <CommentIcon
+                    sx={{
+                      color: "var(--button)",
+                      "&:hover": { color: "var(--text_color)" },
+                    }}
+                  />
                 </ExpandMore>
               </CardActions>
 
@@ -398,7 +457,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                             sx={{
                               bgcolor: "#57636F",
                               textDecoration: "none",
-                              boxShadow: "var(--box_shadow)"
+                              boxShadow: "var(--box_shadow)",
                             }}
                           >
                             {data.username.charAt(0)}
@@ -411,7 +470,6 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                               bgcolor: "#57636F",
                               borderRadius: "10px",
                               padding: "10px",
-                              
                             }}
                           >
                             <Typography
@@ -454,7 +512,12 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                                   )
                                 }
                               >
-                                <DeleteIcon sx={{ color: "#57636F", '&:hover': { color: "var(--text_color)" } }} />
+                                <DeleteIcon
+                                  sx={{
+                                    color: "#57636F",
+                                    "&:hover": { color: "var(--text_color)" },
+                                  }}
+                                />
                               </IconButton>
                             </Tooltip>
                           )}
@@ -476,7 +539,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                           sx={{
                             bgcolor: "#57636F",
                             textDecoration: "none",
-                            boxShadow: "var(--box_shadow)"
+                            boxShadow: "var(--box_shadow)",
                           }}
                         >
                           {data.username.charAt(0)}
@@ -531,7 +594,12 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                                 )
                               }
                             >
-                              <DeleteIcon sx={{ color: "#57636F", '&:hover': { color: "var(--text_color)" } }} />
+                              <DeleteIcon
+                                sx={{
+                                  color: "#57636F",
+                                  "&:hover": { color: "var(--text_color)" },
+                                }}
+                              />
                             </IconButton>
                           </Tooltip>
                         )}
@@ -555,7 +623,11 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                 >
                   <Stack direction="row">
                     <Avatar
-                      sx={{ bgcolor: "#57636F", textDecoration: "none", boxShadow: "var(--box_shadow)" }}
+                      sx={{
+                        bgcolor: "#57636F",
+                        textDecoration: "none",
+                        boxShadow: "var(--box_shadow)",
+                      }}
                     >
                       {data.username.charAt(0)}
                     </Avatar>
@@ -609,7 +681,12 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                             )
                           }
                         >
-                          <DeleteIcon sx={{ color: "#57636F", '&:hover': { color: "var(--text_color)" } }} />
+                          <DeleteIcon
+                            sx={{
+                              color: "#57636F",
+                              "&:hover": { color: "var(--text_color)" },
+                            }}
+                          />
                         </IconButton>
                       </Tooltip>
                     )}
@@ -636,15 +713,17 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
               overflow: "auto",
               backgroundColor: "var(--card_color)",
               color: "var(--text_color)",
-             boxShadow: "var(--box_shadow)"
-
-
+              boxShadow: "var(--box_shadow)",
             }}
           >
             <CardHeader
               avatar={
                 <Avatar
-                  sx={{ bgcolor: "#57636F", textDecoration: "none", boxShadow: "var(--box_shadow)" }}
+                  sx={{
+                    bgcolor: "#57636F",
+                    textDecoration: "none",
+                    boxShadow: "var(--box_shadow)",
+                  }}
                   aria-label="recipe"
                   component={Link}
                   to={`/profile/${post.username}`}
@@ -653,15 +732,19 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                 </Avatar>
               }
               title={post.username}
-              titleTypographyProps={{ fontWeight: "600", variant: "body1", color: "var(--text_color)" }}
+              titleTypographyProps={{
+                fontWeight: "600",
+                variant: "body1",
+                color: "var(--text_color)",
+              }}
               subheader={
                 post.datePostedOn.toDate().toLocaleDateString("en-US") !==
-                  currentDate
+                currentDate
                   ? post.datePostedOn.toDate().toLocaleDateString("en-US")
                   : post.datePostedOn.toDate().toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })
               }
               subheaderTypographyProps={{ color: "var(--text_color)" }}
               action={
@@ -675,18 +758,46 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                       open={openPostDetailsOption}
                       onClose={handlePostDetailsOptionClose}
                       PaperProps={{
-                        style: { backgroundColor: "transparent" }
-
+                        style: { backgroundColor: "transparent" },
                       }}
                     >
-                      <Button onClick={() => handleDeletePost(postId)} variant="outlined" startIcon={<DeleteIcon />}
-                      sx={{ color: "#57636F", border: "none", fontStyle: "italic", '&:hover': {  border: "none", backgroundColor: "#57636f", color: "#fff", fontStyle: "normal" } }}>
-                      Delete Post
+                      <Button
+                        onClick={handleClickOpenDeleteDialog}
+                        variant="outlined"
+                        startIcon={<DeleteIcon />}
+                        sx={{
+                          color: "#57636F",
+                          border: "none",
+                          fontStyle: "italic",
+                          "&:hover": {
+                            border: "none",
+                            backgroundColor: "#57636f",
+                            color: "#fff",
+                            fontStyle: "normal",
+                          },
+                        }}
+                      >
+                        Delete Post
                       </Button>
                       <br></br>
-                      <Button onClick={handleCloseDetails} variant="outlined" startIcon={<CloseIcon />}
-                      sx={{ marginTop: "5px", color: "#57636F", border: "none", fontStyle: "italic", '&:hover': {  border: "none", backgroundColor: "#57636f", color: "#fff", fontStyle: "normal" } }}>
-                      Close
+                      <Button
+                        onClick={handleCloseDetails}
+                        variant="outlined"
+                        startIcon={<CloseIcon />}
+                        sx={{
+                          marginTop: "5px",
+                          color: "#57636F",
+                          border: "none",
+                          fontStyle: "italic",
+                          "&:hover": {
+                            border: "none",
+                            backgroundColor: "#57636f",
+                            color: "#fff",
+                            fontStyle: "normal",
+                          },
+                        }}
+                      >
+                        Close
                       </Button>
                     </Menu>
                   ) : (
@@ -695,13 +806,27 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                       open={openPostDetailsOption}
                       onClose={handlePostDetailsOptionClose}
                       PaperProps={{
-                        style: { backgroundColor: "transparent" }
-
+                        style: { backgroundColor: "transparent" },
                       }}
                     >
-                      <br></br><Button onClick={handleCloseDetails} variant="outlined" startIcon={<CloseIcon />}
-                      sx={{ color: "#57636F", border: "none", fontStyle: "italic", '&:hover': {  border: "none", backgroundColor: "#57636f", color: "#fff", fontStyle: "normal" } }}>
-                      Close
+                      <br></br>
+                      <Button
+                        onClick={handleCloseDetails}
+                        variant="outlined"
+                        startIcon={<CloseIcon />}
+                        sx={{
+                          color: "#57636F",
+                          border: "none",
+                          fontStyle: "italic",
+                          "&:hover": {
+                            border: "none",
+                            backgroundColor: "#57636f",
+                            color: "#fff",
+                            fontStyle: "normal",
+                          },
+                        }}
+                      >
+                        Close
                       </Button>
                     </Menu>
                   )}
@@ -739,7 +864,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                       height: "100%",
                       fill: isLiked.length > 0 && "#810955",
                       color: isLiked.length > 0 && "#810955",
-                      color: "var(--text_color)"
+                      color: "var(--text_color)",
                     }}
                   />
                 </IconButton>
@@ -756,7 +881,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                     padding: "10px",
                     backgroundColor: "var(--card)",
                     color: "var(--text_color)",
-                    boxShadow: "var(--box_shadow)"
+                    boxShadow: "var(--box_shadow)",
                   }}
                 />
 
@@ -783,7 +908,13 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                   key={index}
                 >
                   <Stack direction="row">
-                    <Avatar sx={{ bgcolor: "#57636F", textDecoration: "none", boxShadow: "var(--box_shadow)" }}>
+                    <Avatar
+                      sx={{
+                        bgcolor: "#57636F",
+                        textDecoration: "none",
+                        boxShadow: "var(--box_shadow)",
+                      }}
+                    >
                       {data.username.charAt(0)}
                     </Avatar>
                     <Box
@@ -837,7 +968,12 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                             )
                           }
                         >
-                          <DeleteIcon sx={{ color: "#57636F", '&:hover': { color: "var(--text_color)" } }} />
+                          <DeleteIcon
+                            sx={{
+                              color: "#57636F",
+                              "&:hover": { color: "var(--text_color)" },
+                            }}
+                          />
                         </IconButton>
                       </Tooltip>
                     )}
@@ -848,6 +984,22 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
           </Card>
         </Backdrop>
       </Container>
+
+      <Dialog open={openDeleteDialog} onClose={handleCloseDeleteDialog}>
+        <DialogTitle>Are you sure to delete this post?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            If you delete this post, it won't be possible to retrieve it again.
+            Do you wish to proceed?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDeleteDialog}>Cancel</Button>
+          <Button onClick={() => handleDeletePost(postId)} autoFocus>
+            Delete Post
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };
