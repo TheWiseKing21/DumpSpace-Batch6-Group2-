@@ -20,12 +20,12 @@ import CustomSnackbar from "../snackbar/snackbar";
 
 const Navbar = () => {
 
-   //new const for snackbar
-   const [message, setMessage] = useState(false);
-   const [showSnackbar, setShowSnackbar] = useState(false);
-   const handleSnackbarClose = () => {
-     setShowSnackbar(false);
-   };
+  //new const for snackbar
+  const [message, setMessage] = useState(false);
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const handleSnackbarClose = () => {
+    setShowSnackbar(false);
+  };
 
 
   const { logout, isSearch, setIsSearch } = useContext(firebaseContex);
@@ -66,7 +66,7 @@ const Navbar = () => {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
 
-        <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -134,15 +134,16 @@ const Navbar = () => {
             }}
           >
             {/* <a href ="/"><img src = "/images/logo/logo-light.png" ></img></a> */}
-            <div className="logo-image" 
-            
-            style={{ 
-            width: "200px", 
-            height: "40px", 
-            backgroundImage: "var(--logo_color)",
-            backgroundSize:"cover",
-            backgroundRepeat: "no-repeat"}}></div>
-            
+            <div className="logo-image"
+
+              style={{
+                width: "200px",
+                height: "40px",
+                backgroundImage: "var(--logo_color)",
+                backgroundSize: "cover",
+                backgroundRepeat: "no-repeat"
+              }}></div>
+
           </Typography>
 
           <Typography
@@ -162,9 +163,9 @@ const Navbar = () => {
             }}
           >
             {/* <a href ="/"><img src = "/images/logo/logo-light.png" ></img></a> */}
-            <a href ="/"><img src = "/images/logo/rocket-3d-logo.png"
-            style = {{height: "50px", width: "auto", marginTop: "5px" }} ></img></a>
-            
+            <a href="/"><img src="/images/logo/rocket-3d-logo.png"
+              style={{ height: "50px", width: "auto", marginTop: "5px" }} ></img></a>
+
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
@@ -221,13 +222,14 @@ const Navbar = () => {
               onClose={handleCloseUserMenu}
               PaperProps={{
                 style: {
-                  backgroundColor: "var(--home_background)", boxShadow: "var(--box_shadow)"
+                  backgroundColor: "transparent",
+                  border: "none"
                 }
 
               }}
             >
               <Button onClick={handleLogout} variant="outlined" startIcon={<LogoutIcon />}
-                sx={{ marginBottom: "5px", color: "#57636F", borderColor: "#57636F", border: "none",'&:hover': { borderColor: '#57636F', backgroundColor: "var(--button)", color: "var(--text_color)",border: "none" } }}>
+                sx={{ marginBottom: "5px", color: "#57636F", border: "none", fontStyle: "italic", '&:hover': { border: "none", backgroundColor: "#57636f", color: "#fff", fontStyle: "normal" } }}>
                 Logout
               </Button>
               <CustomSnackbar
