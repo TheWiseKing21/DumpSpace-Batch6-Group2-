@@ -1,11 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-
+import "./Profile.css";
 import CreatePost from "../../components/createPost/CreatePost";
 import Navbar from "../../components/navbar/Navbar";
 import firebaseContex from "../../context/FirebaseContext";
-import "./Profile.css";
 import Editprofile from "./Editprofile";
-
 import ProfileSkeleton from "./ProfileSkeleton";
 
 import {
@@ -29,31 +27,17 @@ import { useParams } from "react-router-dom";
 
 import SearchUser from "../../components/searchUser/SearchUser";
 import Loading from "../../components/loading/Loading";
-
-// import List from "@mui/material/List";
-// import Card from "@mui/material/Card";
-// import CardHeader from "@mui/material/CardHeader";
-// import CardMedia from "@mui/material/CardMedia";
-// import CardContent from "@mui/material/CardContent";
-// import CardActions from "@mui/material/CardActions";
-// import FavoriteIcon from "@mui/icons-material/Favorite";
-// import ShareIcon from "@mui/icons-material/Share";
-// import MoreVertIcon from "@mui/icons-material/MoreVert";
-
-import { Menu, MenuItem, IconButton, Typography } from "@mui/material";
-import EditIcon from '@mui/icons-material/Edit';
-
 import PostCardOutline from "../../components/postCard/PostCardOutline";
 import PostCard from "../../components/postCard/PostCard";
-import Container from "@mui/material/Container";
 import CustomSnackbar from "../../components/snackbar/snackbar";
-
-
 import {ref, uploadBytes, getDownloadURL} from "firebase/storage"
 
-import { Avatar } from '@mui/material'
-
-
+import { ImageList, ImageListItem} from '@mui/material';
+import {Typography} from "@mui/material";
+import AddPhotoAlternateTwoToneIcon from '@mui/icons-material/AddPhotoAlternateTwoTone';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import Stack from '@mui/material/Stack';
 
 const Profile = () => {
   const { allUsers, loading, setLoading, posts } = useContext(firebaseContex);
@@ -239,7 +223,7 @@ const Profile = () => {
 
   const handleSubmitCover = async () =>{
     const imageName = image.name; //the name of the file in the database will be the same name file as uploaded
-    const imageRef = ref(storage, `/images/${imageName}`);
+    const imageRef = ref(storage, `/coverphoto/${imageName}`);
     
     await uploadBytes(imageRef, imageC).then
     ( //uploading the file to firebase
@@ -280,32 +264,6 @@ const Profile = () => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   return (
     <div className="profile-page-section" >
       <Navbar />
@@ -323,7 +281,7 @@ const Profile = () => {
 
                 {currentUserCover.length > 0 &&
                       currentUserCover.map((cover) => 
-                      <div>
+                      <div className="profile-banner">
                       
                         <img
                         // alt="image"
@@ -359,10 +317,7 @@ const Profile = () => {
                     }
                 </div>
               </div>
-              
-              
-              
-              
+             
               
               <div className="profile-image-details-wrapper">
                 
@@ -429,15 +384,38 @@ const Profile = () => {
                         
                         
                         <div>
-                        <h4>Change profile picture</h4>
-                        <input type = "file" accept="image/jpeg,image/png,image/gif" onChange = {handleImageChange}/>
-                        <button onClick={handleSubmit}>Upload profile picture</button><br/>
 
-                        {/* FOR COVER PHOTO */}
-                        
-                        <input type = "file" accept="image/jpeg,image/png,image/gif" onChange = {handleImageChangeCover}/>
-                        <button onClick={handleSubmitCover}>Upload Cover Photo</button>
-                        
+                        <Stack direction="row" alignItems="center" spacing={2}>
+                          
+                          <h4>Change profile picture</h4>
+                          <IconButton color="primary" aria-label="upload picture" component="label">
+                            <input hidden 
+                              type = "file" 
+                              accept="image/jpeg,image/png,image/gif" 
+                              onChange = {handleImageChange}/>
+                            <AddPhotoAlternateTwoToneIcon></AddPhotoAlternateTwoToneIcon>
+                          </IconButton>
+                          <Button onClick={handleSubmit} variant="contained" component="label">
+                            Upload
+                          </Button>
+                          
+
+              
+                        </Stack>
+
+                        <Stack direction="row" alignItems="center" spacing={3}>
+                          <h4>Change cover photo</h4>
+                          <IconButton color="primary" aria-label="upload picture" component="label">
+                            <input hidden 
+                              type = "file" 
+                              accept="image/jpeg,image/png,image/gif" 
+                              onChange = {handleImageChangeCover}/>
+                            <AddPhotoAlternateTwoToneIcon></AddPhotoAlternateTwoToneIcon>
+                          </IconButton>
+                          <Button onClick={handleSubmitCover} variant="contained" component="label">
+                            Upload
+                          </Button>
+                        </Stack>
                         </div>
 
 
@@ -448,37 +426,44 @@ const Profile = () => {
             </div>
           ))
         )}
-
-
-
-
-        <Container maxWidth="md" sx={{ marginBottom: "20px" }}>
-          <div>
-            <CreatePost />
-            <div className="profile-post-container">
-              {loading ? (
+        <CreatePost />     
+        <div>
+      
+        <ImageList variant="masonry" sx={{
+              columnCount: {
+                xs: '1 !important',
+                sm: '2 !important',
+                md: '3 !important',
+                lg: '3 !important',
+                xl: '3 !important',
+              }, padding: "1%"
+            }} gap={0}>
+        
+        {loading ? (
                 <PostCardOutline />
               ) : (
                 currentUserPosts.map((post) => (
+                  <ImageListItem key={post.id}>
                   <PostCard
                     key={post.id}
                     post={post.data()}
                     postId={post.id}
                     setAlertMessage={setAlertMessage}
                   />
+                  </ImageListItem>
                 ))
               )}
-              {!currentUserPosts.length && (
+              
+    </ImageList>
+    {!currentUserPosts.length && (
                 <Typography
-                  variant="h6"
-                  sx={{ display: "flex", justifyContent: "center" }}
+                  variant="h3"
+                  sx={{ display: "flex", justifyContent: "center", paddingBottom: "5%" }}
                 >
                   No Posts Available
                 </Typography>
               )}
-            </div>
-          </div>
-        </Container>
+        </div>
       </div>
       <CustomSnackbar
                   open={showSnackbar}

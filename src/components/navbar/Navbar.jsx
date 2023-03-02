@@ -77,7 +77,7 @@ const Navbar = () => {
     );
 
     onSnapshot(q, (querySnapshot) => {
-      console.log(querySnapshot.docs);
+      // console.log(querySnapshot.docs);
       setCurrentUserPic(querySnapshot.docs);
     });
   };
