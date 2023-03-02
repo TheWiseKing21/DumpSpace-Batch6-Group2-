@@ -73,6 +73,13 @@ const Profile = () => {
    const [image, setImage] = useState([]);
    const [currentUserPic, setCurrentUserPic] = useState([]);
 
+
+   //UPLOAD COVER PHOTO
+   const [imageC, setImageC] = useState([]);
+   const [currentUserCover, setCurrentUserCover] = useState([]);
+
+
+
   // get username form param
   const { username } = useParams();
 
@@ -133,6 +140,8 @@ const Profile = () => {
   useEffect(() => {
     getCurrentUserPosts();
     getUserPic();
+    getCoverPic();
+    
   }, [username]);
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -194,6 +203,8 @@ const Profile = () => {
   }
 
 
+
+
    // get current user's posts
    const getUserPic = () => {
     const postRef = collection(db, "profile");
@@ -209,6 +220,91 @@ const Profile = () => {
 
   }
 
+  /////////////////////////////COVER PHOTO///////////////////////////////////////
+  const handleImageChangeCover = (e) =>{
+    const imageFile = e.target.files[0]
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+
+    if(allowedTypes.includes(imageFile.type)){
+      setImageC(imageFile)
+      console.log(imageFile)
+    }else{
+      alert('Please select an image file (jpg, png or gif)');
+      e.target.value = ''; // Reset the input field to clear the selected file
+    }
+  }
+  
+  
+  
+
+  const handleSubmitCover = async () =>{
+    const imageName = image.name; //the name of the file in the database will be the same name file as uploaded
+    const imageRef = ref(storage, `/images/${imageName}`);
+    
+    await uploadBytes(imageRef, imageC).then
+    ( //uploading the file to firebase
+      () => {
+        getDownloadURL(imageRef).then(
+          (url) => {
+            addDoc(collection(db,'coverphoto'),{
+              userId: auth.currentUser.uid,
+              datePostedOn: serverTimestamp(),
+              imageUrl: url,
+              username: auth.currentUser.displayName,
+              
+
+            })
+        }).catch((error) => {
+          console.log(error.message, "ERROR GETTING THE IMAGE URL")
+
+        });
+      }).catch((error)=>{
+        console.log(error.message)
+
+      })
+  }
+
+    const getCoverPic = () => {
+      const postRef = collection(db, "coverphoto");
+      const q = query(postRef, where('username', '==', username), orderBy('datePostedOn', "desc"), limit(1));
+
+      onSnapshot(q, (querySnapshot) => {
+        
+        setCurrentUserCover(querySnapshot.docs)
+        
+      })
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   return (
     <div className="profile-page-section" >
@@ -223,10 +319,27 @@ const Profile = () => {
               
               <div className="profile-banner-container">
                 <div className="profile-banner">
-                  <img src = "/images/sample/1.gif" className="banner"></img>
-      
-                  
+
+
+                {currentUserCover.length > 0 &&
+                      currentUserCover.map((cover) => 
+                      <div>
+                      
+                        <img
+                        // alt="image"
+                        key = {cover?.data().datePostedOn}
+                        src = {cover?.data().imageUrl}
+                        className="banner"
+                        /></div>)
+                      
+                    }
+
+                    {currentUserCover.length === 0 &&
+                     <img src = "/images/sample/1.jpg" className="banner"></img>
+                    }
+
                 </div>
+
                 <div className="profile-image-wrapper">
                   
                   {currentUserPic.length > 0 &&
@@ -313,11 +426,21 @@ const Profile = () => {
                 {(localUserData[0].username === currentUser.username) && 
                     <div>
                       <Editprofile>
+                        
+                        
                         <div>
                         <h4>Change profile picture</h4>
                         <input type = "file" accept="image/jpeg,image/png,image/gif" onChange = {handleImageChange}/>
-                        <button onClick={handleSubmit}>Upload profile picture</button>
+                        <button onClick={handleSubmit}>Upload profile picture</button><br/>
+
+                        {/* FOR COVER PHOTO */}
+                        
+                        <input type = "file" accept="image/jpeg,image/png,image/gif" onChange = {handleImageChangeCover}/>
+                        <button onClick={handleSubmitCover}>Upload Cover Photo</button>
+                        
                         </div>
+
+
                       </Editprofile> 
                     </div>
                     }  
