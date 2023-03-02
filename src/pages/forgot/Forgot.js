@@ -1,16 +1,11 @@
-import { sendEmailVerification } from "firebase/auth";
 import React, { useContext, useEffect, useState } from "react";
-import { FaFacebookSquare } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-// import Footer from "../../components/footer/Footer";
-import Loading from "../../components/loading/Loading";
-import { auth } from "../../config/FirebaseConfig";
 import firebaseContex from "../../context/FirebaseContext";
 
-// import "./Login.css";
-// import "../signup/Signup.css";
 import "./Forgot.css";
 import "../forgot/Forgot.css";
+import CustomSnackbar from "../../components/snackbar/snackbar";
+import "../login/Login.css";
 
 const Forgot = () => {
   const { login, facebookLogin } = useContext(firebaseContex);
@@ -27,9 +22,16 @@ const Forgot = () => {
 
   const invalid = email === "";
 
+  // new const for snackbar
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const handleSnackbarClose = () => {
+    setShowSnackbar(false);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setShowSnackbar(true);
 
     forgotPassword(email)
       .then((Response) => {
@@ -47,15 +49,20 @@ const Forgot = () => {
   }, [localUser]);
 
   return (
+    <section>
     <div className="login-container">
-      <div className="login-poster">
-        <img src="" alt="" className="" />
-      </div>
+      {/* <div className="login-poster">
+        <img src="/images/logo/signup-poster.png" alt="" className="" />
+      </div> */}
       <div className="login-wrapper">
-        <div className="login-box">
+        
+        
+        <div className="forgotpwd-box">
           <div className="logo-wrapper">
-            <img src="" alt="" className="" />
+            <img src="/images/logo/dump-space-logo.png"alt="" className="" />
           </div>
+          
+          
           {!isEmailSend ? (
             <div className="login-form-wrapper">
               <form className="login-form" onSubmit={handleSubmit}>
@@ -70,17 +77,6 @@ const Forgot = () => {
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
-                {/* <div className="input-label">
-                  <input
-                    type="password"
-                    placeholder="Password"
-                    aria-label="Enter your password"
-                    aria-required="true"
-                    autoComplete="off"
-                    name="password"
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </div> */}
 
                 <div className="button-wrapper ">
                   <button
@@ -91,16 +87,27 @@ const Forgot = () => {
                   >
                     Send
                   </button>
-                  {/* {loading && <Loading />} */}
+                  <CustomSnackbar
+                    open={showSnackbar}
+                    message="Please check your email."
+                    variant="success"
+                    onClose={handleSnackbarClose} />
 
-                  {/* <div className="redirect-text">
-                    <Link to="/signup" className="cur-point">
-                      Forgot Password
-                    </Link>
-                  </div> */}
                 </div>
               </form>
+
               {errorMessage && <p className="errorMessage">{errorMessage}</p>}
+              <div className="redirect-box">
+                <div className="redirect-text">
+                  <p>
+                    Go back to{" "}
+                    <Link to="/login" className="cur-point">
+                      Login Page
+                    </Link>
+                    
+                  </p>
+                </div>
+              </div>
             </div>
           ) : (
             // email send confirmation
@@ -109,18 +116,18 @@ const Forgot = () => {
                 <img
                   src="/images/confirm-email.svg"
                   alt="confirm-email"
-                  className="confirm-email-image"
-                />
+                  className="confirm-email-image" />
               </div>
               <div className="confirm-email-message">
-                Your Email not Verified yet, So Please verify email first.
-                Varification link send to your email (check inbox or spam
-                folder).
+                Please make sure your email is verified.
+                Verification link will be sent to your email, please check inbox or spam
+                folder.
               </div>
             </div>
           )}
         </div>
-        <div className="redirect-box login-box">
+        
+        {/* <div className="redirect-box login-box">
           <div className="redirect-text">
             <p>
               This is Forgot Page{" "}
@@ -129,7 +136,9 @@ const Forgot = () => {
               </Link>
             </p>
           </div>
-        </div>
+        </div> */}
+
+
         <div
           className="guest-login-info-wrapper login-box"
           style={{ display: "none" }}
@@ -145,8 +154,8 @@ const Forgot = () => {
           </div>
         </div>
       </div>
-      {/* <Footer /> */}
     </div>
+    </section>
   );
 };
 

@@ -1,19 +1,16 @@
-// import { textAlign } from "@mui/system";
 import React from "react";
+import "./PageNotFound.css"
 
 const PageNotFound = () => {
   return (
-    <div className="pageNotFound">
-      <h1>Oops..! 404 Page Not Found</h1>
-      <p>Looks like you came to wrong page on our server</p>
+    <div className="page-not-found-container">
+      <div className="stars"></div>
+      <div className="cloud"></div>
       <img
-        src={
-          "https://raw.githubusercontent.com/oshyam/404-with-react-router-dom/master/src/pagenotfound.jpg"
-        }
-        height="500"
-        width="500"
+        src="/images/pagenotfound/page-not-found.png"
         alt="not found"
       />
+      
     </div>
   );
 };

@@ -1,11 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
-import ImageUpload from "../../components/imageUpload/ImageUpload";
+
+import CreatePost from "../../components/createPost/CreatePost";
 import Navbar from "../../components/navbar/Navbar";
-import firebaseContex from "../../context/FirebaseContex";
-import ExploreCardSkeleton from "../explore/ExploreCardSkeleton";
+import firebaseContex from "../../context/FirebaseContext";
 import "./Profile.css";
-import "../explore/Explore.css";
+import Editprofile from "./Editprofile";
+
 import ProfileSkeleton from "./ProfileSkeleton";
+
 import {
   arrayRemove,
   arrayUnion,
@@ -16,23 +18,42 @@ import {
   updateDoc,
   deleteDoc,
   where,
+  addDoc,
+  serverTimestamp,
+  orderBy,
+  limit
 } from "firebase/firestore";
-import { auth, db } from "../../config/FirebaseConfig";
+
+import { auth, db, storage } from "../../config/FirebaseConfig";
 import { useParams } from "react-router-dom";
-import SearchBox from "../../components/searchBox/SearchBox";
+
+import SearchUser from "../../components/searchUser/SearchUser";
 import Loading from "../../components/loading/Loading";
-import List from "@mui/material/List";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { Menu, MenuItem, IconButton } from "@mui/material";
-import PostCardSkeleton from "../../components/postCard/PostCardSkeleton";
+
+// import List from "@mui/material/List";
+// import Card from "@mui/material/Card";
+// import CardHeader from "@mui/material/CardHeader";
+// import CardMedia from "@mui/material/CardMedia";
+// import CardContent from "@mui/material/CardContent";
+// import CardActions from "@mui/material/CardActions";
+// import FavoriteIcon from "@mui/icons-material/Favorite";
+// import ShareIcon from "@mui/icons-material/Share";
+// import MoreVertIcon from "@mui/icons-material/MoreVert";
+
+import { Menu, MenuItem, IconButton, Typography } from "@mui/material";
+import EditIcon from '@mui/icons-material/Edit';
+
+import PostCardOutline from "../../components/postCard/PostCardOutline";
 import PostCard from "../../components/postCard/PostCard";
+import Container from "@mui/material/Container";
+import CustomSnackbar from "../../components/snackbar/snackbar";
+
+
+import {ref, uploadBytes, getDownloadURL} from "firebase/storage"
+
+import { Avatar } from '@mui/material'
+
+
 
 const Profile = () => {
   const { allUsers, loading, setLoading, posts } = useContext(firebaseContex);
@@ -40,6 +61,17 @@ const Profile = () => {
   const [currentUserPosts, setCurrentUserPosts] = useState([]);
   const [loadingSpinner, setLoadingSpinner] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+
+  //new const for snackbar
+  const [message, setMessage] = useState(false);
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const handleSnackbarClose = () => {
+    setShowSnackbar(false);
+  };
+
+   //UPLOAD PROFILE PICTURE
+   const [image, setImage] = useState([]);
+   const [currentUserPic, setCurrentUserPic] = useState([]);
 
   // get username form param
   const { username } = useParams();
@@ -100,6 +132,7 @@ const Profile = () => {
 
   useEffect(() => {
     getCurrentUserPosts();
+    getUserPic();
   }, [username]);
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -114,39 +147,122 @@ const Profile = () => {
 
   const handleDelete = async (e) => {
     await deleteDoc(doc(db, "posts", e));
+    setMessage("Your post is out on space.");
+    setShowSnackbar(true);
   };
 
+
+  /////////////////////////////PROFILE PICTURE///////////////////////////////////////
+  const handleImageChange = (e) =>{
+    const imageFile = e.target.files[0]
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+
+    if(allowedTypes.includes(imageFile.type)){
+      setImage(imageFile)
+      console.log(imageFile)
+    }else{
+      alert('Please select an image file (jpg, png or gif)');
+      e.target.value = ''; // Reset the input field to clear the selected file
+    }
+  }
+
+  const handleSubmit = async () =>{
+    const imageName = image.name; //the name of the file in the database will be the same name file as uploaded
+    const imageRef = ref(storage, `/images/${imageName}`);
+    
+    await uploadBytes(imageRef, image).then
+    ( //uploading the file to firebase
+      () => {
+        getDownloadURL(imageRef).then(
+          (url) => {
+            addDoc(collection(db,'profile'),{
+              userId: auth.currentUser.uid,
+              datePostedOn: serverTimestamp(),
+              imageUrl: url,
+              username: auth.currentUser.displayName,
+              
+
+            })
+        }).catch((error) => {
+          console.log(error.message, "ERROR GETTING THE IMAGE URL")
+
+        });
+      }).catch((error)=>{
+        console.log(error.message)
+
+      })
+  }
+
+
+   // get current user's posts
+   const getUserPic = () => {
+    const postRef = collection(db, "profile");
+    const q = query(postRef, where('username', '==', username), orderBy('datePostedOn', "desc"), limit(1));
+
+    onSnapshot(q, (querySnapshot) => {
+      
+      setCurrentUserPic(querySnapshot.docs)
+      
+    })
+
+
+
+  }
+
+
   return (
-    <div className="profile-page-section">
-      <div className="top-instagram-logo">
-        <img
-          src="/images/Instagram_logo.svg"
-          alt="instagram logo"
-          className="instagram-logo"
-        />
-      </div>
+    <div className="profile-page-section" >
       <Navbar />
-      <SearchBox />
-      <div className="profile-page-container">
+
+      <div className="profile-bg">
         {loading ? (
           <ProfileSkeleton />
         ) : (
           currentUserInfo.map((currentUser) => (
-            <div className="profile-datails-section" key={currentUser.userId}>
-              <div className="profile-image-details-wrapper absolute-center ">
-                <div className="profile-image-wrapper">
-                  <img
-                    src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
-                    alt="user-profile"
-                  />
+            <div className="profile-details-section" key={currentUser.userId}>
+              
+              <div className="profile-banner-container">
+                <div className="profile-banner">
+                  <img src = "/images/sample/1.gif" className="banner"></img>
+      
+                  
                 </div>
+                <div className="profile-image-wrapper">
+                  
+                  {currentUserPic.length > 0 &&
+                      currentUserPic.map((pic) => 
+                      <div>
+                      
+                        <img
+                        alt="image"
+                        key = {pic?.data().datePostedOn}
+                        src = {pic?.data().imageUrl}
+                        /></div>)
+                      
+                    }
 
+                    {currentUserPic.length === 0 &&
+                     <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="user-profile" />
+                    }
+                </div>
+              </div>
+              
+              
+              
+              
+              
+              <div className="profile-image-details-wrapper">
+                
                 <div className="profile-details-wrapper">
                   <div className="profile-username-follow-wrapper ">
                     <div className="profile-username">
-                      {currentUser?.username}
+                      <span id ="username">@{currentUser?.username}</span><br/>
+                      <span id = "fullname">(<i>{currentUser.fullName}</i>)</span>
+                      
                     </div>
+
                     {localUserData[0].username !== currentUser.username && (
+                      
                       <div className="profile-follow-unfollow-btn-wrapper">
                         <button
                           type="button"
@@ -168,133 +284,87 @@ const Profile = () => {
                       </div>
                     )}
                   </div>
+
+
                   <div className="posts-followers-details-wrapper absolute-center">
                     <div className="total-posts-wrapper total-wrapper absolute-center">
                       <span className="font-w-500 total-number">
                         {currentUserPosts.length}
                       </span>
                       Post
-                    </div>
+                    </div>  
                     <div className="total-followers-wrapper total-wrapper absolute-center">
                       <span className="font-w-500 total-number">
                         {currentUser.follower?.length}
                       </span>
-                      followers
+                      Followers
                     </div>
                     <div className="total-following-wrapper total-wrapper absolute-center">
                       <span className="font-w-500 total-number">
                         {currentUser.following?.length}
                       </span>
-                      following
+                      Following
                     </div>
-                  </div>
-                  <div className="profile-fullname-wrapper font-w-500">
-                    {currentUser.fullName}
                   </div>
                 </div>
               </div>
 
-              <div className="mobile-screen">
-                <div className="profile-fullname-wrapper font-w-500">
-                  {currentUser.fullName}
-                </div>
+              <div className = "edit-profile">
+                {(localUserData[0].username === currentUser.username) && 
+                    <div>
+                      <Editprofile>
+                        <div>
+                        <h4>Change profile picture</h4>
+                        <input type = "file" accept="image/jpeg,image/png,image/gif" onChange = {handleImageChange}/>
+                        <button onClick={handleSubmit}>Upload profile picture</button>
+                        </div>
+                      </Editprofile> 
+                    </div>
+                    }  
               </div>
             </div>
           ))
         )}
 
-        <div className="posts-list-section">
-          <div
-            className="posts-list-container"
-            // style={{
-            //   width: "800px",
-            //   justifyContent: "center",
-            //   alignItems: "center",
-            //   marginLeft: "220px",
-            // }}
-          >
-            <div>
-              <ImageUpload />
-              <div>
-                {loading ? (
-                  <PostCardSkeleton />
-                ) : (
-                  currentUserPosts.map((post) => (
-                    <PostCard
-                      key={post.id}
-                      post={post.data()}
-                      postId={post.id}
-                      setAlertMessage={setAlertMessage}
-                    />
-                  ))
-                )}
-              </div>
-            </div>
 
-            {/* {loading ? (
-            <ExploreCardSkeleton number={1} />
-          ) : (
-            currentUserPosts.map((post) => (
-              <>
-                <List>
-                  <Card sx={{ maxWidth: 800 }} key={post.id}>
-                    <CardHeader
-                      avatar={
-                        <div className="image-wrapper absolute-center">
-                          <img
-                            src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
-                            alt="user-profile"
-                          />
-                        </div>
-                      }
-                      title={post.username}
-                      subheader={post.caption}
-                    />
-                    <CardMedia
-                      component="img"
-                      height="100%"
-                      image={post.data().imageUrl}
-                      alt="post"
-                    />
-                    <CardContent></CardContent>
-                    <CardActions disableSpacing>
-                      <div classname="morevert">
-                        {auth.currentUser.displayName !== post.username ? (
-                          <>
-                            <IconButton onClick={handleMenu}>
-                              <MoreVertIcon />
-                            </IconButton>
-                            <Menu
-                              anchorEl={anchorEl}
-                              keepMounted
-                              open={Boolean(anchorEl)}
-                              onClose={handleClose}
-                            >
-                              <MenuItem onClick={() => handleDelete(post.id)}>
-                                Delete
-                              </MenuItem>
-                            </Menu>
-                            {console.log(post.userId)}
-                          </>
-                        ) : (
-                          ""
-                        )}
-                      </div>
-                      <IconButton aria-label="add to favorites">
-                        <FavoriteIcon />
-                      </IconButton>
-                      <IconButton aria-label="share">
-                        <ShareIcon />
-                      </IconButton>
-                    </CardActions>
-                  </Card>
-                </List>
-              </>
-            ))
-          )} */}
+
+
+        <Container maxWidth="md" sx={{ marginBottom: "20px" }}>
+          <div>
+            <CreatePost />
+            <div className="profile-post-container">
+              {loading ? (
+                <PostCardOutline />
+              ) : (
+                currentUserPosts.map((post) => (
+                  <PostCard
+                    key={post.id}
+                    post={post.data()}
+                    postId={post.id}
+                    setAlertMessage={setAlertMessage}
+                  />
+                ))
+              )}
+              {!currentUserPosts.length && (
+                <Typography
+                  variant="h6"
+                  sx={{ display: "flex", justifyContent: "center" }}
+                >
+                  No Posts Available
+                </Typography>
+              )}
+            </div>
           </div>
-        </div>
+        </Container>
       </div>
+      <CustomSnackbar
+                  open={showSnackbar}
+                  message={message}
+                  variant="success"
+                  onClose={handleSnackbarClose}
+                />
+
+      <SearchUser />
     </div>
   );
 };

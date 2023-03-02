@@ -9,12 +9,16 @@ function CustomSnackbar(props) {
         <Snackbar
             anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
             open={open}
-            autoHideDuration={3000}
+            autoHideDuration={4000}
             onClose={onClose}
         >
             <SnackbarContent
                 message={message}
-                style={{ backgroundColor: variant === 'success' ? '#064670' : '#fff' }}
+                style={{
+                    background: variant === 'success'
+                        ? 'radial-gradient(circle, rgba(119,52,81,1) 0%, rgba(62,100,144,1) 60%)'
+                        : '#fff'
+                }}
             />
         </Snackbar>
     );
