@@ -65,26 +65,8 @@ const Navbar = () => {
     <AppBar position="static" className="appbar" sx={{ borderColor: "#000", backgroundColor: "var(--card_color)", color: "var(--text_color)" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            DumpSpace
-          </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+        <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -130,11 +112,39 @@ const Navbar = () => {
                 >
                   <PersonIcon />
                 </IconButton>
+
               </MenuItem>
             </Menu>
           </Box>
 
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+          {/* <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} /> */}
+          <Typography
+            variant="h6"
+            noWrap
+            component="a"
+            href="/"
+            sx={{
+              mr: 2,
+              display: { xs: "none", md: "flex" },
+              fontFamily: "monospace",
+              fontWeight: 700,
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none",
+            }}
+          >
+            {/* <a href ="/"><img src = "/images/logo/logo-light.png" ></img></a> */}
+            <div className="logo-image" 
+            
+            style={{ 
+            width: "200px", 
+            height: "40px", 
+            backgroundImage: "var(--logo_color)",
+            backgroundSize:"cover",
+            backgroundRepeat: "no-repeat"}}></div>
+            
+          </Typography>
+
           <Typography
             variant="h5"
             noWrap
@@ -151,8 +161,12 @@ const Navbar = () => {
               textDecoration: "none",
             }}
           >
-            DumpSpace
+            {/* <a href ="/"><img src = "/images/logo/logo-light.png" ></img></a> */}
+            <a href ="/"><img src = "/images/logo/rocket-3d-logo.png"
+            style = {{height: "50px", width: "auto", marginTop: "5px" }} ></img></a>
+            
           </Typography>
+
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             <Tooltip title="Search">
               <IconButton
@@ -213,7 +227,7 @@ const Navbar = () => {
               }}
             >
               <Button onClick={handleLogout} variant="outlined" startIcon={<LogoutIcon />}
-                sx={{ marginBottom: "5px", color: "#57636F", borderColor: "#57636F", '&:hover': { borderColor: '#57636F', backgroundColor: "var(--button)", color: "var(--text_color)" } }}>
+                sx={{ marginBottom: "5px", color: "#57636F", borderColor: "#57636F", border: "none",'&:hover': { borderColor: '#57636F', backgroundColor: "var(--button)", color: "var(--text_color)",border: "none" } }}>
                 Logout
               </Button>
               <CustomSnackbar

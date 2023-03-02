@@ -47,6 +47,7 @@ const DarkMode = ({ darkMode }) => {
       setDefaultTheme(e.target.checked);
     }
   };
+  
   return (
     <div className="dark_mode">
       <input
