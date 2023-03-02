@@ -38,9 +38,8 @@ const Home = () => {
     <>
       <Navbar />
       <div className="home-page-container">
-
         <div className="home-page">
-        <div className="stars"></div>
+          <div className="stars"></div>
           <CreatePost />
           <div className="home-page-feed">
             {loading ? (
@@ -56,9 +55,8 @@ const Home = () => {
               ))
             )}
           </div>
-          
         </div>
-        
+
         <SearchUser />
       </div>
     </>

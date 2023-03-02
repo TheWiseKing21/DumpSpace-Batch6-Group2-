@@ -70,6 +70,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
   const [isClick, setIsClick] = useState(false);
   const currentDate = new Date().toLocaleDateString("en-US");
   const [message, setMessage] = useState("");
+  const [timeAgo, setTimeAgo] = useState("");
 
   const [currentUserPic, setCurrentUserPic] = useState([]);
 
@@ -119,7 +120,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
           username: auth.currentUser.displayName,
           comment: comments,
           commentId: post.comments.length,
-          dateCommentedOn: new Date(),
+          dateCommentOn: new Date(),
         }),
       });
       setComments("");
@@ -133,7 +134,12 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
   };
 
   const commentRef = doc(db, "posts", postId);
-  const handleDeleteComment = async (userName, userComment, userCommentId) => {
+  const handleDeleteComment = async (
+    userName,
+    userComment,
+    userCommentId,
+    userDateCommentOn
+  ) => {
     setMessage("Your comment is out on space.");
     setShowSnackbar(true);
     try {
@@ -142,7 +148,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
           username: userName,
           comment: userComment,
           commentId: userCommentId,
-          dateCommentedOn: new Date(),
+          dateCommentOn: userDateCommentOn,
         }),
       });
       setComments("");
@@ -438,7 +444,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                 {post.comments?.map((data, index) =>
                   data.commentId > 2 ? (
                     <Collapse
-                      key={data.commentId}
+                      key={index}
                       in={expanded}
                       timeout="auto"
                       unmountOnExit
@@ -508,7 +514,9 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                                   handleDeleteComment(
                                     data.username,
                                     data.comment,
-                                    data.commentId
+                                    data.commentId,
+                                    data.timeCommentOn,
+                                    data.dateCommentOn
                                   )
                                 }
                               >
@@ -578,6 +586,13 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                           >
                             {data.comment}
                           </Typography>
+                          <Typography
+                            variant="subtitle1"
+                            sx={{
+                              marginLeft: "10px",
+                              paddingBottom: "5px",
+                            }}
+                          ></Typography>
                         </Box>
                         {auth.currentUser?.displayName != data.username ? (
                           " "
@@ -590,7 +605,8 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                                 handleDeleteComment(
                                   data.username,
                                   data.comment,
-                                  data.commentId
+                                  data.commentId,
+                                  data.dateCommentOn.toDate()
                                 )
                               }
                             >
@@ -677,7 +693,8 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                             handleDeleteComment(
                               data.username,
                               data.comment,
-                              data.commentId
+                              data.commentId,
+                              data.dateCommentOn.toDate()
                             )
                           }
                         >
@@ -724,7 +741,6 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                     textDecoration: "none",
                     boxShadow: "var(--box_shadow)",
                   }}
-                  aria-label="recipe"
                   component={Link}
                   to={`/profile/${post.username}`}
                 >
@@ -737,15 +753,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                 variant: "body1",
                 color: "var(--text_color)",
               }}
-              subheader={
-                post.datePostedOn.toDate().toLocaleDateString("en-US") !==
-                currentDate
-                  ? post.datePostedOn.toDate().toLocaleDateString("en-US")
-                  : post.datePostedOn.toDate().toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })
-              }
+              subheader={moment(post.datePostedOn.toDate()).fromNow()}
               subheaderTypographyProps={{ color: "var(--text_color)" }}
               action={
                 <div>
@@ -964,7 +972,8 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                             handleDeleteComment(
                               data.username,
                               data.comment,
-                              data.commentId
+                              data.commentId,
+                              data.dateCommentOn.toDate()
                             )
                           }
                         >
