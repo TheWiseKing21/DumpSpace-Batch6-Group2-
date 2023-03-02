@@ -97,8 +97,9 @@ const Signup = () => {
           await auth.currentUser.reload();
         }, 2000);
       } catch (error) {
+      
         setLoading(false);
-        setErrorMessage(error.message.replace("Firebase:", ""));
+        setErrorMessage("Email is already taken.");
         setTimeout(() => {
           setMessage("");
         }, 5000);
@@ -120,11 +121,13 @@ const Signup = () => {
         minSymbols: 1,
       })
     ) {
+
       const createUser = await signup(email, password);
       await sendEmailVerification(createUser.user);
       setLoading(false);
     } else {
       setErrorMessage("Password is not strong.");
+
     }
   };
 
@@ -138,6 +141,7 @@ const Signup = () => {
             className="signup-poster-image"
           />
         </div>
+        
         <div className="signup-wrapper">
           <div className="signup-box">
             <div className="logo-wrapper">
@@ -145,7 +149,6 @@ const Signup = () => {
             </div>
 
             {!isEmailSend ? (
-
               <div className="login-form-wrapper">
                 <form className="login-form" onSubmit={handleSubmit}>
                   <div className="input-label">
@@ -182,7 +185,9 @@ const Signup = () => {
                       name="username"
                       required
                       onChange={(e) => setUsername(e.target.value)}
-                      onKeyDown={(e) => e.code === "Space" && e.preventDefault()}
+                      onKeyDown={(e) =>
+                        e.code === "Space" && e.preventDefault()
+                      }
                     />
                   </div>
                   <div className="input-label">
@@ -212,7 +217,6 @@ const Signup = () => {
                         Sign Up
                       </span>
                     </button>
-
                   </div>
                 </form>
                 {errorMessage && <p className="errorMessage">Error: {errorMessage}</p>}
@@ -232,11 +236,11 @@ const Signup = () => {
                       </Link>
                     </p>
                   </div>
-
                 </div>
               </div>
             ) : (
               // email send confirmation
+
               <div className="signup-confirm-email-wrapper">
                 <div className="confirm-email-image-wrapper">
                   <img
@@ -245,6 +249,7 @@ const Signup = () => {
                     alt="confirm-email"
                     className="confirm-email-image"
                   />
+
                 </div>
                 <div className="confirm-email-message">
                   Verification link send to your email (check inbox or spam
