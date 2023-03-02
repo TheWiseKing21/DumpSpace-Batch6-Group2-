@@ -123,4 +123,8 @@ input:focus {
   }
 
 }
+
+.errormessage{
+  color: #AA4A44;
+}
 }
