@@ -20,15 +20,12 @@ import {
   Box,
   Menu,
   Button,
-  MenuItem,
-  TextField,
   CardActions,
   Tooltip,
   InputBase,
 } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import RocketLaunchOutlinedIcon from "@mui/icons-material/RocketLaunchOutlined";
-import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import CustomSnackbar from "../snackbar/snackbar";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -36,10 +33,8 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Backdrop from "@mui/material/Backdrop";
 import Container from "@mui/material/Container";
 import Collapse from "@mui/material/Collapse";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { styled } from "@mui/material/styles";
 import CommentIcon from "@mui/icons-material/Comment";
-import SendIcon from "@mui/icons-material/Send";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -53,7 +48,6 @@ import {
   query,
   where,
   orderBy,
-  Timestamp,
   limit,
 } from "firebase/firestore";
 
@@ -107,7 +101,6 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
     }, 1000);
   };
 
-  //new const for snackbar
   const [showSnackbar, setShowSnackbar] = useState(false);
   const handleSnackbarClose = () => {
     setShowSnackbar(false);
@@ -206,7 +199,6 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
     setExpanded(!expanded);
   };
 
-  ////////////////////////////////////PROFILE PICTURE/////////////////////////////////////
   const getUserPic = () => {
     const postRef = collection(db, "profile");
     const q = query(
@@ -303,9 +295,7 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                       style: { backgroundColor: "transparent" },
                     }}
                   >
-
                     <Button
-                      // onClick={() => handleDeletePost(postId)}
                       onClick={handleClickOpenDeleteDialog}
                       variant="outlined"
                       startIcon={<DeleteIcon />}
@@ -321,7 +311,6 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                         },
                       }}
                     >
-
                       Delete Post
                     </Button>
                   </Menu>
@@ -334,7 +323,6 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
           <CardContent onClick={handleClickOpenDetails}>
             <Typography
               sx={{
-                // fontFamily: "monospace",
                 textDecoration: "none",
                 paddingLeft: "30px",
                 marginBottom: "10px",
@@ -936,7 +924,6 @@ const PostCard = ({ post, postId, setAlertMessage }) => {
                         borderRadius: "10px",
                         padding: "10px",
                         bgcolor: "var(--body_background)",
-                        // color: "var(--text_color)"
                       }}
                     >
                       <Typography
