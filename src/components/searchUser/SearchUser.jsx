@@ -26,7 +26,6 @@ const SearchUser = () => {
     <Dialog onClose={() => setIsSearch(false)} open={isSearch}>
       <Box
         sx={{
-          // bgcolor: "white",
           position: "fixed",
           top: "0",
           left: "30px",
@@ -35,7 +34,7 @@ const SearchUser = () => {
           width: "400px",
           backgroundColor: "var(--home_background)",
           color: "var(--text_color)",
-          boxShadow: "var(--box_shadow)"
+          boxShadow: "var(--box_shadow)",
         }}
       >
         <Stack direction={"column"} sx={{ width: "100%" }}>
@@ -59,7 +58,7 @@ const SearchUser = () => {
             paddingLeft: "20px",
             marginBottom: "15px",
             backgroundColor: "var(--card)",
-            color: "var(--text_color)"
+            color: "var(--text_color)",
           }}
         />
         <Divider />

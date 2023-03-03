@@ -4,8 +4,6 @@ import { ReactComponent as Moon } from "../../assets/img/Moon.svg";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import "./DarkMode.css";
 import { auth, db } from "../../config/FirebaseConfig";
-import firebaseContex from "../../context/FirebaseContext";
-import { async } from "@firebase/util";
 
 const DarkMode = ({ darkMode }) => {
   const [toggle, setToggle] = useState(false);
@@ -47,7 +45,7 @@ const DarkMode = ({ darkMode }) => {
       setDefaultTheme(e.target.checked);
     }
   };
-  
+
   return (
     <div className="dark_mode">
       <input

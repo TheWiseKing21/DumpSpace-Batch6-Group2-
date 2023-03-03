@@ -19,7 +19,7 @@ import {
   addDoc,
   serverTimestamp,
   orderBy,
-  limit
+  limit,
 } from "firebase/firestore";
 
 import { auth, db, storage } from "../../config/FirebaseConfig";
@@ -30,14 +30,14 @@ import Loading from "../../components/loading/Loading";
 import PostCardOutline from "../../components/postCard/PostCardOutline";
 import PostCard from "../../components/postCard/PostCard";
 import CustomSnackbar from "../../components/snackbar/snackbar";
-import {ref, uploadBytes, getDownloadURL} from "firebase/storage"
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
-import { ImageList, ImageListItem} from '@mui/material';
-import {Typography} from "@mui/material";
-import AddPhotoAlternateTwoToneIcon from '@mui/icons-material/AddPhotoAlternateTwoTone';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import Stack from '@mui/material/Stack';
+import { ImageList, ImageListItem } from "@mui/material";
+import { Typography } from "@mui/material";
+import AddPhotoAlternateTwoToneIcon from "@mui/icons-material/AddPhotoAlternateTwoTone";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import Stack from "@mui/material/Stack";
 
 const Profile = () => {
   const { allUsers, loading, setLoading, posts } = useContext(firebaseContex);
@@ -46,28 +46,20 @@ const Profile = () => {
   const [loadingSpinner, setLoadingSpinner] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
 
-  //new const for snackbar
   const [message, setMessage] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const handleSnackbarClose = () => {
     setShowSnackbar(false);
   };
 
-   //UPLOAD PROFILE PICTURE
-   const [image, setImage] = useState([]);
-   const [currentUserPic, setCurrentUserPic] = useState([]);
+  const [image, setImage] = useState([]);
+  const [currentUserPic, setCurrentUserPic] = useState([]);
 
+  const [imageC, setImageC] = useState([]);
+  const [currentUserCover, setCurrentUserCover] = useState([]);
 
-   //UPLOAD COVER PHOTO
-   const [imageC, setImageC] = useState([]);
-   const [currentUserCover, setCurrentUserCover] = useState([]);
-
-
-
-  // get username form param
   const { username } = useParams();
 
-  // get current user's posts
   const getCurrentUserPosts = () => {
     const postRef = collection(db, "posts");
     const q = query(postRef, where("username", "==", username));
@@ -77,18 +69,16 @@ const Profile = () => {
       setLoading(false);
     });
   };
-  // get and check userinfo from param
+
   const allUsersData = allUsers.map((user) => user.data());
   const currentUserInfo = allUsersData.filter(
     (val) => val?.username === username
   );
 
-  // get localUser Data
   const localUserData = allUsersData.filter((val) => {
     return localUser?.uid === val.userId;
   });
 
-  // to check username present in localuser following list
   const isFollowing = localUserData
     .map((data) => data.following)[0]
     ?.filter((val) => val?.username === username);
@@ -125,7 +115,6 @@ const Profile = () => {
     getCurrentUserPosts();
     getUserPic();
     getCoverPic();
-    
   }, [username]);
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -144,128 +133,110 @@ const Profile = () => {
     setShowSnackbar(true);
   };
 
+  const handleImageChange = (e) => {
+    const imageFile = e.target.files[0];
+    const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
 
-  /////////////////////////////PROFILE PICTURE///////////////////////////////////////
-  const handleImageChange = (e) =>{
-    const imageFile = e.target.files[0]
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-
-    if(allowedTypes.includes(imageFile.type)){
-      setImage(imageFile)
-      console.log(imageFile)
-    }else{
-      alert('Please select an image file (jpg, png or gif)');
-      e.target.value = ''; // Reset the input field to clear the selected file
+    if (allowedTypes.includes(imageFile.type)) {
+      setImage(imageFile);
+      console.log(imageFile);
+    } else {
+      alert("Please select an image file (jpg, png or gif)");
+      e.target.value = "";
     }
-  }
+  };
 
-  const handleSubmit = async () =>{
-    const imageName = image.name; //the name of the file in the database will be the same name file as uploaded
+  const handleSubmit = async () => {
+    const imageName = image.name;
     const imageRef = ref(storage, `/images/${imageName}`);
-    
-    await uploadBytes(imageRef, image).then
-    ( //uploading the file to firebase
-      () => {
-        getDownloadURL(imageRef).then(
-          (url) => {
-            addDoc(collection(db,'profile'),{
+
+    await uploadBytes(imageRef, image)
+      .then(() => {
+        getDownloadURL(imageRef)
+          .then((url) => {
+            addDoc(collection(db, "profile"), {
               userId: auth.currentUser.uid,
               datePostedOn: serverTimestamp(),
               imageUrl: url,
               username: auth.currentUser.displayName,
-              
-
-            })
-        }).catch((error) => {
-          console.log(error.message, "ERROR GETTING THE IMAGE URL")
-
-        });
-      }).catch((error)=>{
-        console.log(error.message)
-
+            });
+          })
+          .catch((error) => {
+            console.log(error.message, "ERROR GETTING THE IMAGE URL");
+          });
       })
-  }
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
 
-
-
-
-   // get current user's posts
-   const getUserPic = () => {
+  const getUserPic = () => {
     const postRef = collection(db, "profile");
-    const q = query(postRef, where('username', '==', username), orderBy('datePostedOn', "desc"), limit(1));
+    const q = query(
+      postRef,
+      where("username", "==", username),
+      orderBy("datePostedOn", "desc"),
+      limit(1)
+    );
 
     onSnapshot(q, (querySnapshot) => {
-      
-      setCurrentUserPic(querySnapshot.docs)
-      
-    })
+      setCurrentUserPic(querySnapshot.docs);
+    });
+  };
 
+  const handleImageChangeCover = (e) => {
+    const imageFile = e.target.files[0];
+    const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
 
-
-  }
-
-  /////////////////////////////COVER PHOTO///////////////////////////////////////
-  const handleImageChangeCover = (e) =>{
-    const imageFile = e.target.files[0]
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-
-    if(allowedTypes.includes(imageFile.type)){
-      setImageC(imageFile)
-      console.log(imageFile)
-    }else{
-      alert('Please select an image file (jpg, png or gif)');
-      e.target.value = ''; // Reset the input field to clear the selected file
+    if (allowedTypes.includes(imageFile.type)) {
+      setImageC(imageFile);
+      console.log(imageFile);
+    } else {
+      alert("Please select an image file (jpg, png or gif)");
+      e.target.value = "";
     }
-  }
-  
-  
-  
+  };
 
-  const handleSubmitCover = async () =>{
-    const imageName = image.name; //the name of the file in the database will be the same name file as uploaded
+  const handleSubmitCover = async () => {
+    const imageName = image.name;
     const imageRef = ref(storage, `/coverphoto/${imageName}`);
-    
-    await uploadBytes(imageRef, imageC).then
-    ( //uploading the file to firebase
-      () => {
-        getDownloadURL(imageRef).then(
-          (url) => {
-            addDoc(collection(db,'coverphoto'),{
+
+    await uploadBytes(imageRef, imageC)
+      .then(() => {
+        getDownloadURL(imageRef)
+          .then((url) => {
+            addDoc(collection(db, "coverphoto"), {
               userId: auth.currentUser.uid,
               datePostedOn: serverTimestamp(),
               imageUrl: url,
               username: auth.currentUser.displayName,
-              
-
-            })
-        }).catch((error) => {
-          console.log(error.message, "ERROR GETTING THE IMAGE URL")
-
-        });
-      }).catch((error)=>{
-        console.log(error.message)
-
+            });
+          })
+          .catch((error) => {
+            console.log(error.message, "ERROR GETTING THE IMAGE URL");
+          });
       })
-  }
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
 
-    const getCoverPic = () => {
-      const postRef = collection(db, "coverphoto");
-      const q = query(postRef, where('username', '==', username), orderBy('datePostedOn', "desc"), limit(1));
+  const getCoverPic = () => {
+    const postRef = collection(db, "coverphoto");
+    const q = query(
+      postRef,
+      where("username", "==", username),
+      orderBy("datePostedOn", "desc"),
+      limit(1)
+    );
 
-      onSnapshot(q, (querySnapshot) => {
-        
-        setCurrentUserCover(querySnapshot.docs)
-        
-      })
-
-
-
-  }
-
-
+    onSnapshot(q, (querySnapshot) => {
+      setCurrentUserCover(querySnapshot.docs);
+    });
+  };
 
   return (
-    <div className="profile-page-section" >
+    <div className="profile-page-section">
       <Navbar />
 
       <div className="profile-bg">
@@ -274,63 +245,57 @@ const Profile = () => {
         ) : (
           currentUserInfo.map((currentUser) => (
             <div className="profile-details-section" key={currentUser.userId}>
-              
               <div className="profile-banner-container">
                 <div className="profile-banner">
-
-
-                {currentUserCover.length > 0 &&
-                      currentUserCover.map((cover) => 
+                  {currentUserCover.length > 0 &&
+                    currentUserCover.map((cover) => (
                       <div className="profile-banner">
-                      
                         <img
-                        // alt="image"
-                        key = {cover?.data().datePostedOn}
-                        src = {cover?.data().imageUrl}
-                        className="banner"
-                        /></div>)
-                      
-                    }
+                          key={cover?.data().datePostedOn}
+                          src={cover?.data().imageUrl}
+                          className="banner"
+                        />
+                      </div>
+                    ))}
 
-                    {currentUserCover.length === 0 &&
-                     <img src = "/images/sample/1.jpg" className="banner"></img>
-                    }
-
+                  {currentUserCover.length === 0 && (
+                    <img src="/images/sample/1.jpg" className="banner"></img>
+                  )}
                 </div>
 
                 <div className="profile-image-wrapper">
-                  
                   {currentUserPic.length > 0 &&
-                      currentUserPic.map((pic) => 
+                    currentUserPic.map((pic) => (
                       <div>
-                      
                         <img
-                        alt="image"
-                        key = {pic?.data().datePostedOn}
-                        src = {pic?.data().imageUrl}
-                        /></div>)
-                      
-                    }
+                          alt="image"
+                          key={pic?.data().datePostedOn}
+                          src={pic?.data().imageUrl}
+                        />
+                      </div>
+                    ))}
 
-                    {currentUserPic.length === 0 &&
-                     <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="user-profile" />
-                    }
+                  {currentUserPic.length === 0 && (
+                    <img
+                      src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                      alt="user-profile"
+                    />
+                  )}
                 </div>
               </div>
-             
-              
+
               <div className="profile-image-details-wrapper">
-                
                 <div className="profile-details-wrapper">
                   <div className="profile-username-follow-wrapper ">
                     <div className="profile-username">
-                      <span id ="username">@{currentUser?.username}</span><br/>
-                      <span id = "fullname">(<i>{currentUser.fullName}</i>)</span>
-                      
+                      <span id="username">@{currentUser?.username}</span>
+                      <br />
+                      <span id="fullname">
+                        (<i>{currentUser.fullName}</i>)
+                      </span>
                     </div>
 
                     {localUserData[0].username !== currentUser.username && (
-                      
                       <div className="profile-follow-unfollow-btn-wrapper">
                         <button
                           type="button"
@@ -353,14 +318,13 @@ const Profile = () => {
                     )}
                   </div>
 
-
                   <div className="posts-followers-details-wrapper absolute-center">
                     <div className="total-posts-wrapper total-wrapper absolute-center">
                       <span className="font-w-500 total-number">
                         {currentUserPosts.length}
                       </span>
                       Post
-                    </div>  
+                    </div>
                     <div className="total-followers-wrapper total-wrapper absolute-center">
                       <span className="font-w-500 total-number">
                         {currentUser.follower?.length}
@@ -377,100 +341,120 @@ const Profile = () => {
                 </div>
               </div>
 
-              <div className = "edit-profile">
-                {(localUserData[0].username === currentUser.username) && 
-                    <div>
-                      <Editprofile>
-                        
-                        
-                        <div>
-
+              <div className="edit-profile">
+                {localUserData[0].username === currentUser.username && (
+                  <div>
+                    <Editprofile>
+                      <div>
                         <Stack direction="row" alignItems="center" spacing={2}>
-                          
                           <h4>Change profile picture</h4>
-                          <IconButton color="primary" aria-label="upload picture" component="label">
-                            <input hidden 
-                              type = "file" 
-                              accept="image/jpeg,image/png,image/gif" 
-                              onChange = {handleImageChange}/>
+                          <IconButton
+                            color="primary"
+                            aria-label="upload picture"
+                            component="label"
+                          >
+                            <input
+                              hidden
+                              type="file"
+                              accept="image/jpeg,image/png,image/gif"
+                              onChange={handleImageChange}
+                            />
                             <AddPhotoAlternateTwoToneIcon></AddPhotoAlternateTwoToneIcon>
                           </IconButton>
-                          <Button onClick={handleSubmit} variant="contained" component="label">
+                          <Button
+                            onClick={handleSubmit}
+                            variant="contained"
+                            component="label"
+                          >
                             Upload
                           </Button>
-                          
-
-              
                         </Stack>
 
                         <Stack direction="row" alignItems="center" spacing={3}>
                           <h4>Change cover photo</h4>
-                          <IconButton color="primary" aria-label="upload picture" component="label">
-                            <input hidden 
-                              type = "file" 
-                              accept="image/jpeg,image/png,image/gif" 
-                              onChange = {handleImageChangeCover}/>
+                          <IconButton
+                            color="primary"
+                            aria-label="upload picture"
+                            component="label"
+                          >
+                            <input
+                              hidden
+                              type="file"
+                              accept="image/jpeg,image/png,image/gif"
+                              onChange={handleImageChangeCover}
+                            />
                             <AddPhotoAlternateTwoToneIcon></AddPhotoAlternateTwoToneIcon>
                           </IconButton>
-                          <Button onClick={handleSubmitCover} variant="contained" component="label">
+                          <Button
+                            onClick={handleSubmitCover}
+                            variant="contained"
+                            component="label"
+                          >
                             Upload
                           </Button>
                         </Stack>
-                        </div>
-
-
-                      </Editprofile> 
-                    </div>
-                    }  
+                      </div>
+                    </Editprofile>
+                  </div>
+                )}
               </div>
             </div>
           ))
         )}
-        <CreatePost />     
+        {currentUserInfo.map(
+          (currentUser) =>
+            localUserData[0].username === currentUser.username && <CreatePost />
+        )}
         <div>
-      
-        <ImageList variant="masonry" sx={{
+          <ImageList
+            variant="masonry"
+            sx={{
               columnCount: {
-                xs: '1 !important',
-                sm: '2 !important',
-                md: '3 !important',
-                lg: '3 !important',
-                xl: '3 !important',
-              }, padding: "1%"
-            }} gap={0}>
-        
-        {loading ? (
-                <PostCardOutline />
-              ) : (
-                currentUserPosts.map((post) => (
-                  <ImageListItem key={post.id}>
+                xs: "1 !important",
+                sm: "2 !important",
+                md: "3 !important",
+                lg: "3 !important",
+                xl: "3 !important",
+              },
+              padding: "1%",
+            }}
+            gap={0}
+          >
+            {loading ? (
+              <PostCardOutline />
+            ) : (
+              currentUserPosts.map((post) => (
+                <ImageListItem key={post.id}>
                   <PostCard
                     key={post.id}
                     post={post.data()}
                     postId={post.id}
                     setAlertMessage={setAlertMessage}
                   />
-                  </ImageListItem>
-                ))
-              )}
-              
-    </ImageList>
-    {!currentUserPosts.length && (
-                <Typography
-                  variant="h3"
-                  sx={{ display: "flex", justifyContent: "center", paddingBottom: "5%" }}
-                >
-                  No Posts Available
-                </Typography>
-              )}
+                </ImageListItem>
+              ))
+            )}
+          </ImageList>
+          {!currentUserPosts.length && (
+            <Typography
+              variant="h3"
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                paddingBottom: "5%",
+              }}
+            >
+              No Posts Available
+            </Typography>
+          )}
         </div>
       </div>
       <CustomSnackbar
-                  open={showSnackbar}
-                  message={message}
-                  variant="success"
-                  onClose={handleSnackbarClose}
-                />
+        open={showSnackbar}
+        message={message}
+        variant="success"
+        onClose={handleSnackbarClose}
+      />
 
       <SearchUser />
     </div>
