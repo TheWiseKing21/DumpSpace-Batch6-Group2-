@@ -237,9 +237,9 @@ const Navbar = () => {
               paddingBottom: "5px",
             }}
           >
-            <Typography sx={{ marginTop: "8px", fontWeight: 400 }}>
+            {/* <Typography sx={{ marginTop: "8px", fontWeight: 400 }}>
               OuterSpace mode
-            </Typography>
+            </Typography> */}
             <DarkMode />
             <Typography
               sx={{ marginTop: "8px", fontWeight: 600, marginLeft: "10px" }}

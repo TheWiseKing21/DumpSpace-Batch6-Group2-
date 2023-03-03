@@ -12,7 +12,7 @@ import "./Home.css";
 // import { doc, getDoc } from "firebase/firestore";
 // import { db } from "../../config/FirebaseConfig";
 import RightNavbar from "../../components/rightNavbar/RightNavbar";
-import { ImageList, ImageListItem} from '@mui/material';
+import { ImageList, ImageListItem } from "@mui/material";
 
 const Home = () => {
   const { posts, allUsers, loading, setIsUpload } = useContext(firebaseContex);
@@ -35,54 +35,58 @@ const Home = () => {
     return localUser?.uid === val.id;
   });
 
-  
-
   return (
     <>
       <Navbar />
       <div className="home-page-container">
         <div className="home-page">
           <div className="stars"></div>
-          <CreatePost />
-          
-          <div className="home-page-feed">
 
-          <ImageList variant="masonry" sx={{
-              columnCount: {
-                xs: '1 !important',
-                sm: '2 !important',
-                md: '2 !important',
-                lg: '3 !important',
-                xl: '3 !important',
-              }, padding: "2%"
-            }} gap={0}>
-
-            {loading ? (
-              <PostCardOutline />
-            ) : (
-              posts.map((post) => (
-                <ImageListItem key={post.id}>
-                <PostCard
-                  key={post.id}
-                  post={post.data()}
-                  postId={post.id}
-                  setAlertMessage={setAlertMessage}
-                />
-                </ImageListItem>
-              ))
-            )}
-            </ImageList>
-            
+          <div className="upper-section">
+            <CreatePost />
+            <div className="suggested-users">
+              <RightNavbar
+                currentUserInfo={currentUserInfo}
+                suggestedUsers={suggestedUsers}
+                localUser={localUser}
+              />
+            </div>
           </div>
 
+          <div className="home-page-feed">
+            <ImageList
+              variant="masonry"
+              sx={{
+                columnCount: {
+                  xs: "1 !important",
+                  sm: "2 !important",
+                  md: "2 !important",
+                  lg: "3 !important",
+                  xl: "3 !important",
+                },
+                padding: "2%",
+              }}
+              gap={0}
+            >
+              {loading ? (
+                <PostCardOutline />
+              ) : (
+                posts.map((post) => (
+                  <ImageListItem key={post.id}>
+                    <PostCard
+                      key={post.id}
+                      post={post.data()}
+                      postId={post.id}
+                      setAlertMessage={setAlertMessage}
+                    />
+                  </ImageListItem>
+                ))
+              )}
+            </ImageList>
+          </div>
         </div>
 
         <SearchUser />
-        <RightNavbar
-          currentUserInfo={currentUserInfo}
-          suggestedUsers={suggestedUsers}
-          localUser={localUser}
-        />
       </div>
     </>
   );
