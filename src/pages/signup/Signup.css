@@ -7,59 +7,33 @@ input:focus {
   display: flex;
   justify-content: space-between;
   margin: 20%;
-  
-  /* top: 50%;
-  left: 50%; */
   overflow: hidden;
   border-radius: 10px;
   box-shadow: 1px 4px 22px -8px #0004;
-  /* width: auto; */
-
-  /* border: 1px solid var(--border-color); */
-  /* background: var(--primary-bg); */
-  /* height: 100vh; */
-  /* position: relative; */
-  /* border: solid black; */
-  /* width: 1050px;
-  height: 600px; */
 }
-
 
 .signup-box {
   display: flex;
   align-items: center;
   flex-direction: column;
-  background-color: rgb(255, 255, 255,0.5);
+  background-color: rgb(255, 255, 255, 0.5);
   padding: 10px 50px;
   height: 100%;
   overflow: hidden;
-  /* border-radius: 10px; */
   box-shadow: 1px 4px 22px -8px #0004;
-
 }
 
 .signup-poster {
-  /* width: auto; */
-  /* height: 300px; */
-  /* background-image: url(/public/images/logo/signup-poster.png);
-  background-size: cover;
-  background-position: center;
-  width: 100%;
-  height: 100%; */
   width: 450px;
   background-color: #113e6b;
-  
-  
 }
 
 .signup-poster-image {
   width: 100%;
   height: 100%;
-  
 }
 
-.redirect-box{
-  
+.redirect-box {
   display: flex;
   justify-content: center;
 }
@@ -68,15 +42,13 @@ input:focus {
   align-items: center;
   flex-direction: column;
   margin-bottom: 20px;
-  
-  
+
   width: 300px;
 }
 
 .confirm-email-image-wrapper {
   width: 100%;
-  height: 300px
-  
+  height: 300px;
 }
 
 .confirm-email-image {
@@ -89,42 +61,36 @@ input:focus {
 }
 
 @media (max-width: 426px) {
-
-  
   .confirm-email-image-wrapper {
     height: auto;
   }
 
   /* responsive for mobile */
-@media (max-width:426px) {
-  .signup-container{
-    margin: 0;
-  }
-  .signup-poster {
-    display: none;
-  }
+  @media (max-width: 426px) {
+    .signup-container {
+      margin: 0;
+    }
+    .signup-poster {
+      display: none;
+    }
 
-  .logo-wrapper .instagram-logo {
-    height: 70px;
-    width: 200px;
-  }
+    .logo-wrapper .instagram-logo {
+      height: 70px;
+      width: 200px;
+    }
 
-  .signup-box {
-    margin: 0;
-    border: none;
-    padding: 0;
-    
-    
-  }
+    .signup-box {
+      margin: 0;
+      border: none;
+      padding: 0;
+    }
 
-  .login-form-wrapper {
-    /* padding: 0 20px 20px; */
-    width: 100%;
+    .login-form-wrapper {
+      width: 100%;
+    }
   }
 
-}
-
-.errormessage{
-  color: #AA4A44;
-}
+  .errormessage {
+    color: #aa4a44;
+  }
 }

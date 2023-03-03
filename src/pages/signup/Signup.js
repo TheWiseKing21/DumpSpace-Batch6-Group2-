@@ -7,13 +7,10 @@ import { db, auth } from "../../config/FirebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
 import usernameChecker from "./UsernameCheker";
 import { sendEmailVerification, updateProfile } from "firebase/auth";
-import Loading from "../../components/loading/Loading";
 import CustomSnackbar from "../../components/snackbar/snackbar";
 import validator from "validator";
 
-
 const Signup = () => {
-
   //new const for snackbar
   const [message, setMessage] = useState("");
   const [showSnackbar, setShowSnackbar] = useState("");
@@ -31,22 +28,6 @@ const Signup = () => {
   const [isEmailSend, setIsEmailSend] = useState(false);
 
   const navigate = useNavigate();
-
-  // const validate = (value) => {
-  //   if (
-  //     validator.isStrongPassword(value, {
-  //       minLength: 8,
-  //       minLowercase: 1,
-  //       minUppercase: 1,
-  //       minNumbers: 1,
-  //       minSymbols: 1,
-  //     })
-  //   ) {
-  //     setErrorMessage("Is Strong Password");
-  //   } else {
-  //     setErrorMessage("Is Not Strong Password");
-  //   }
-  // };
 
   const invalid =
     password.length < 8 || email === "" || fullName === "" || username === "";
@@ -70,7 +51,6 @@ const Signup = () => {
         await sendEmailVerification(createUser.user);
         setLoading(false);
         setIsEmailSend(true);
-
 
         // wait until email verify
         let interval = setInterval(async () => {
@@ -97,7 +77,6 @@ const Signup = () => {
           await auth.currentUser.reload();
         }, 2000);
       } catch (error) {
-      
         setLoading(false);
         setErrorMessage("Email is already taken.");
         setTimeout(() => {
@@ -121,13 +100,11 @@ const Signup = () => {
         minSymbols: 1,
       })
     ) {
-
       const createUser = await signup(email, password);
       await sendEmailVerification(createUser.user);
       setLoading(false);
     } else {
       setErrorMessage("Password is not strong.");
-
     }
   };
 
@@ -141,7 +118,7 @@ const Signup = () => {
             className="signup-poster-image"
           />
         </div>
-        
+
         <div className="signup-wrapper">
           <div className="signup-box">
             <div className="logo-wrapper">
@@ -212,14 +189,13 @@ const Signup = () => {
                         opacity: (invalid || loading) && "0.5",
                       }}
                     >
-                      <span class="front">
-                        {/* Start dumping... */}
-                        Sign Up
-                      </span>
+                      <span class="front">Sign Up</span>
                     </button>
                   </div>
                 </form>
-                {errorMessage && <p className="errorMessage">Error: {errorMessage}</p>}
+                {errorMessage && (
+                  <p className="errorMessage">Error: {errorMessage}</p>
+                )}
                 <CustomSnackbar
                   open={showSnackbar}
                   message={message}
@@ -244,22 +220,18 @@ const Signup = () => {
               <div className="signup-confirm-email-wrapper">
                 <div className="confirm-email-image-wrapper">
                   <img
-                    // src="/images/confirm-email.svg"
                     src="/images/logo/confirm-img.png"
                     alt="confirm-email"
                     className="confirm-email-image"
                   />
-
                 </div>
                 <div className="confirm-email-message">
                   Verification link send to your email (check inbox or spam
                   folder). Please verify email first...
                 </div>
               </div>
-
             )}
           </div>
-
         </div>
       </div>
     </section>
