@@ -1,60 +1,65 @@
 ::-webkit-scrollbar {
-    display: none;
-  }
+  display: none;
+}
 
-.page-not-found-container{
-    
-    background: radial-gradient(circle at bottom,#ee7752, #e73c7e, #23a6d5,#113e6b, #151716);
-  /* background: black; */
+.page-not-found-container {
+  background: radial-gradient(
+    circle at bottom,
+    #ee7752,
+    #e73c7e,
+    #23a6d5,
+    #113e6b,
+    #151716
+  );
   background-repeat: no-repeat;
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.page-not-found-container img{
-    width: auto;
-    height: 500px;
-    animation: floating 3s infinite ease-in-out;
-    
+.page-not-found-container img {
+  width: auto;
+  height: 500px;
+  animation: floating 3s infinite ease-in-out;
 }
 
-.cloud{
-    position: absolute;
-    background-image: url(/public/images/pagenotfound/cloud.png);
-    background-size: cover;
-    background-repeat: no-repeat;
-    height: 100vh;
-    width: 100%;
+.cloud {
+  position: absolute;
+  background-image: url(/public/images/pagenotfound/cloud.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+  width: 100%;
 }
 
-.stars{
-    position: absolute;
-    background-image: url(/public/images/pagenotfound/cloud.png);
-    background-size: cover;
-    background-repeat: no-repeat;
-    height: 100vh;
-    width: 100%;
+.stars {
+  position: absolute;
+  background-image: url(/public/images/pagenotfound/cloud.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+  width: 100%;
 }
 
-
-@keyframes floating{
-    0% { transform: translate(0,  0px); }
-    50%  { transform: translate(0, 20px); }
-    100%   { transform: translate(0, -0px); } 
+@keyframes floating {
+  0% {
+    transform: translate(0, 0px);
   }
-  
+  50% {
+    transform: translate(0, 20px);
+  }
+  100% {
+    transform: translate(0, -0px);
+  }
+}
 
 @media (max-width: 426px) {
-
-    .page-not-found-container img{
-        width: 100%;
-        height: 50%;
-        
-        
-    }
+  .page-not-found-container img {
+    width: 100%;
+    height: 50%;
+  }
 }

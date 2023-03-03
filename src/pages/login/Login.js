@@ -1,17 +1,13 @@
 import { sendEmailVerification } from "firebase/auth";
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-// import Loading from "../../components/loading/Loading";
 import { auth } from "../../config/FirebaseConfig";
 import firebaseContex from "../../context/FirebaseContext";
 import "./Login.css";
 import "../signup/Signup.css";
-
 import CustomSnackbar from "../../components/snackbar/snackbar";
-// import DarkMode from "../../components/darkmode/DarkMode";
 
 const Login = () => {
-
   //new const for snackbar
   const [message, setMessage] = useState("");
   const [showSnackbar, setShowSnackbar] = useState(false);
@@ -35,21 +31,19 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
     try {
-
+      setMessage("Login Successful");
+      setShowSnackbar(true);
       const loginUser = await login(email, password);
       if (auth.currentUser.emailVerified) {
         localStorage.setItem("authUser", JSON.stringify(loginUser.user));
         setLoading(false);
-        setMessage("Login Successful");
-        setShowSnackbar(true);
         navigate("/");
-
       } else {
         await sendEmailVerification(auth.currentUser);
         setLoading(false);
         setIsEmailSend(true);
+
         // wait until email verify
         let interval = setInterval(async () => {
           if (auth.currentUser.emailVerified) {
@@ -81,7 +75,6 @@ const Login = () => {
   }, [localUser]);
 
   return (
-
     <section>
       <div class="star star1"></div>
       <div class="star star2"></div>
@@ -96,7 +89,6 @@ const Login = () => {
         </div>
 
         <div className="login-wrapper">
-
           <div className="login-box">
             <div className="logo-wrapper">
               <img
@@ -132,8 +124,6 @@ const Login = () => {
                     />
                   </div>
 
-
-
                   <div className="button-wrapper ">
                     <button
                       disabled={invalid}
@@ -141,11 +131,7 @@ const Login = () => {
                       className="pushable"
                       style={{ opacity: (invalid || loading) && "1" }}
                     >
-
-                      <span class="front">
-                        {/* Start dumping... */}
-                        Log In
-                      </span>
+                      <span class="front">Log In</span>
                     </button>
                     <CustomSnackbar
                       open={showSnackbar}
@@ -153,9 +139,6 @@ const Login = () => {
                       variant="success"
                       onClose={handleSnackbarClose}
                     />
-
-
-                    {/* {loading && <Loading />} */}
                   </div>
 
                   <div className="forgot-pass">
@@ -163,13 +146,9 @@ const Login = () => {
                       Forgot Password?
                     </Link>
                   </div>
-
                 </form>
-                
               </div>
-
             ) : (
-
               // email send confirmation
               <div className="signup-confirm-email-wrapper">
                 <div className="confirm-email-image-wrapper">
@@ -211,8 +190,6 @@ const Login = () => {
             </div>
           </div>
         </div>
-        {/* <DarkMode /> */}
-        {/* <Footer /> */}
       </div>
     </section>
   );

@@ -1,23 +1,27 @@
 .home-page-container {
-
   width: 100%;
-  height:auto;
+  height: auto;
   position: relative;
   background-color: var(--home_background);
   margin-top: -5px;
-  padding-top: 1%
-  
- 
+  padding-top: 1%;
+  padding-bottom: 2%;
 }
 
-
-.home-page{
+.home-page {
   /* background-image: url(/public/images/pagenotfound/star1.png); */
   background-image: var(--image_background);
   background-size: contain;
   background-repeat: repeat;
   width: 100%;
- 
+  padding-bottom: 2%;
+}
+
+.upper-section {
+  display: flex;
+  justify-content: center;
+  /* border: solid; */
+  padding: 3%;
 }
 
 /* .home-page-feed{
@@ -37,8 +41,12 @@
   background-color: var(--primary-bg);
 }
 
-@media (min-width: 768px) and (max-width: 1024px) {
+@media (min-width: 375px) and (max-width: 1024px) {
   .story-post-wrapper {
     max-width: 370px;
+  }
+
+  .upper-section {
+    flex-direction: column;
   }
 }
