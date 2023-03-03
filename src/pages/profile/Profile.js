@@ -46,25 +46,20 @@ const Profile = () => {
   const [loadingSpinner, setLoadingSpinner] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
 
-  //new const for snackbar
   const [message, setMessage] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const handleSnackbarClose = () => {
     setShowSnackbar(false);
   };
 
-  //UPLOAD PROFILE PICTURE
   const [image, setImage] = useState([]);
   const [currentUserPic, setCurrentUserPic] = useState([]);
 
-  //UPLOAD COVER PHOTO
   const [imageC, setImageC] = useState([]);
   const [currentUserCover, setCurrentUserCover] = useState([]);
 
-  // get username form param
   const { username } = useParams();
 
-  // get current user's posts
   const getCurrentUserPosts = () => {
     const postRef = collection(db, "posts");
     const q = query(postRef, where("username", "==", username));
@@ -74,18 +69,16 @@ const Profile = () => {
       setLoading(false);
     });
   };
-  // get and check userinfo from param
+
   const allUsersData = allUsers.map((user) => user.data());
   const currentUserInfo = allUsersData.filter(
     (val) => val?.username === username
   );
 
-  // get localUser Data
   const localUserData = allUsersData.filter((val) => {
     return localUser?.uid === val.userId;
   });
 
-  // to check username present in localuser following list
   const isFollowing = localUserData
     .map((data) => data.following)[0]
     ?.filter((val) => val?.username === username);
@@ -140,7 +133,6 @@ const Profile = () => {
     setShowSnackbar(true);
   };
 
-  /////////////////////////////PROFILE PICTURE///////////////////////////////////////
   const handleImageChange = (e) => {
     const imageFile = e.target.files[0];
     const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
@@ -150,38 +142,37 @@ const Profile = () => {
       console.log(imageFile);
     } else {
       alert("Please select an image file (jpg, png or gif)");
-      e.target.value = ""; // Reset the input field to clear the selected file
+
+      e.target.value = "";
+
+      e.target.value = "";
     }
   };
 
   const handleSubmit = async () => {
-    const imageName = image.name; //the name of the file in the database will be the same name file as uploaded
+    const imageName = image.name;
     const imageRef = ref(storage, `/images/${imageName}`);
 
     await uploadBytes(imageRef, image)
-      .then(
-        //uploading the file to firebase
-        () => {
-          getDownloadURL(imageRef)
-            .then((url) => {
-              addDoc(collection(db, "profile"), {
-                userId: auth.currentUser.uid,
-                datePostedOn: serverTimestamp(),
-                imageUrl: url,
-                username: auth.currentUser.displayName,
-              });
-            })
-            .catch((error) => {
-              console.log(error.message, "ERROR GETTING THE IMAGE URL");
+      .then(() => {
+        getDownloadURL(imageRef)
+          .then((url) => {
+            addDoc(collection(db, "profile"), {
+              userId: auth.currentUser.uid,
+              datePostedOn: serverTimestamp(),
+              imageUrl: url,
+              username: auth.currentUser.displayName,
             });
-        }
-      )
+          })
+          .catch((error) => {
+            console.log(error.message, "ERROR GETTING THE IMAGE URL");
+          });
+      })
       .catch((error) => {
         console.log(error.message);
       });
   };
 
-  // get current user's posts
   const getUserPic = () => {
     const postRef = collection(db, "profile");
     const q = query(
@@ -196,7 +187,6 @@ const Profile = () => {
     });
   };
 
-  /////////////////////////////COVER PHOTO///////////////////////////////////////
   const handleImageChangeCover = (e) => {
     const imageFile = e.target.files[0];
     const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
@@ -206,32 +196,32 @@ const Profile = () => {
       console.log(imageFile);
     } else {
       alert("Please select an image file (jpg, png or gif)");
-      e.target.value = ""; // Reset the input field to clear the selected file
+      e.target.value = "";
+
+      e.target.value = "";
     }
   };
 
   const handleSubmitCover = async () => {
-    const imageName = image.name; //the name of the file in the database will be the same name file as uploaded
+    const imageName = image.name;
     const imageRef = ref(storage, `/coverphoto/${imageName}`);
 
     await uploadBytes(imageRef, imageC)
-      .then(
-        //uploading the file to firebase
-        () => {
-          getDownloadURL(imageRef)
-            .then((url) => {
-              addDoc(collection(db, "coverphoto"), {
-                userId: auth.currentUser.uid,
-                datePostedOn: serverTimestamp(),
-                imageUrl: url,
-                username: auth.currentUser.displayName,
-              });
-            })
-            .catch((error) => {
-              console.log(error.message, "ERROR GETTING THE IMAGE URL");
+      .then(() => {
+        getDownloadURL(imageRef)
+          .then((url) => {
+            addDoc(collection(db, "coverphoto"), {
+              userId: auth.currentUser.uid,
+              datePostedOn: serverTimestamp(),
+              imageUrl: url,
+              username: auth.currentUser.displayName,
             });
-        }
-      )
+          })
+          .catch((error) => {
+            console.log(error.message, "ERROR GETTING THE IMAGE URL");
+          });
+      })
+
       .catch((error) => {
         console.log(error.message);
       });
@@ -267,7 +257,6 @@ const Profile = () => {
                     currentUserCover.map((cover) => (
                       <div className="profile-banner">
                         <img
-                          // alt="image"
                           key={cover?.data().datePostedOn}
                           src={cover?.data().imageUrl}
                           className="banner"
@@ -418,7 +407,7 @@ const Profile = () => {
             </div>
           ))
         )}
-        {/* <CreatePost /> */}
+
         {currentUserInfo.map(
           (currentUser) =>
             localUserData[0].username === currentUser.username && <CreatePost />
