@@ -5,7 +5,6 @@ import { db, auth } from "../../config/FirebaseConfig";
 import Box from "@mui/material/Box";
 import { AppBar, IconButton, Toolbar, Tooltip, Button } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import AdbIcon from "@mui/icons-material/Adb";
 import SearchIcon from "@mui/icons-material/Search";
 import PersonIcon from "@mui/icons-material/Person";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -15,9 +14,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Avatar from "@mui/material/Avatar";
 import DarkMode from "../darkmode/DarkMode";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CustomSnackbar from "../snackbar/snackbar";
-import { margin } from "@mui/system";
+
 import {
   collection,
   onSnapshot,
@@ -29,7 +27,6 @@ import {
 } from "firebase/firestore";
 
 const Navbar = () => {
-  //new const for snackbar
   const [message, setMessage] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const handleSnackbarClose = () => {
@@ -77,7 +74,6 @@ const Navbar = () => {
     );
 
     onSnapshot(q, (querySnapshot) => {
-      // console.log(querySnapshot.docs);
       setCurrentUserPic(querySnapshot.docs);
     });
   };
@@ -150,7 +146,6 @@ const Navbar = () => {
             </Menu>
           </Box>
 
-          {/* <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} /> */}
           <Typography
             variant="h6"
             noWrap
@@ -166,7 +161,6 @@ const Navbar = () => {
               textDecoration: "none",
             }}
           >
-            {/* <a href ="/"><img src = "/images/logo/logo-light.png" ></img></a> */}
             <div
               className="logo-image"
               style={{
@@ -195,7 +189,6 @@ const Navbar = () => {
               textDecoration: "none",
             }}
           >
-            {/* <a href ="/"><img src = "/images/logo/logo-light.png" ></img></a> */}
             <a href="/">
               <img
                 src="/images/logo/rocket-3d-logo.png"
@@ -214,20 +207,8 @@ const Navbar = () => {
                 <SearchIcon />
               </IconButton>
             </Tooltip>
-
-            {/* <Tooltip title="Go to Profile">
-              <IconButton
-                size="large"
-                color="inherit"
-                component={Link}
-                to={`/profile/${auth.currentUser?.displayName}`}
-              >
-                <PersonIcon />
-              </IconButton>
-            </Tooltip> */}
           </Box>
 
-          {/* new */}
           <Box
             sx={{
               flexGrow: 0,
@@ -251,8 +232,6 @@ const Navbar = () => {
                 onClick={handleOpenUserMenu}
                 sx={{ p: 0, marginLeft: "10px" }}
               >
-                {/* <MoreVertIcon style={{ color: "var(--text_color)" }} /> */}
-                {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" /> */}
                 <div>
                   {currentUserPic.length > 0 &&
                     currentUserPic.map((pic) => (
