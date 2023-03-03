@@ -2,8 +2,15 @@
   display: none;
 }
 
-section{
-  background: radial-gradient(circle at bottom,#ee7752, #e73c7e, #23a6d5,#113e6b, #151716);
+section {
+  background: radial-gradient(
+    circle at bottom,
+    #ee7752,
+    #e73c7e,
+    #23a6d5,
+    #113e6b,
+    #151716
+  );
   position: relative;
   width: 100%;
   height: 100vh;
@@ -13,107 +20,81 @@ section{
   align-items: center;
 }
 
-section .star{
+section .star {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
-  animation: animate 8s ease-in-out infinite,
-  backgroundmove 16s linear infinite;
+  animation: animate 8s ease-in-out infinite, backgroundmove 16s linear infinite;
   z-index: 1;
 }
 
-section .star.star1{
-  animation-delay: 0s ;
+section .star.star1 {
+  animation-delay: 0s;
   background: url(/public/images/stars/star1.png);
-  /* background-size: cover; */
   background-size: 200px;
-
 }
 
-section .star.star2{
-  animation-delay: -1s ;
+section .star.star2 {
+  animation-delay: -1s;
   background: url(/public/images/stars/star2.png);
   background-size: 300px;
-  /* background-size: cover; */
-  /* transform: scale(0.5); */
-
 }
-section .star.star3{
-  animation-delay: -2s ;
+section .star.star3 {
+  animation-delay: -2s;
   background: url(/public/images/stars/star3.png);
   background-size: 500px;
-  /* background-size: cover; */
-  /* transform: scale(0.5); */
-
 }
 
-@keyframes animate{
-  0%,20%,40%,60%,80%,100%
-  {
-      opacity: 0;
+@keyframes animate {
+  0%,
+  20%,
+  40%,
+  60%,
+  80%,
+  100% {
+    opacity: 0;
   }
-  10%,30%,50%,70%,90%
-  {
-      opacity: 1;
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    opacity: 1;
   }
 }
-
-/* @keyframes backgroundmove
-{
-  0%{
-      transform: scale(2);
-  }
-  
-  100%{
-      transform: scale(1);
-  }
-} */
-
 
 .login-container {
   display: flex;
   justify-content: center;
-  
-  
+
   top: 50%;
   left: 50%;
   overflow: hidden;
   border-radius: 10px;
   box-shadow: 1px 4px 22px -8px #0004;
   z-index: 2;
-  /* width: auto; */
-
-  /* border: 1px solid var(--border-color); */
-  /* background: var(--primary-bg); */
-  /* height: 100vh; */
-  /* position: relative; */
-  /* border: solid black; */
-  /* width: 1050px;
-  height: 600px; */
-
   animation: floating 3s infinite ease-in-out;
 }
 
-@keyframes floating{
-  0% { transform: translate(0,  0px); }
-  50%  { transform: translate(0, 20px); }
-  100%   { transform: translate(0, -0px); } 
+@keyframes floating {
+  0% {
+    transform: translate(0, 0px);
+  }
+  50% {
+    transform: translate(0, 20px);
+  }
+  100% {
+    transform: translate(0, -0px);
+  }
 }
-
-
 
 .login-poster {
   width: 450px;
   height: 530px;
   background-color: #113e6b;
-  /* margin-right: 32px; */
-  /* width: 100px;
-  height: auto; */
-  
-  
 }
 
 .login-poster-image {
@@ -126,17 +107,13 @@ section .star.star3{
   flex-direction: column;
   max-width: 350px;
   width: 100%;
-
 }
 
 .login-box {
   display: flex;
   align-items: center;
   flex-direction: column;
-  background-color: rgb(255, 255, 255,0.5);
-  /* border: 1px solid var(--border-color); */
-  /* border-radius: 3px;
-  margin-top: 10px; */
+  background-color: rgb(255, 255, 255, 0.5);
   padding: 10px 0;
   height: 100%;
 }
@@ -147,14 +124,8 @@ section .star.star3{
 
 .instagram-logo {
   height: 100%;
-  width: 100%
+  width: 100%;
 }
-
-
-/* .login-form-wrapper {
-  padding: 0 40px 20px;
-  background-color: transparent;
-} */
 
 .login-form {
   display: flex;
@@ -163,7 +134,6 @@ section .star.star3{
   width: 100%;
   max-width: 350px;
   background: transparent;
-
 }
 
 .input-label {
@@ -172,17 +142,7 @@ section .star.star3{
 }
 
 .input-label input {
-  /* padding: 9px;
-  overflow: hidden;
-  text-overflow: ellipsis; */
-  /* background: var(--primary-bg); */
-  /* border: 1px solid var(--border-color);
-  outline: none;
-  border-radius: 3px;
-  width: 100%; */
-
   border: none;
-  /* width: 80%; */
   margin: 15px 0px;
   border-bottom: 1px solid #4f30677d;
   padding: 7px 9px;
@@ -194,33 +154,19 @@ section .star.star3{
   color: #354678;
 }
 
-input::placeholder{
+input::placeholder {
   color: #354678;
 }
 
- .button-wrapper {
+.button-wrapper {
   width: 100%;
-  /* margin: 8px 40px; */
   display: flex;
   justify-content: center;
   position: relative;
-  
 }
-/*
-.login-button {
-  width: 100%;
-  background-color: var(--primary-btn-bg);
-  border: none;
-  border-radius: 4px;
-  padding: 7px 15px;
-  color: white;
-  font-weight: bold;
-} */
 
 .pushable {
   background: hsl(340deg 100% 32%);
-  /* background: hsl(225, 39%, 34%); */
-
   border-radius: 12px;
   border: none;
   padding: 0;
@@ -228,11 +174,7 @@ input::placeholder{
   outline-offset: 4px;
   margin-top: 10%;
   margin-bottom: 10%;
-  
   width: 250px;
-  
- 
-  
 }
 .front {
   display: block;
@@ -240,43 +182,20 @@ input::placeholder{
   border-radius: 12px;
   font-size: 1rem;
   background: hsl(345deg 100% 47%);
-  /* background: hsl(225, 74%, 22%); */
   color: white;
   transform: translateY(-6px);
-
   font-size: 14px;
   font-weight: 600;
-  
 }
 
 .pushable:active .front {
   transform: translateY(-2px);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* .forgot-pass {
-  margin-right: auto;
-} */
-
 .forgot-pass a {
   color: var(--primary-btn-bg);
   text-decoration: none;
   font-weight: 500;
-  
-  
 }
 
 .redirect-text {
@@ -287,7 +206,6 @@ input::placeholder{
   color: var(--primary-btn-bg);
   text-decoration: none;
   font-weight: 500;
-  
 }
 
 .loading-spinner-wrapper {
@@ -311,35 +229,8 @@ input::placeholder{
   margin: 5px;
 }
 
-/* .facebook-login-wrapper {
-  margin: 5px 0 15px 0;
-}
-
-.facebook-login-btn {
-  background: none;
-  color: #385185;
-  font-size: 16px;
-
-} */
-/* .facebook-login-btn .facebook-icon {
-  width: 20px;
-  height: 20px;
-  margin-right: 5px; 
-} */
-
-
-
-
-
-
-
-
-
-
-
-
 /* responsive for mobile */
-@media (max-width:426px) {
+@media (max-width: 426px) {
   .login-poster {
     display: none;
   }
@@ -350,8 +241,6 @@ input::placeholder{
   }
 
   .login-box {
-    
-    
     padding: 0;
   }
 
@@ -359,5 +248,4 @@ input::placeholder{
     padding: 0 20px 20px;
     width: 100%;
   }
-
 }
