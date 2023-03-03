@@ -37,7 +37,16 @@ const Home = () => {
       <div className="home-page-container">
         <div className="home-page">
           <div className="stars"></div>
-          <CreatePost />
+          <div className="upper-section">
+            <CreatePost />
+            <div className="suggested-users">
+              <RightNavbar
+                currentUserInfo={currentUserInfo}
+                suggestedUsers={suggestedUsers}
+                localUser={localUser}
+              />
+            </div>
+          </div>
 
           <div className="home-page-feed">
             <ImageList
@@ -71,13 +80,7 @@ const Home = () => {
             </ImageList>
           </div>
         </div>
-
         <SearchUser />
-        <RightNavbar
-          currentUserInfo={currentUserInfo}
-          suggestedUsers={suggestedUsers}
-          localUser={localUser}
-        />
       </div>
     </>
   );

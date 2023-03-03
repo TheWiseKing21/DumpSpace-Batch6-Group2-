@@ -142,6 +142,9 @@ const Profile = () => {
       console.log(imageFile);
     } else {
       alert("Please select an image file (jpg, png or gif)");
+
+      e.target.value = "";
+
       e.target.value = "";
     }
   };
@@ -194,6 +197,8 @@ const Profile = () => {
     } else {
       alert("Please select an image file (jpg, png or gif)");
       e.target.value = "";
+
+      e.target.value = "";
     }
   };
 
@@ -216,6 +221,7 @@ const Profile = () => {
             console.log(error.message, "ERROR GETTING THE IMAGE URL");
           });
       })
+
       .catch((error) => {
         console.log(error.message);
       });
@@ -401,6 +407,7 @@ const Profile = () => {
             </div>
           ))
         )}
+
         {currentUserInfo.map(
           (currentUser) =>
             localUserData[0].username === currentUser.username && <CreatePost />
