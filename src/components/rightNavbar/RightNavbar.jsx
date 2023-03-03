@@ -1,6 +1,5 @@
 import { Card } from "@mui/material";
 import React from "react";
-// import Footer from '../footer/Footer';
 import "./RightNavbar.css";
 import SuggestionList from "./suggestionList/SuggestionList";
 import CardContent from "@mui/material/CardContent";
@@ -20,7 +19,6 @@ const RightNavbar = ({ currentUserInfo, suggestedUsers }) => {
       }}
     >
       <CardContent>
-        {/* <div className="suggestion-wrapper"> */}
         <div className="suggestion-title">Suggestions For You</div>
         <div className="suggestion-user-list">
           {shuffleArr.slice(0, 5).map((users) => (
@@ -31,10 +29,6 @@ const RightNavbar = ({ currentUserInfo, suggestedUsers }) => {
             />
           ))}
         </div>
-        {/* <Footer /> */}
-        {/* </div>
-         </div>
-       </div> */}
       </CardContent>
     </Card>
   );

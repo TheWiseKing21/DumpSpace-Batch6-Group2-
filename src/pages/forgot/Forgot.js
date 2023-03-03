@@ -1,25 +1,19 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import firebaseContex from "../../context/FirebaseContext";
-
 import "./Forgot.css";
 import "../forgot/Forgot.css";
 import CustomSnackbar from "../../components/snackbar/snackbar";
 import "../login/Login.css";
 
 const Forgot = () => {
-  const { login, facebookLogin } = useContext(firebaseContex);
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [isEmailSend, setIsEmailSend] = useState(false);
   const { forgotPassword } = useContext(firebaseContex);
-
   const localUser = JSON.parse(localStorage.getItem("authUser"));
   const [errorMessage, setErrorMessage] = useState("");
-
   const navigate = useNavigate();
-
   const invalid = email === "";
 
   // new const for snackbar

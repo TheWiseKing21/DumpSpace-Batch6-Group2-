@@ -20,12 +20,9 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [isEmailSend, setIsEmailSend] = useState(false);
-
   const localUser = JSON.parse(localStorage.getItem("authUser"));
   const [errorMessage, setErrorMessage] = useState("");
-
   const navigate = useNavigate();
-
   const invalid = password.length < 6 || email === "";
 
   const handleSubmit = async (e) => {

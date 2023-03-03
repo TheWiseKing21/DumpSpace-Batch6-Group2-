@@ -7,7 +7,6 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
 import { Stack } from "@mui/system";
 import IconButton from "@mui/material/IconButton";
 import LinearProgress from "@mui/material/LinearProgress";
@@ -140,7 +139,10 @@ const CreatePost = () => {
   };
 
   return (
-    <Container maxWidth="md" sx={{ marginBottom: "20px", color: "var(--text_color)" }}>
+    <Container
+      maxWidth="md"
+      sx={{ marginBottom: "20px", color: "var(--text_color)" }}
+    >
       <Card
         elevation={24}
         sx={{
@@ -151,7 +153,7 @@ const CreatePost = () => {
           padding: "20px",
           backgroundColor: "var(--card_color)",
           color: "var(--text_color)",
-          boxShadow: "var(--box_shadow)"
+          boxShadow: "var(--box_shadow)",
         }}
       >
         <CardContent>
@@ -170,7 +172,7 @@ const CreatePost = () => {
                 padding: "10px",
                 backgroundColor: "var(--card)",
                 color: "var(--text_color)",
-                boxShadow: "var(--box_shadow)"
+                boxShadow: "var(--box_shadow)",
               }}
             />
           </Stack>
@@ -193,13 +195,24 @@ const CreatePost = () => {
               />
               <CameraAltOutlinedIcon sx={{ color: "var(--text_color)" }} />
             </IconButton>
-            <Button className="create-post"
+            <Button
+              className="create-post"
               variant="contained"
               onClick={handleUpload}
               // disabled={!caption}
-              sx={{ width: "90%", backgroundColor: "var(--button)", color: "var(--text_color)", fontStyle: "italic", borderRadius: "25px",
-              '&:hover': { color: "#fff", bgcolor: "#064670", fontStyle: "normal" } }}>
-
+              sx={{
+                width: "90%",
+                backgroundColor: "var(--button)",
+                color: "var(--text_color)",
+                fontStyle: "italic",
+                borderRadius: "25px",
+                "&:hover": {
+                  color: "#fff",
+                  bgcolor: "#064670",
+                  fontStyle: "normal",
+                },
+              }}
+            >
               Create post
               {loading && <Loading />}
             </Button>

@@ -9,7 +9,6 @@
 }
 
 .home-page {
-  /* background-image: url(/public/images/pagenotfound/star1.png); */
   background-image: var(--image_background);
   background-size: contain;
   background-repeat: repeat;
@@ -20,13 +19,8 @@
 .upper-section {
   display: flex;
   justify-content: center;
-  /* border: solid; */
   padding: 3%;
 }
-
-/* .home-page-feed{
-  z-index: 2;
-} */
 
 @media (max-width: 426px) {
   .home-page-container {
