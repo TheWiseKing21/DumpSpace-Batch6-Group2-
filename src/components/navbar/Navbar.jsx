@@ -66,7 +66,6 @@ const Navbar = () => {
     setAnchorElUser(null);
   };
 
-
   const [currentUserPic, setCurrentUserPic] = useState([]);
   const getUserPic = () => {
     const postRef = collection(db, "profile");
@@ -78,7 +77,7 @@ const Navbar = () => {
     );
 
     onSnapshot(q, (querySnapshot) => {
-      console.log(querySnapshot.docs);
+      // console.log(querySnapshot.docs);
       setCurrentUserPic(querySnapshot.docs);
     });
   };
@@ -88,7 +87,6 @@ const Navbar = () => {
       getUserPic();
     }
   });
-
 
   return (
     <AppBar
@@ -246,7 +244,7 @@ const Navbar = () => {
             <Typography
               sx={{ marginTop: "8px", fontWeight: 600, marginLeft: "10px" }}
             >
-              {auth.currentUser.displayName}
+              {auth.currentUser?.displayName}
             </Typography>
             <Tooltip title="Menu">
               <IconButton
@@ -358,7 +356,6 @@ const Navbar = () => {
                   onClose={handleSnackbarClose}
                 />
               </MenuItem>
-
             </Menu>
           </Box>
         </Toolbar>
